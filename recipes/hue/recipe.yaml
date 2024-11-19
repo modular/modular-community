@@ -38,7 +38,7 @@ about:
   # (even if the license doesn't require it) using the license_file entry.
   # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
   license_file: LICENSE
-  summary: A library for playing with colors in Mojo. https://github.com/thatstoasty/hue
+  summary: A library for playing with colors in Mojo.
   repository: https://github.com/thatstoasty/hue
 
 extra:
