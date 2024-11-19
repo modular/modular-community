@@ -3,6 +3,9 @@ name: Build all packages
 on:
   workflow_dispatch:
   pull_request:
+    types:
+      - labeled
+      - synchronize
 
 
 jobs:
