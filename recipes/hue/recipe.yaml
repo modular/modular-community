@@ -12,7 +12,7 @@ source:
 build:
   number: 3
   script:
-    - mojo package src/hue -o ${{ PREFIX }}/lib/mojo/hue.mojopkg
+    - moj package src/hue -o ${{ PREFIX }}/lib/mojo/hue.mojopkg
 requirements:
   host:
     - max

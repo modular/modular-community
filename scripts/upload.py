@@ -1,9 +1,8 @@
-import subprocess
 import sys
 from pathlib import Path
 import argparse
 
-from scripts.common import eprint
+from scripts.common import eprint, run_command_unchecked
 
 
 def main() -> None:
@@ -26,8 +25,7 @@ def main() -> None:
             args.channel,
             str(conda_file),
         ]
-        print(f"Running command: {' '.join(command)}")
-        result = subprocess.run(command, capture_output=True, text=True)
+        result = run_command_unchecked(command)
         if result.returncode != 0:
             eprint(f"Error uploading {conda_file}: {result.stderr}")
             exit_code = 1

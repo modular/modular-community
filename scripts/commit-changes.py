@@ -1,9 +1,8 @@
-import subprocess
 import sys
 from pathlib import Path
 import argparse
 
-from scripts.common import commit_push_changes, configure_git, eprint
+from scripts.common import commit_push_changes, eprint, run_command
 
 
 def main() -> None:
@@ -15,11 +14,8 @@ def main() -> None:
         eprint(f"{args.file} does not exist.")
         sys.exit(1)
 
-    # Configure git
-    configure_git()
-
     # Commit and push changes
-    subprocess.run(["git", "add", args.file], check=True)
+    run_command(["git", "add", args.file])
     commit_push_changes(f"Update {args.file.name}", "main")
 
 

@@ -1,24 +1,21 @@
-name: Pre-commit
-
+name: docs
 on:
   push:
     branches:
+      - master
       - main
-  workflow_dispatch:
-  pull_request:
-    branches:
-      - main
-
+permissions:
+  contents: write
 jobs:
-  pre-commit:
+  deploy:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # v4.2.2
-        with:
-          fetch-depth: 2
       - uses: prefix-dev/setup-pixi@ba3bb36eb2066252b2363392b7739741bb777659 # v0.8.1
         with:
           pixi-version: v0.37.0
 
-      - name: Run pre-commit
-        run: pixi run lint
+      - name: Configure Git Credentials
+        run: pixi run configure-git
+
+      - run: pixi run deploy-docs

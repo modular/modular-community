@@ -27,37 +27,6 @@ def eprint(*args: Any, **kwargs: Any) -> None:
     print(*args, file=sys.stderr, **kwargs)
 
 
-def configure_git() -> None:
-    """
-    Configures the global Git user name and email for the current environment.
-
-    This function sets the global Git configuration for the user name and email
-    to be used by Git commands. It is typically used in automated environments
-    such as CI/CD pipelines to ensure that Git operations are performed with a
-    consistent identity.
-
-    The user name is set to "github-actions[bot]" and the email is set to
-    "github-actions[bot]@users.noreply.github.com".
-
-    Raises:
-        subprocess.CalledProcessError: If any of the subprocess calls fail.
-    """
-    subprocess.run(
-        ["git", "config", "--global", "user.name", "github-actions[bot]"],
-        check=True,
-    )
-    subprocess.run(
-        [
-            "git",
-            "config",
-            "--global",
-            "user.email",
-            "github-actions[bot]@users.noreply.github.com",
-        ],
-        check=True,
-    )
-
-
 def commit_push_changes(message: str, branch_name: str) -> None:
     """
     Commit and push changes to the specified branch with a given commit message.
@@ -65,16 +34,32 @@ def commit_push_changes(message: str, branch_name: str) -> None:
     """
 
     # Switch to branch
-    subprocess.run(["git", "switch", branch_name])
+    run_command(["git", "switch", branch_name])
 
     # Check if there are changes to commit
-    result = subprocess.run(
-        ["git", "diff-index", "--quiet", "HEAD"], capture_output=True
-    )
+    result = run_command_unchecked(["git", "diff-index", "--quiet", "HEAD"])
     if result.returncode == 0:
         eprint("No changes to commit.")
         return
 
-    # Commit and push the changes
-    subprocess.run(["git", "commit", "--message", message], check=True)
-    subprocess.run(["git", "push", "--set-upstream", "origin", branch_name], check=True)
+    # Commit, pull and push the changes
+    run_command(["git", "pull", "origin", branch_name])
+    run_command(["git", "commit", "--message", message, "--no-verify"])
+    run_command(["git", "push", "--set-upstream", "origin", branch_name])
+
+
+def run_command_unchecked(command: list[str]) -> subprocess.CompletedProcess[Any]:
+    eprint(" ".join(command))
+    result = subprocess.run(command, capture_output=True, text=True)
+    return result
+
+
+def run_command(command: list[str]) -> subprocess.CompletedProcess[Any]:
+    result = run_command_unchecked(command)
+    if result.returncode != 0:
+        eprint("Command failed")
+        print(f"stdout: {result.stdout}")
+        eprint(f"stderr: {result.stderr}")
+        sys.exit(result.returncode)
+
+    return result
