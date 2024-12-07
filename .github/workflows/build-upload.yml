@@ -34,7 +34,7 @@ jobs:
 
       - name: Build packages
         shell: bash
-        run: pixi run build-all --channel https://prefix.dev/modular-public-test --channel https://conda.modular.com/max
+        run: pixi run build-all --channel https://prefix.dev/modular-community --channel https://conda.modular.com/max
         env:
           RATTLER_BUILD_ENABLE_GITHUB_INTEGRATION: true
           RATTLER_BUILD_COLOR: always
@@ -45,4 +45,4 @@ jobs:
 
       - name: Upload all packages
         shell: bash
-        run: pixi run upload --channel modular-public-test
+        run: pixi run upload --channel modular-community
