@@ -23,10 +23,14 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test.mojo
+          - mojo run test_small_time.mojo
+          - mojo run test_time_delta.mojo
+          - mojo run test_time_zone.mojo
     files:
       recipe:
-        - test.mojo
+        - test_small_time.mojo
+        - test_time_delta.mojo
+        - test_time_zone.mojo
 
 about:
   homepage: https://github.com/thatstoasty/small-time
@@ -37,4 +41,4 @@ about:
 
 extra:
   maintainers:
-    - Hofer-Julian
+    - thatstoasty
