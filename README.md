@@ -30,7 +30,7 @@ max = ">=24.5.0,<25"
 
 ### **Install a package**
 
-To install a package from the Modular community channel, simply enter the following in the command line: 
+To install a package from the Modular community channel, simply enter the following in the command line:
 ```
 magic add <name of the package.
 ```
