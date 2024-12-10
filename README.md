@@ -2,7 +2,7 @@
 
 Welcome to the repository for the Modular community channel! This conda-based [Prefix.dev](http://Prefix.dev) channel allows Modular community members to distribute their packages built with MAX and Mojo via Magic 🪄
 
-We’re currently running an Early Access Program, and we’d love for you to join the fun! Whether you want to install packages, contribute your own, or review creations from fellow community members, it’s easy to get started. Simply [join our forum](https://forum.modular.com/t/community-channel-early-access/213 and [opt in](https://forum.modular.com/t/community-channel-early-access/213) – you'll receive a DM shortly with more info.
+We’re currently running an Early Access Program, and we’d love for you to join the fun! Whether you want to install packages, contribute your own, or review creations from fellow community members, it’s easy to get started. Simply [join our forum](https://forum.modular.com/t/community-channel-early-access/213) and [opt in](https://forum.modular.com/t/community-channel-early-access/213) – you'll receive a DM shortly with more info.
 
 ## Installing a package
 
