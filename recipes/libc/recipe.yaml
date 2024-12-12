@@ -1,0 +1,37 @@
+context:
+  version: "0.1.9"
+
+package:
+  name: "libc"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com:msaelices/mojo-libc.git
+    rev: 6ab870f7f259d68054bd38b179ab988a12552bdd
+
+build:
+  number: 0
+  script:
+    - magic run mojo package libc -o ${PREFIX}/lib/mojo/libc.mojopkg
+
+requirements:
+  host:
+    - max
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/msaelices/mojo-libc
+  license: MIT
+  license_file: LICENSE
+  summary: Mojo's libc support
+  repository: https://github.com/msaelices/mojo-libc
