@@ -27,6 +27,7 @@ tests:
     files:
       recipe:
         - tests/LogisR_test.mojo
+        - tests/load_breast_cancer.py
 
 about:
   homepage: https://github.com/yetalit/Mojmelo
