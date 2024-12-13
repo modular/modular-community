@@ -1,0 +1,41 @@
+context:
+  version: "0.0.1"
+
+package:
+  name: "mojmelo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/yetalit/mojmelo.git
+    rev: c17c802105f65aa4fc2811f60cf8b099bae8f9ca
+
+build:
+  number: 0
+  script:
+    - mojo package mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojopkg
+requirements:
+  host:
+    - max
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run tests/LogisR_test.mojo
+    files:
+      recipe:
+        - tests/LogisR_test.mojo
+
+about:
+  homepage: https://github.com/yetalit/Mojmelo
+  license: BSD 3-Clause
+  license_file: LICENSE
+  summary: Machine Learning algorithms in pure Mojo.
+  repository: https://github.com/yetalit/Mojmelo
+  project_name: Mojmelo
+
+extra:
+  maintainers:
+    - yetalit
