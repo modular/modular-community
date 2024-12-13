@@ -68,11 +68,11 @@ Additionally, you may want to install bellow Python packages for a better usabil
 ## Usage
 
 Just import any model you want this way:
-```python 
+```python
 from mojmelo.LinearRegression import LinearRegression
 ```
 You may also want to use the utility codes I've written for this project:
-```python 
+```python
 from mojmelo.utils.Matrix import Matrix
 from mojmelo.utils.utils import *
 ```
