@@ -21,6 +21,9 @@ requirements:
 
 tests:
     requirements:
+      host:
+        - scikit-learn
+      run:
         - scikit-learn
   - script:
       - if: unix
