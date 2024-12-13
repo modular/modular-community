@@ -30,11 +30,10 @@ tests:
 
 about:
   homepage: https://github.com/yetalit/Mojmelo
-  license: BSD 3-Clause
+  license: BSD-3-Clause
   license_file: LICENSE
   summary: Machine Learning algorithms in pure Mojo.
   repository: https://github.com/yetalit/Mojmelo
-  project_name: Mojmelo
 
 extra:
   maintainers:
