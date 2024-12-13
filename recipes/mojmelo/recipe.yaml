@@ -20,6 +20,8 @@ requirements:
     - ${{ pin_compatible('max') }}
 
 tests:
+    requirements:
+        - scikit-learn
   - script:
       - if: unix
         then:
