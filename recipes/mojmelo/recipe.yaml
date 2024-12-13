@@ -36,5 +36,6 @@ about:
   repository: https://github.com/yetalit/Mojmelo
 
 extra:
+  project_name: Mojmelo
   maintainers:
     - yetalit
