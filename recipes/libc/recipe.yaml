@@ -35,3 +35,9 @@ about:
   license_file: LICENSE
   summary: Mojo's libc support
   repository: https://github.com/msaelices/mojo-libc
+
+extra:
+  maintainers:
+    - msaelices
+    - crisadamo
+  project_name: mojo-libc
