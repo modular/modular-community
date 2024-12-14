@@ -6,7 +6,7 @@ package:
   version: ${{ version }}
 
 source:
-  - git: https://github.com:msaelices/mojo-libc.git
+  - git: https://github.com/msaelices/mojo-libc.git
     rev: 6ab870f7f259d68054bd38b179ab988a12552bdd
 
 build:
