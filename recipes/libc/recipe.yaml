@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/msaelices/mojo-libc.git
-    rev: 6ab870f7f259d68054bd38b179ab988a12552bdd
+    rev: 674d0fd35af4e716eb30df18cb1fe25cdddb08cf
 
 build:
   number: 0
