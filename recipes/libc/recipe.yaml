@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - magic run mojo package libc -o ${PREFIX}/lib/mojo/libc.mojopkg
+    - mojo package libc -o ${PREFIX}/lib/mojo/libc.mojopkg
 
 requirements:
   host:
