@@ -23,10 +23,13 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run tests/test.mojo
+          - mojo run tests.mojo
+    requirements:
+      run:
+        - numpy
     files:
       recipe:
-        - tests/test.mojo
+        - tests.mojo
 
 about:
   homepage: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo
