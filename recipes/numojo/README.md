@@ -4,7 +4,7 @@
 
 <div align="center">
   <a href="">
-    <img src="./assets/numojo_logo.png" alt="Logo" width="350" height="350">
+    <img src="./numojo_logo.png" alt="Logo" width="350" height="350">
   </a>
 
   <h1 align="center" style="font-size: 3em; color: white; font-family: 'Avenir'; text-shadow: 1px 1px orange;">NuMojo</h1>
@@ -20,7 +20,7 @@
     </div>
     <br />
     <div style="font-family: 'Arial'; border: 1px solid black; padding: 5px;">
-        <a href="./docs/readme_zhs.md"><strong>中文·简» </strong></a> &nbsp; 
+        <a href="./docs/readme_zhs.md"><strong>中文·简» </strong></a> &nbsp;
         <a href="./docs/readme_zht.md"><strong>中文·繁» </strong></a> &nbsp;
         <a href="./docs/readme_jp.md"><strong>日本語» </strong></a>
     </div>
