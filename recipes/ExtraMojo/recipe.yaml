@@ -1,0 +1,53 @@
+context:
+  version: "0.3.1"
+
+package:
+  name: "hue"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/ExtraMojo/ExtraMojo.git
+    rev: 42c0b81ba3cf2bde90fb5fa559089a10e129202e
+
+build:
+  number: 0
+  script:
+    - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
+requirements:
+  host:
+    - max
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run tests/test_file.mojo
+          - mojo test tests/test_regex.mojo
+          - mojo test tests/test_bstr.mojo
+    files:
+      recipe:
+        - tests/test_file.mojo
+        - tests/test_regex.mojo
+        - tests/test_bstr.mojo
+
+about:
+  homepage: https://github.com/ExtraMojo/ExtraMojo
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
+  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
+  # See https://spdx.org/licenses/
+  license: "Unlicense OR MIT"
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
+  license_file:
+    - LICENSE-MIT
+    - UNLICENSE
+  summary: Extra functionality not yet in the standard library, mostly focused on strings and file IO.
+  repository: https://github.com/ExtraMojo/ExtraMojo
+
+extra:
+  maintainers:
+    - sstadick
+  project_name: ExtraMojo
