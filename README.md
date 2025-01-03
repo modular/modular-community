@@ -48,4 +48,4 @@ To submit your package to the Modular community channel, you’ll need to:
 2. Add a folder to the `/recipes` folder. Give it the same name as your package.
 3. In the folder for your package, include a rattler-build recipe file named `recipe.yaml` and a file that includes tests for your package.
 
-Before submitting a package, please [join the early access program](https://forum.modular.com/t/community-channel-early-access/213) to get access to the full instructions and guidelines (plus, you'll get swag!).
+Before submitting a package, please [join the early access program](https://forum.modular.com/t/getting-started-with-community-packages/219) to get access to the full instructions and guidelines (plus, you'll get swag!).
