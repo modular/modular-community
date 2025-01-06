@@ -4,6 +4,7 @@ from ExtraMojo.bstr.bstr import (
     to_ascii_lowercase,
     to_ascii_uppercase,
 )
+from ExtraMojo.bstr.memchr import memchr, memchr_wide
 from memory import Span
 from testing import *
 
@@ -13,6 +14,69 @@ fn s(bytes: Span[UInt8]) -> String:
     var buffer = String()
     buffer.write_bytes(bytes)
     return buffer
+
+
+# Sometimes useful for digging into the memchr function
+# from ir_utils.dump import dump_ir
+# fn main() raises:
+# var static_str = "hi"
+# dump_ir[
+#     find_chr_next_occurrence[__origin_of(static_str)],
+#     "find_chr_next_occurrence",
+# ]()
+# test_find_chr_next_occurance()
+
+
+fn test_memchr() raises:
+    var cases = List[(StringLiteral, Int)](
+        (
+            "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            49,
+        ),
+        (
+            "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            124,
+        ),
+    )
+
+    for kase in cases:
+        var index = memchr(kase[][0].as_bytes(), ord("|"))
+        assert_equal(
+            index,
+            kase[][1],
+            "Expected "
+            + str(kase[][1])
+            + " Found "
+            + str(index)
+            + " in "
+            + kase[][0],
+        )
+
+
+fn test_memchr_wide() raises:
+    var cases = List[(StringLiteral, Int)](
+        (
+            "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            49,
+        ),
+        (
+            "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            124,
+        ),
+    )
+
+    for kase in cases:
+        var index = memchr_wide(kase[][0].as_bytes(), ord("|"))
+        assert_equal(
+            index,
+            kase[][1],
+            "Expected "
+            + str(kase[][1])
+            + " Found "
+            + str(index)
+            + " in "
+            + kase[][0],
+        )
 
 
 fn test_lowercase_short() raises:
@@ -88,6 +152,17 @@ fn test_find_long() raises:
     var expected = 373
     var answer = find(haystack, "result".as_bytes()).value()
     assert_equal(answer, expected)
+
+
+fn test_find_long_variable_start() raises:
+    var haystack = "ABCDEFGhijklmnop0123456789TheKindIguana\nJumpedOver the angry weird fense as it ran away from the seething moon that was swooping down to scoop it up and bring it to outer space.\nThen a really weird thing happened and suddenly 64 moons were swooping down at the Iguana. It tried to turn and tell them it was scalar, but they didn't care all tried to scoop it at once, which resulted in a massive IguanaZ lock contention.".as_bytes()
+    for i in range(0, len(haystack)):
+        var answer = memchr(haystack, ord("Z"), i)
+        if i <= 401:
+            assert_equal(401, answer)
+        else:
+            assert_equal(-1, answer)
+        # assert_equal(answer, expected)
 
 
 fn test_spilt_iterator() raises:
