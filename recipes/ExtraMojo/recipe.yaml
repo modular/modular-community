@@ -1,13 +1,13 @@
 context:
-  version: "0.3.1"
+  version: "0.6.0"
 
 package:
-  name: "hue"
+  name: "ExtraMojo"
   version: ${{ version }}
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 42c0b81ba3cf2bde90fb5fa559089a10e129202e
+    rev: eaebcaa98c14f840f441dab434d522011d7d4500
 
 build:
   number: 0
