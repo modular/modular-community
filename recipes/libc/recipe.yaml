@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package libc -o ${PREFIX}/lib/mojo/libc.mojopkg
+    - mojo package src/libc -o ${PREFIX}/lib/mojo/libc.mojopkg
 
 requirements:
   host:
