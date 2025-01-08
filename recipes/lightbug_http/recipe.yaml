@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/saviorand/lightbug_http.git
-    rev: ea897f70483bf20ec3f4764308404e11d9271151
+    rev: bcd2967c6177ac2c7800b0c4d51ddc0630326b28
 
 build:
   number: 0
