@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.1.7"
+  version: "0.1.8"
 
 package:
   name: "lightbug_http"
@@ -30,8 +30,14 @@ tests:
         then:
           - magic run test
     files:
-      source:
-        - tests/lightbug_http/
+      recipe:
+        - tests/lightbug_http/io/test_bytes.mojo
+        - tests/lightbug_http/test_client.mojo
+        - tests/lightbug_http/test_cookie.mojo
+        - tests/lightbug_http/test_header.mojo
+        - tests/lightbug_http/test_http.mojo
+        - tests/lightbug_http/test_net.mojo
+        - tests/lightbug_http/test_uri.mojo
 
 about:
   homepage: https://lightbug.site
