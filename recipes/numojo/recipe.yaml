@@ -1,0 +1,47 @@
+context:
+  version: "0.4.0"
+
+package:
+  name: "numojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
+    rev: 18d999a70aaf9882fb2ecff965cf7278a5138855
+
+build:
+  number: 0
+  script:
+    - mojo package numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojopkg
+requirements:
+  host:
+    - max
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run tests.mojo
+    requirements:
+      run:
+        - numpy
+    files:
+      recipe:
+        - tests.mojo
+
+about:
+  homepage: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: NuMojo is a library for numerical computing in Mojo 🔥 similar to NumPy, SciPy in Python.
+  repository: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo
+
+extra:
+  project_name: NuMojo
+  maintainers:
+    - shivasankarka
+    - MadAlex1997
+    - forFudan
+    - sandstromviktor
