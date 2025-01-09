@@ -26,6 +26,7 @@ tests:
           - mojo run tests/LogisR_test.mojo
     requirements:
       run:
+        - max <24.6
         - scikit-learn
     files:
       recipe:
