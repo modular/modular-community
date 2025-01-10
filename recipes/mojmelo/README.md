@@ -3,13 +3,10 @@
 [![Stargazers][stars-shield]][stars-url]
 [![Issues][issues-shield]][issues-url]
 [![BSD-3-Clause License][license-shield]][license-url]
-![CodeQL](https://github.com/yetalit/Mojmelo/workflows/CodeQL/badge.svg)
+![CodeQL](https://github.com/yetalit/Mojmelo/actions/workflows/codeql.yml/badge.svg)
 
 <br />
 <div align="center">
-  <a href="https://github.com/yetalit/mojmelo">
-    <img src="./image.jpeg" alt="Logo" width="256" height="256">
-  </a>
   <h3 align="center">Mojmelo</h3>
   <p align="center">
     <a href="https://github.com/yetalit/mojmelo/issues/new?labels=bug&template=bug-report---.md">Report Bug</a>
