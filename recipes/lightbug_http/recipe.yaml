@@ -1,0 +1,54 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+
+context:
+  version: "0.1.8"
+
+package:
+  name: "lightbug_http"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/saviorand/lightbug_http.git
+    rev: bcd2967c6177ac2c7800b0c4d51ddc0630326b28
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - magic run mojo package . -o ${PREFIX}/lib/mojo/lightbug_http.mojopkg
+
+requirements:
+  host:
+      - max
+  run:
+    - ${{ pin_compatible('max') }}
+    - small_time == 0.1.6
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - magic run test
+    files:
+      recipe:
+        - tests/lightbug_http/io/test_bytes.mojo
+        - tests/lightbug_http/test_client.mojo
+        - tests/lightbug_http/test_cookie.mojo
+        - tests/lightbug_http/test_header.mojo
+        - tests/lightbug_http/test_http.mojo
+        - tests/lightbug_http/test_net.mojo
+        - tests/lightbug_http/test_uri.mojo
+
+about:
+  homepage: https://lightbug.site
+  license: MIT
+  license_file: LICENSE
+  summary: Lightbug is a simple and sweet HTTP framework for Mojo
+  repository: https://github.com/saviorand/lightbug_http
+
+extra:
+  maintainers:
+    - saviorand
+    - bgreni
+    - thatstoasty
+  project_name: lightbug_http
