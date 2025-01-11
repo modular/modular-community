@@ -1,5 +1,5 @@
 context:
-  version: "0.6.0"
+  version: "0.7.0"
 
 package:
   name: "ExtraMojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: eaebcaa98c14f840f441dab434d522011d7d4500
+    rev: c509406a4951f83b63a2ff09be1f53a67c9ea45e
 
 build:
   number: 0
@@ -17,6 +17,7 @@ requirements:
   host:
     - max ==24.6
   run:
+    - max ==24.6
     - ${{ pin_compatible('max') }}
 
 tests:
