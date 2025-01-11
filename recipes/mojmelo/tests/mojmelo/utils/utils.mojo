@@ -99,7 +99,7 @@ fn _partition[
         right += 1
     swap(array[size - 1], array[right])
     indices[size - 1], indices[right] = indices[right], indices[size - 1]
-    
+
     return right
 
 

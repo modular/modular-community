@@ -242,7 +242,7 @@ struct Matrix(Stringable, Writable):
         for i in range(mat.width):
             mat[row, i] = self[row, columns[i]]
         return mat^
-    
+
     # replace an element
     @always_inline
     fn __setitem__(mut self, row: Int, column: Int, val: Float32) raises:
@@ -254,7 +254,7 @@ struct Matrix(Stringable, Writable):
         if loc > self.size - 1:
             raise Error("Error: Location is out of range!")
         self.data[loc] = val
-    
+
     # replace the given row
     @always_inline
     fn __setitem__(mut self, row: Int, val: Matrix) raises:
@@ -776,7 +776,7 @@ struct Matrix(Stringable, Writable):
                 tmpPtr += simd_width * self.height
             vectorize[convert, self.simd_width](self.width)
         return mat^
-    
+
     @always_inline
     fn T(self) -> Matrix:
         if self.height == 1 or self.width == 1:
@@ -1140,7 +1140,7 @@ struct Matrix(Stringable, Writable):
         mat.height = height
         mat.width = width
         return mat^
-    
+
     fn cov(self) raises -> Matrix:
         var c = Matrix(self.height, self.height, order= self.order)
         for i in range(self.height):
@@ -1292,7 +1292,7 @@ struct Matrix(Stringable, Writable):
 
         for i in range(self.size):
             vect[int(self.data[i])] += 1
-    
+
         return vect^
 
     @staticmethod
