@@ -188,7 +188,7 @@ fn main() raises:
                     results_list[i - 1][1] = atol(res[1])
                     results_list[i - 1][2] = atol(res[2])
             results_list.append(results)
-            
+
             from collections import Counter
 
             votes = List[Int]()
