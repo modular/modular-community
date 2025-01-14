@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://gitlab.com/hylkedonker/bridge.git
-    rev: ae5c6fca137bf8903b9062315e163d41e90c4d78
+    rev: 0e4ee8acbdbf2facd4c8af26b593bf86dc835f25
 
 build:
   number: 0
@@ -15,7 +15,7 @@ build:
     - mojo package src/bridge -o ${{ PREFIX }}/lib/mojo/bridge.mojopkg
 requirements:
   host:
-    - max
+    - max>=25.1.0.dev2025011405,<26
   run:
     - ${{ pin_compatible('max') }}
 
