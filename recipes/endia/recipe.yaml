@@ -7,16 +7,16 @@ package:
 
 source:
   - git: https://github.com/endia-ai/Endia.git
-    rev: 6b5a1a9d9d06e0da6c36aa8c940f45cede424396
+    rev: eeafbd1d1a519dbc63fd863c8922f37ec8f84a46
 
 build:
   number: 0
   script:
-    - mojo package src/endia -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
+    - mojo package endia -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
 
 requirements:
   host:
-    - max
+    - max =24.6
   run:
     - ${{ pin_compatible('max') }}
 
@@ -25,6 +25,9 @@ tests:
       - if: unix
         then:
           - mojo run test.mojo
+    requirements:
+      run:
+        - max =24.6
     files:
       recipe:
         - test.mojo
@@ -35,11 +38,6 @@ about:
   license_file: LICENSE
   summary: Dynamic Neural Networks in Mojo
   repository: https://github.com/endia-ai/Endia
-  description: |
-    Endia is a dynamic Machine Learning Library that features algorithmic differentiation
-    for computing derivatives of arbitrary order, signal processing capabilities including
-    Complex Numbers and Fourier Transforms, JIT compilation via the MAX Engine, and both
-    PyTorch-like imperative and JAX-like functional interfaces.
 
 extra:
   maintainers:
