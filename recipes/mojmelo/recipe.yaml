@@ -1,5 +1,5 @@
 context:
-  version: "0.0.1"
+  version: "0.0.2"
 
 package:
   name: "mojmelo"
@@ -7,15 +7,16 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: c17c802105f65aa4fc2811f60cf8b099bae8f9ca
+    rev: e53bb63aa35c4f377fe5c6e7ff5da7b3e13fbbcd
 
 build:
   number: 0
   script:
-    - mojo package mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojopkg
+    - mojo package magic/mojmelo/utils/mojmelo_matmul -o ${{ PREFIX }}/lib/mojo/mojmelo_matmul.mojopkg
+    - mojo package magic/mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojopkg
 requirements:
   host:
-    - max <24.6
+    - max =24.6
   run:
     - ${{ pin_compatible('max') }}
 
@@ -23,15 +24,17 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run tests/LogisR_test.mojo
+          - mojo tests/setup.mojo
     requirements:
       run:
-        - max <24.6
-        - scikit-learn
+        - max =24.6
     files:
       recipe:
-        - tests/LogisR_test.mojo
-        - tests/load_breast_cancer.py
+        - tests/setup.mojo
+        - tests/setup.sh
+        - tests/mojmelo/__init__.mojo
+        - tests/mojmelo/utils/*.mojo
+        - tests/mojmelo/utils/mojmelo_matmul/*.mojo
 
 about:
   homepage: https://github.com/yetalit/Mojmelo
