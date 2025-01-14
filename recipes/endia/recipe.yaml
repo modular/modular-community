@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package endia -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
+    - mojo package src/endia -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
 
 requirements:
   host:
@@ -31,7 +31,7 @@ tests:
 
 about:
   homepage: https://endia.vercel.app/
-  license: Apache-2.0 with LLVM Exceptions
+  license: Apache-2.0
   license_file: LICENSE
   summary: Dynamic Neural Networks in Mojo
   repository: https://github.com/endia-ai/Endia
@@ -40,10 +40,7 @@ about:
     for computing derivatives of arbitrary order, signal processing capabilities including
     Complex Numbers and Fourier Transforms, JIT compilation via the MAX Engine, and both
     PyTorch-like imperative and JAX-like functional interfaces.
-  doc_url: https://endia.vercel.app
-  dev_url: https://github.com/endia-ai/Endia
 
 extra:
   maintainers:
     - TilliFe
-  project_name: Endia
