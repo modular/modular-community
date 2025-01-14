@@ -15,7 +15,7 @@ build:
   number: 0
   script:
     - mkdir -p ${PREFIX}/lib/mojo
-    - magic run mojo package . -o ${PREFIX}/lib/mojo/lightbug_http.mojopkg
+    - mojo package lightbug_http -o ${{ PREFIX }}/lib/mojo/lightbug_http.mojopkg
 
 requirements:
   host:
