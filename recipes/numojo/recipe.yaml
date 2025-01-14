@@ -15,7 +15,7 @@ build:
     - mojo package numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojopkg
 requirements:
   host:
-    - max =24.6
+    - max==24.6
   run:
     - ${{ pin_compatible('max') }}
 
@@ -26,6 +26,7 @@ tests:
           - mojo run tests.mojo
     requirements:
       run:
+        - max==24.6
         - numpy
     files:
       recipe:
