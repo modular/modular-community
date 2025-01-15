@@ -23,10 +23,10 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test.mojo
+          - mojo run test/test_color.mojo
     files:
       recipe:
-        - test.mojo
+        - test/test_color.mojo
 
 about:
   homepage: https://github.com/thatstoasty/hue
