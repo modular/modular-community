@@ -15,9 +15,9 @@ build:
     - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
 requirements:
   host:
-    - max ==24.6
+    - max =24.6
   run:
-    - max ==24.6
+    - max =24.6
     - ${{ pin_compatible('max') }}
 
 tests:
@@ -27,6 +27,9 @@ tests:
           - mojo run tests/test_file.mojo
           - mojo test tests/test_regex.mojo
           - mojo test tests/test_bstr.mojo
+    requirements:
+      run:
+        - max =24.6
     files:
       recipe:
         - tests/test_file.mojo
