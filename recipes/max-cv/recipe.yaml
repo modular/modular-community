@@ -1,0 +1,50 @@
+context:
+  version: "24.6.0"
+
+package:
+  name: "max-cv"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/BradLarson/max-cv.git
+    rev: 31f67369b33680ca0b13acfe6c8f87d79dd002a3
+
+build:
+  number: 0
+  script:
+    - mojo package max-cv -o ${{ PREFIX }}/lib/mojo/max-cv.mojopkg
+
+requirements:
+  host:
+    - max =24.6
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run tests/__init__.mojo
+    requirements:
+      run:
+        - max =24.6
+    files:
+      recipe:
+        - tests/run_tests.mojo
+        - tests/common.py
+        - tests/conftest.py
+        - tests/test_color_correction.py
+        - tests/test_effects.py
+        - tests/test_io.py
+        - tests/test_pipeline.py
+
+about:
+  homepage: https://github.com/BradLarson/max-cv
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An image processing framework built upon MAX
+  repository: https://github.com/BradLarson/max-cv
+
+extra:
+  maintainers:
+    - BradLarson
