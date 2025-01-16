@@ -11,14 +11,16 @@ source:
 
 build:
   number: 0
-  script:
-    - mojo package max-cv -o ${{ PREFIX }}/lib/mojo/max-cv.mojopkg
+  noarch: python
+  # script: pip install . -v
 
 requirements:
   host:
     - max =24.6
+    - python >=3.9,<3.13
   run:
     - ${{ pin_compatible('max') }}
+    - python >=3.9,<3.13
 
 tests:
   - script:
