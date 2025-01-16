@@ -706,14 +706,6 @@ fn check_matrices_close[
         np.all(np.isclose(np.matrix(matrix.to_numpy()), np_sol, atol=0.01)), st
     )
 
-
-fn check_values_close[
-    dtype: DType
-](value: Scalar[dtype], np_sol: PythonObject, st: String) raises:
-    var np = Python.import_module("numpy")
-    assert_true(np.isclose(value, np_sol, atol=0.01), st)
-
-
 # ===-----------------------------------------------------------------------===#
 # Manipulation
 # ===-----------------------------------------------------------------------===#
