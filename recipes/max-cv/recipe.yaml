@@ -26,7 +26,7 @@ tests:
   - script:
       - if: unix
         then:
-          - pytest tests/common.py
+          - pytest tests/conftest.py
     requirements:
       run:
         - max =24.6
@@ -34,12 +34,7 @@ tests:
         - pytest
     files:
       recipe:
-        - tests/common.py
         - tests/conftest.py
-        - tests/test_color_correction.py
-        - tests/test_effects.py
-        - tests/test_io.py
-        - tests/test_pipeline.py
 
 about:
   homepage: https://github.com/BradLarson/max-cv
