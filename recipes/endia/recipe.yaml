@@ -24,13 +24,13 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test.mojo
+          - mojo run tests/__init__.mojo
     requirements:
       run:
         - max =24.6
     files:
       recipe:
-        - test.mojo
+        - tests/run_tests.mojo
 
 about:
   homepage: https://endia.vercel.app/
