@@ -25,12 +25,20 @@ tests:
       - if: unix
         then:
           - mojo run tests/__init__.mojo
+          - mojo run tests/test_endia/__init__.mojo
+          - mojo run tests/test_endia/test_fft/__init__.mojo
     requirements:
       run:
         - max =24.6
     files:
       recipe:
         - tests/run_tests.mojo
+        - tests/test_endia/test_fft/test_fft.mojo
+        - tests/test_endia/test_fft/test_fft2.mojo
+        - tests/test_endia/test_fft/test_fftn.mojo
+        - tests/test_endia/test_fft/test_ifft.mojo
+        - tests/test_endia/test_fft/test_ifft2.mojo
+        - tests/test_endia/test_fft/test_ifftn.mojo
 
 about:
   homepage: https://endia.vercel.app/
