@@ -24,13 +24,12 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run tests/__init__.mojo
+          - pytest tests/__init__.py
     requirements:
       run:
         - max =24.6
     files:
       recipe:
-        - tests/run_tests.mojo
         - tests/common.py
         - tests/conftest.py
         - tests/test_color_correction.py
