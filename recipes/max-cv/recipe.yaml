@@ -26,7 +26,7 @@ tests:
   - script:
       - if: unix
         then:
-          - pytest tests/__init__.py
+          - pytest tests/common.py
     requirements:
       run:
         - max =24.6
