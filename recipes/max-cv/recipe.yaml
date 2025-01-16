@@ -30,6 +30,8 @@ tests:
     requirements:
       run:
         - max =24.6
+        - python >=3.9,<3.13
+        - pytest
     files:
       recipe:
         - tests/common.py
