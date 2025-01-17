@@ -7,15 +7,15 @@ package:
 
 source:
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
-    rev: 18d999a70aaf9882fb2ecff965cf7278a5138855
-
+    rev: 13bc54b65a47ba31306dae510e61787284469332
+    
 build:
   number: 0
   script:
     - mojo package numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojopkg
 requirements:
   host:
-    - max==24.6
+    - max=24.6
   run:
     - ${{ pin_compatible('max') }}
 
@@ -26,7 +26,7 @@ tests:
           - mojo run tests.mojo
     requirements:
       run:
-        - max==24.6
+        - max=24.6
         - numpy
     files:
       recipe:
