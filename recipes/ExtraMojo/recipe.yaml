@@ -1,13 +1,13 @@
 context:
-  version: "0.7.0"
+  version: "0.8.0"
 
 package:
-  name: "ExtraMojo"
+  name: "extramojo"
   version: ${{ version }}
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: c509406a4951f83b63a2ff09be1f53a67c9ea45e
+    rev: 263006acc60d64a2f21958e9bb6298cc5a0da8c2
 
 build:
   number: 0
@@ -24,9 +24,9 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run tests/test_file.mojo
-          - mojo test tests/test_regex.mojo
-          - mojo test tests/test_bstr.mojo
+          - mojo run -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_file.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_regex.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_bstr.mojo
     requirements:
       run:
         - max =24.6
@@ -54,4 +54,4 @@ about:
 extra:
   maintainers:
     - sstadick
-  project_name: ExtraMojo
+  project_name: extramojo 
