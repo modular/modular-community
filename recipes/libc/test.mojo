@@ -160,3 +160,18 @@ fn test_printf() raises:
 #     var msg_ptr = msg.unsafe_cstr_ptr()
 #     var bytes_written = write(FD_STDOUT, msg_ptr.bitcast[c_void](), len(msg))
 #     assert_equal(bytes_written, len(msg), "write failed to write to stdout")
+
+
+fn main() raises:
+    test_getaddrinfo()
+    test_strlen()
+    test_htonl_ntohl()
+    test_cftob()
+    test_inet_pton()
+    test_htons_ntohs()
+    test_inet_ntop_pton()
+    test_inet_addr_ntoa()
+    test_socket_close()
+    test_printf()
+    # test_write()
+    return 0
