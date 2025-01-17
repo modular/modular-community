@@ -19,7 +19,7 @@ build:
 
 requirements:
   host:
-      - max
+      - max =24.6
   run:
     - ${{ pin_compatible('max') }}
     - small_time == 0.1.6
@@ -29,6 +29,9 @@ tests:
       - if: unix
         then:
           - magic run test
+    requirements:
+      run:
+        - max =24.6
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
