@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: 32ff979d86393cf91068ead70e96ce18cd701106
+    rev: 3c07884d8ff5c823859bf4aebf532d8c4042357d
 
 build:
   number: 0
