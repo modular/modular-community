@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/BradLarson/max-cv.git
-    rev: 31f67369b33680ca0b13acfe6c8f87d79dd002a3
+    rev: 21bbd57404548de3c471ec8492dfcc01b76ae457
 
 build:
   number: 0
