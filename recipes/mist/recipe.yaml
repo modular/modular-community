@@ -15,7 +15,7 @@ build:
     - mojo package src/mist -o ${{ PREFIX }}/lib/mojo/mist.mojopkg
 requirements:
   host:
-    - max
+    - max =24.6
   run:
     - ${{ pin_compatible('max') }}
 
