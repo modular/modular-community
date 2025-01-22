@@ -1,0 +1,57 @@
+context:
+  version: "0.8.0"
+
+package:
+  name: "extramojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/ExtraMojo/ExtraMojo.git
+    rev: 263006acc60d64a2f21958e9bb6298cc5a0da8c2
+
+build:
+  number: 0
+  script:
+    - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
+requirements:
+  host:
+    - max =24.6
+  run:
+    - max =24.6
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_file.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_regex.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_bstr.mojo
+    requirements:
+      run:
+        - max =24.6
+    files:
+      recipe:
+        - tests/test_file.mojo
+        - tests/test_regex.mojo
+        - tests/test_bstr.mojo
+
+about:
+  homepage: https://github.com/ExtraMojo/ExtraMojo
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
+  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
+  # See https://spdx.org/licenses/
+  license: "Unlicense OR MIT"
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
+  license_file:
+    - LICENSE-MIT
+    - UNLICENSE
+  summary: Extra functionality not yet in the standard library, mostly focused on strings and file IO.
+  repository: https://github.com/ExtraMojo/ExtraMojo
+
+extra:
+  maintainers:
+    - sstadick
+  project_name: extramojo

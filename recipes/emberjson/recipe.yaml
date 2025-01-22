@@ -1,0 +1,43 @@
+context:
+  version: 0.1.1
+
+package:
+  name: "emberjson"
+  version: ${{ version }}
+
+source:
+ - git: https://github.com/bgreni/EmberJson.git
+   rev: 23bf62c726f6f57d0338780fad3802c2c42c5487
+
+build:
+  number: 0
+  script:
+    - mojo package emberjson -o ${{ PREFIX }}/lib/mojo/emberjson.mojopkg
+
+requirements:
+  host:
+    - max =24.6
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+    - if: unix
+      then:
+        - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/bgreni/EmberJson
+  license: MIT
+  license_file: LICENSE
+  summary: A lightweight JSON parsing library written in pure Mojo
+  repository: https://github.com/bgreni/EmberJson
+
+extra:
+  maintainers:
+    - bgreni
+  project_name:
+    - EmberJson
