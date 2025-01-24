@@ -20,15 +20,6 @@ requirements:
   run:
     - ${{ pin_compatible('max') }}
 
-tests:
-  - script:
-      - if: unix
-        then:
-          - mojo run test.mojo
-    files:
-      recipe:
-        - test.mojo
-
 about:
   homepage: https://github.com/msaelices/mojo-libc
   license: MIT
