@@ -15,7 +15,7 @@ build:
     - mojo package src -o ${{ PREFIX }}/lib/mojo/infrared.mojopkg
 requirements:
   host:
-    - max
+    - max=24.6
   run:
     - ${{ pin_compatible('max') }}
 
@@ -24,6 +24,9 @@ tests:
       - if: unix
         then:
           - mojo run test.mojo
+    requirements:
+      run:
+        - max=24.6
     files:
       recipe:
         - test.mojo
