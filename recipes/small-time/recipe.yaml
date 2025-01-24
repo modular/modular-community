@@ -24,6 +24,11 @@ tests:
       - if: unix
         then:
           - mojo test test/test_small_time.mojo
+    files:
+      recipe:
+        - test_small_time.mojo
+        - test_time_delta.mojo
+        - test_time_zone.mojo
 
 about:
   homepage: https://github.com/thatstoasty/small-time
