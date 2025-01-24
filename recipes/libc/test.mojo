@@ -174,4 +174,4 @@ fn main() raises:
     test_socket_close()
     test_printf()
     # test_write()
-    return 0
+    return
