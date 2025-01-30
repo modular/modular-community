@@ -2,7 +2,7 @@ context:
   version: "0.0.1"
 
 package:
-  name: "mist"
+  name: "small_time"
   version: ${{ version }}
 
 source:
