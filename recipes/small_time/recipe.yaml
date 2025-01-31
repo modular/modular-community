@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package small_time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
+    - mojo package small-time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
 requirements:
   host:
     - max =24.6
