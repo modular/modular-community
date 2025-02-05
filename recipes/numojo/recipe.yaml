@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
-    rev: 13bc54b65a47ba31306dae510e61787284469332
+    rev: 4229b768d87b63896f527a7d52527ac1aec22fa2
 
 build:
   number: 0
