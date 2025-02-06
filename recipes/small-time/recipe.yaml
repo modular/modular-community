@@ -2,7 +2,7 @@ context:
   version: "0.0.1"
 
 package:
-  name: "smalltime"
+  name: "small-time"
   version: ${{ version }}
 
 source:
