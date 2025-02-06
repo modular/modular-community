@@ -1,5 +1,5 @@
 context:
-  version: "0.0.2"
+  version: "0.0.3"
 
 package:
   name: "mojmelo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: e53bb63aa35c4f377fe5c6e7ff5da7b3e13fbbcd
+    rev: 9531118fb9df74c3b376befe30da82281f24375f
 
 build:
   number: 0
