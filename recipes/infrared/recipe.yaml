@@ -1,0 +1,44 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: "infrared"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/helehex/infrared.git
+    rev: 1776092af17ce25af4d3c1273bee9974a4bc66c4
+
+build:
+  number: 0
+  script:
+    - mojo package src -o ${{ PREFIX }}/lib/mojo/infrared.mojopkg
+requirements:
+  host:
+    - max=24.5
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    requirements:
+      run:
+        - max=24.5
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/helehex/infrared
+  license: MIT
+  license_file: LICENSE
+  summary: A geometric algebra library for mojo.
+  repository: https://github.com/helehex/infrared
+
+extra:
+  maintainers:
+    - helehex
+  project_name: Infrared
