@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/msaelices/mojo-websockets.git
-    rev: 4835c1ae0cf9d49b77ced42daf9821f62418450c
+    rev: 3009c1720ee3cf98e27ed7a2467f0a247f4dc010
 
 build:
   number: 0
