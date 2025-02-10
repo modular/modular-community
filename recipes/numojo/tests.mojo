@@ -1,8 +1,12 @@
 import numojo as nm
 from numojo.prelude import *
-from numojo import mat
 from python import Python, PythonObject
-from testing.testing import assert_raises, assert_equal, assert_true, assert_almost_equal
+from testing.testing import (
+    assert_raises,
+    assert_equal,
+    assert_true,
+    assert_almost_equal,
+)
 
 
 fn check[
@@ -39,6 +43,7 @@ def test_arange():
         "Arange is broken",
     )
 
+
 def test_linspace():
     var np = Python.import_module("numpy")
     check(
@@ -47,7 +52,7 @@ def test_linspace():
         "Linspace is broken",
     )
 
+
 def main():
     test_arange()
     test_linspace()
-
