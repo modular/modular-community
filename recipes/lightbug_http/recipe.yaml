@@ -32,6 +32,7 @@ tests:
     requirements:
       run:
         - max =24.6
+        - small_time =0.0.1
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
