@@ -28,7 +28,7 @@ tests:
   - script:
       - if: unix
         then:
-          - magic run test
+          - mojo test
     requirements:
       run:
         - max =24.6
