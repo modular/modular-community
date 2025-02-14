@@ -45,9 +45,9 @@ fn test_memchr() raises:
             index,
             kase[][1],
             "Expected "
-            + str(kase[][1])
+            + String(kase[][1])
             + " Found "
-            + str(index)
+            + String(index)
             + " in "
             + kase[][0],
         )
@@ -71,9 +71,9 @@ fn test_memchr_wide() raises:
             index,
             kase[][1],
             "Expected "
-            + str(kase[][1])
+            + String(kase[][1])
             + " Found "
-            + str(index)
+            + String(index)
             + " in "
             + kase[][0],
         )
