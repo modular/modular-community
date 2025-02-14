@@ -10,7 +10,7 @@ source:
     rev: 6e26ace5bcf50c8fc10ea6e569d1f03d524b6ce0
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo package src/small_time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
 requirements:
