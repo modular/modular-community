@@ -19,7 +19,7 @@ requirements:
     - max == 25.1
   run:
     - ${{ pin_compatible('max') }}
-    
+
 tests:
   - script:
       - if: unix
