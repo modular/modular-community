@@ -24,7 +24,7 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run tests/test_bytes.mojo
+          - mojo test tests/test_bytes.mojo
     requirements:
       run:
         - max=25.1
