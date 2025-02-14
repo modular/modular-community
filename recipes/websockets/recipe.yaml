@@ -1,0 +1,45 @@
+context:
+  version: "0.1.1"
+
+package:
+  name: "websockets"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/msaelices/mojo-websockets.git
+    rev: 30f0927ce27cde04cf25304b6d449f36d20281a1
+
+build:
+  number: 0
+  script:
+    - mojo package src/websockets -o ${PREFIX}/lib/mojo/websockets.mojopkg
+
+requirements:
+  host:
+    - max == 25.1
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test tests/test_bytes.mojo
+    requirements:
+      run:
+        - max=25.1
+    files:
+      recipe:
+        - tests/test_bytes.mojo
+
+about:
+  homepage: https://github.com/msaelices/mojo-websockets
+  license: MIT
+  license_file: LICENSE
+  summary: Mojo's websockets library
+  repository: https://github.com/msaelices/mojo-websockets
+
+extra:
+  maintainers:
+    - msaelices
+  project_name: mojo-websockets
