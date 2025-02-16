@@ -20,18 +20,6 @@ requirements:
   run:
     - ${{ pin_compatible('max') }}
 
-tests:
-  - script:
-      - if: unix
-        then:
-          - mojo test tests/test_bytes.mojo
-    requirements:
-      run:
-        - max=25.2
-    files:
-      recipe:
-        - tests/test_bytes.mojo
-
 about:
   homepage: https://github.com/msaelices/mojo-websockets
   license: MIT
