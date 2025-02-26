@@ -19,10 +19,10 @@ build:
 
 requirements:
   host:
-      - max =24.6
+      - max =25.1
   run:
     - ${{ pin_compatible('max') }}
-    - small_time == 0.0.1
+    - small_time == 0.0.3
 
 tests:
   - script:
@@ -31,8 +31,8 @@ tests:
           - mojo test
     requirements:
       run:
-        - max =24.6
-        - small_time =0.0.1
+        - max =25.1
+        - small_time =0.0.3
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
