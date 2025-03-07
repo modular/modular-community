@@ -8,6 +8,8 @@ A fixed-point decimal arithmetic library implemented in [the Mojo programming la
 
 DeciMojo provides a Decimal type implementation for Mojo with fixed-precision arithmetic, designed to handle financial calculations and other scenarios where floating-point rounding errors are problematic.
 
+Repo: [https://github.com/forFudan/DeciMojo](https://github.com/forFudan/DeciMojo)
+
 ## Objective
 
 Financial calculations and data analysis require precise decimal arithmetic that floating-point numbers cannot reliably provide. As someone working in finance and credit risk model validation, I needed a dependable correctly-rounded, fixed-precision numeric type when migrating my personal projects from Python to Mojo.
