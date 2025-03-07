@@ -1,5 +1,7 @@
 # DeciMojo
 
+![icon](icon_256x256.png)
+
 A fixed-point decimal arithmetic library implemented in [the Mojo programming language 🔥](https://www.modular.com/mojo).
 
 ## Overview
@@ -13,6 +15,12 @@ Financial calculations and data analysis require precise decimal arithmetic that
 Since Mojo currently lacks a native Decimal type in its standard library, I decided to create my own implementation to fill that gap.
 
 This project draws inspiration from several established decimal implementations and documentation, e.g., [Python built-in `Decimal` type](https://docs.python.org/3/library/decimal.html), [Rust `rust_decimal` crate](https://docs.rs/rust_decimal/latest/rust_decimal/index.html), [Microsoft's `Decimal` implementation](https://learn.microsoft.com/en-us/dotnet/api/system.decimal.getbits?view=net-9.0&redirectedfrom=MSDN#System_Decimal_GetBits_System_Decimal_), [General Decimal Arithmetic Specification](https://speleotrove.com/decimal/decarith.html), etc. Many thanks to these predecessors for their contributions and their commitment to open knowledge sharing.
+
+## Nomenclature
+
+DeciMojo combines "Decimal" and "Mojo" - reflecting both its purpose (decimal arithmetic) and the programming language it's implemented in. The name highlights the project's focus on bringing precise decimal calculations to the Mojo ecosystem.
+
+For brevity, you can also refer to it "decimo" (derived from the Latin root "decimus" meaning "tenth").
 
 ## Status
 
@@ -276,11 +284,12 @@ Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/forFu
 If you find DeciMojo useful for your research, consider listing it in your citations 😀.
 
 ```tex
-@software{decimojo,
-    author       = {{Yuhao Zhu}},
+@software{Zhu.2025,
+    author       = {Zhu, Yuhao},
     year         = {2025},
     title        = {DeciMojo: A fixed-point decimal arithmetic library in Mojo},
     url          = {https://github.com/forFudan/DeciMojo},
-    version      = {0.1.0}
+    version      = {0.1.0},
+    note = {Computer Software}
 }
 ```
