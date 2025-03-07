@@ -270,26 +270,6 @@ var area = pi * (radius ** 2)
 print("Circle area: " + String(area))  # Precisely calculated area
 ```
 
-## Tests and benches
-
-After cloning the repo onto your local disk, you can:
-
-- Use `magic run test` (or `maigic run t`) to run tests.
-- Use `magic run bench` (or `magic run b`) to generate logs for benchmarking tests agains `python.decimal` module. The log files are saved in `benches/logs/`.
-
 ## License
 
 Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/forFudan/decimojo/blob/main/LICENSE) for details.
-
-If you find DeciMojo useful for your research, consider listing it in your citations 😀.
-
-```tex
-@software{Zhu.2025,
-    author       = {Zhu, Yuhao},
-    year         = {2025},
-    title        = {DeciMojo: A fixed-point decimal arithmetic library in Mojo},
-    url          = {https://github.com/forFudan/DeciMojo},
-    version      = {0.1.0},
-    note = {Computer Software}
-}
-```
