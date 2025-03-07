@@ -1,6 +1,6 @@
 # DeciMojo
 
-A correctly-rounded, fixed-point decimal arithmetic library for the [Mojo programming language 🔥](https://www.modular.com/mojo).
+A fixed-point decimal arithmetic library implemented in [the Mojo programming language 🔥](https://www.modular.com/mojo).
 
 ## Overview
 
@@ -8,7 +8,7 @@ DeciMojo provides a Decimal type implementation for Mojo with fixed-precision ar
 
 ## Objective
 
-Financial calculations and data analysis require precise decimal arithmetic that floating-point numbers cannot reliably provide. As someone working in finance and credit risk model validation, I needed a dependable fixed-precision numeric type when migrating my personal projects from Python to Mojo.
+Financial calculations and data analysis require precise decimal arithmetic that floating-point numbers cannot reliably provide. As someone working in finance and credit risk model validation, I needed a dependable correctly-rounded, fixed-precision numeric type when migrating my personal projects from Python to Mojo.
 
 Since Mojo currently lacks a native Decimal type in its standard library, I decided to create my own implementation to fill that gap.
 
@@ -269,14 +269,18 @@ After cloning the repo onto your local disk, you can:
 - Use `magic run test` (or `maigic run t`) to run tests.
 - Use `magic run bench` (or `magic run b`) to generate logs for benchmarking tests agains `python.decimal` module. The log files are saved in `benches/logs/`.
 
-## Related Projects
-
-I am also working on NuMojo, a library for numerical computing in Mojo 🔥 similar to NumPy, SciPy in Python. If you are also interested, you can [check it out here](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo).
-
 ## License
 
 Distributed under the Apache 2.0 License. See [LICENSE](https://github.com/forFudan/decimojo/blob/main/LICENSE) for details.
 
-## Acknowledgements
+If you find DeciMojo useful for your research, consider listing it in your citations 😀.
 
-Built with the [Mojo programming language 🔥](https://www.modular.com/mojo) created by [Modular](https://www.modular.com/).
+```tex
+@software{decimojo,
+    author       = {{Yuhao Zhu}},
+    year         = {2025},
+    title        = {DeciMojo: A fixed-point decimal arithmetic library in Mojo},
+    url          = {https://github.com/forFudan/DeciMojo},
+    version      = {0.1.0}
+}
+```
