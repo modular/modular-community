@@ -28,7 +28,7 @@ tests:
 
 about:
   homepage: https://github.com/Phelsong/mojo_csv
-  license: APACHE-2.0
+  license: Apache-2.0
   license_file: LICENSE
   summary: Csv parsing library written in pure Mojo
   repository: https://github.com/Phelsong/mojo_csv
