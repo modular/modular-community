@@ -1,0 +1,52 @@
+#
+# recipe.yaml
+# mosaic
+#
+# Created by Christian Bator on 03/11/2025
+#
+
+context:
+  version: "0.0.1"
+
+package:
+  name: mosaic
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/christianbator/mosaic
+    rev: main
+
+build:
+  number: 0
+  dynamic_linking:
+    missing_dso_allowlist:
+      - if: osx
+        then:
+          - /usr/lib/swift/libswift*.dylib
+
+requirements:
+  build:
+    - clang
+  host:
+    - max =25
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script: mojo test
+    files:
+      source:
+        - test/*.mojo
+        - data/
+
+about:
+  homepage: https://mosaiclib.org
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Open source computer vision library in Mojo
+  repository: https://github.com/christianbator/mosaic
+
+extra:
+  project_name: Mosaic
+  maintainers:
+    - christianbator
