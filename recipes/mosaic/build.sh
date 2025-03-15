@@ -16,8 +16,6 @@ mkdir -p $PREFIX/lib/mosaic
 #
 # Build libcodec
 #
-cp external/stb/{stb_image.h,stb_image_write.h} libcodec
-
 if [[ -z "${OSX_ARCH+x}" ]]; then
     clang -fPIC -shared -Wall -Werror -o $PREFIX/lib/mosaic/libcodec.dylib libcodec/libcodec.c
 else
