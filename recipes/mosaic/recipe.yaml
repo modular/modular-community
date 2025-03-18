@@ -4,6 +4,8 @@
 #
 # Created by Christian Bator on 03/11/2025
 #
+# Usage: rattler-build build --recipe recipe.yaml -c https://conda.modular.com/max-nightly -c https://conda.modular.com/max -c conda-forge
+#
 
 context:
   version: "0.0.1"
@@ -18,6 +20,7 @@ source:
 
 build:
   number: 0
+  script: build/build.sh
   dynamic_linking:
     missing_dso_allowlist:
       - if: osx
@@ -28,16 +31,17 @@ requirements:
   build:
     - clang
   host:
-    - max =25
+    - max ~=25.1
   run:
     - ${{ pin_compatible('max') }}
 
 tests:
-  - script: mojo test
+  - script: |
+      cd test
+      mojo test
     files:
       source:
-        - test/*.mojo
-        - data/
+        - test/
 
 about:
   homepage: https://mosaiclib.org
@@ -45,6 +49,7 @@ about:
   license_file: LICENSE
   summary: Open source computer vision library in Mojo
   repository: https://github.com/christianbator/mosaic
+  documentation: https://mosaiclib.org/docs
 
 extra:
   project_name: Mosaic
