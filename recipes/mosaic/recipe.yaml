@@ -4,7 +4,7 @@
 #
 # Created by Christian Bator on 03/11/2025
 #
-# Usage: rattler-build build --recipe recipe.yaml -c https://conda.modular.com/max-nightly -c https://conda.modular.com/max -c conda-forge
+# Usage: rattler-build build --recipe recipe.yaml -c https://conda.modular.com/max -c conda-forge
 #
 
 context:
@@ -31,7 +31,7 @@ requirements:
   build:
     - clang
   host:
-    - max ~=25.1
+    - max==25.1.0
   run:
     - ${{ pin_compatible('max') }}
 
