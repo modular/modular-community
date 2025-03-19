@@ -24,7 +24,7 @@ tests:
   - script:
       - if: unix
         then:
-          - "mojo test_pack.mojo test.csv"
+          - mojo test_pack.mojo test.csv
 
 about:
   homepage: https://github.com/Phelsong/mojo_csv
