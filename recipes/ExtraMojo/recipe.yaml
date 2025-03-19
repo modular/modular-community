@@ -1,5 +1,5 @@
 context:
-  version: "0.10.0"
+  version: "0.11.0"
 
 package:
   name: "extramojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: b27ca53cd0208ea57816094770389de7b0d46100
+    rev: 76551e284689cf67b34bab9b4f1968b41025b221
 
 build:
   number: 0
