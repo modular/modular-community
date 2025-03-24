@@ -1,5 +1,5 @@
 context:
-  version: "0.6.0"
+  version: "0.6.1"
 
 package:
   name: "numojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
-    rev: 23f316c9888249b40a7f2cbe5adc94e8ac632335
+    rev: f0dea371bfd15df65e917e013e11d6177bfc975a
 
 build:
   number: 0
