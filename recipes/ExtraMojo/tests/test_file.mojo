@@ -1,3 +1,4 @@
+from collections import Optional, Dict
 from utils import StringSlice
 from memory import Span
 from pathlib import Path
@@ -46,6 +47,7 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
         while reader.read_until(buffer) != 0:
             assert_equal(List(expected_lines[counter].as_bytes()), buffer)
             counter += 1
+            buffer.clear()
 
         assert_equal(counter, len(expected_lines))
         print("Successful read_until with buffer capacity of {}".format(cap[]))
@@ -61,6 +63,7 @@ fn test_read_until_return_trailing(
     while reader.read_until(buffer) != 0:
         assert_equal(List(expected_lines[counter].as_bytes()), buffer)
         counter += 1
+        buffer.clear()
     assert_equal(counter, len(expected_lines))
     print("Successful read_until_return_trailing")
 
@@ -98,6 +101,7 @@ fn test_context_manager_simple(file: Path, expected_lines: List[String]) raises:
         while reader.read_until(buffer) != 0:
             assert_equal(List(expected_lines[counter].as_bytes()), buffer)
             counter += 1
+            buffer.clear()
     assert_equal(counter, len(expected_lines))
     print("Successful read_until")
 
@@ -137,7 +141,10 @@ struct SerDerStruct(ToDelimited, FromDelimited):
         writer.write_record("index", "name")
 
     @staticmethod
-    fn from_delimited(mut data: SplitIterator) raises -> Self:
+    fn from_delimited(
+        mut data: SplitIterator,
+        read header_values: Optional[List[String]] = None,
+    ) raises -> Self:
         var index = Int(StringSlice(unsafe_from_utf8=data.__next__()))
         var name = String()  # String constructor expected nul terminated byte span
         name.write_bytes(data.__next__())
@@ -165,6 +172,69 @@ fn test_delim_reader_writer(file: Path) raises:
     for item in reader^:
         assert_equal(to_write[count].index, item.index)
         assert_equal(to_write[count].name, item.name)
+        count += 1
+    assert_equal(count, len(to_write))
+    print("Successful delim_writer")
+
+
+@value
+struct ThinWrapper(ToDelimited, FromDelimited):
+    var stuff: Dict[String, Int]
+
+    fn write_to_delimited(read self, mut writer: DelimWriter) raises:
+        var seen = 1
+        for value in self.stuff.values():  # Relying on stable iteration order
+            writer.write_field(value[], is_last=seen == len(self.stuff))
+            seen += 1
+
+    fn write_header(read self, mut writer: DelimWriter) raises:
+        var seen = 1
+        for header in self.stuff.keys():  # Relying on stable iteration order
+            writer.write_field(header[], is_last=seen == len(self.stuff))
+            seen += 1
+
+    @staticmethod
+    fn from_delimited(
+        mut data: SplitIterator,
+        read header_values: Optional[List[String]] = None,
+    ) raises -> Self:
+        var result = Dict[String, Int]()
+        for header in header_values.value():
+            result[header[]] = Int(
+                StringSlice(unsafe_from_utf8=data.__next__())
+            )
+        return Self(result)
+
+
+fn test_delim_reader_writer_dicts(file: Path) raises:
+    var to_write = List[ThinWrapper]()
+    var headers = List(
+        String("a"), String("b"), String("c"), String("d"), String("e")
+    )
+    for i in range(0, 1000):
+        var stuff = Dict[String, Int]()
+        for header in headers:
+            stuff[header[]] = i
+        to_write.append(ThinWrapper(stuff))
+    var writer = DelimWriter(
+        BufferedWriter(open(String(file), "w")),
+        delim="\t",
+        write_header=True,
+    )
+    for item in to_write:
+        writer.serialize(item[])
+    writer.flush()
+    writer.close()
+
+    var reader = DelimReader[ThinWrapper](
+        BufferedReader(open(String(file), "r")),
+        delim=ord("\t"),
+        has_header=True,
+    )
+    var count = 0
+    for item in reader^:
+        for header in headers:
+            assert_equal(to_write[count].stuff[header[]], item.stuff[header[]])
         count += 1
     assert_equal(count, len(to_write))
     print("Successful delim_writer")
@@ -217,7 +287,8 @@ fn main() raises:
     test_buffered_writer(String(buf_writer_file), strings)
     var delim_file = Path(String(tempdir.name)) / "delim.txt"
     test_delim_reader_writer(String(delim_file))
-
+    var delim_dict_file = Path(String(tempdir.name)) / "delim_dict.txt"
+    test_delim_reader_writer_dicts(String(delim_dict_file))
     print("SUCCESS")
 
     _ = tempdir.cleanup()
