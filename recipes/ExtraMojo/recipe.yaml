@@ -1,5 +1,5 @@
 context:
-  version: "0.11.0"
+  version: "0.12.0"
 
 package:
   name: "extramojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 76551e284689cf67b34bab9b4f1968b41025b221
+    rev: 25b6a6e7089138ab93f99d79401c57c8174c38ee
 
 build:
   number: 0
@@ -15,9 +15,9 @@ build:
     - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
 requirements:
   host:
-    - max =25.1
+    - max =25.2
   run:
-    - max =25.1
+    - max =25.2
     - ${{ pin_compatible('max') }}
 
 tests:
@@ -29,7 +29,7 @@ tests:
           - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_bstr.mojo
     requirements:
       run:
-        - max =25.1
+        - max =25.2
     files:
       recipe:
         - tests/test_file.mojo
