@@ -27,7 +27,7 @@ tests:
           - mojo test tests/test_bytes.mojo
     requirements:
       run:
-        - max=25.1
+        - max=25.2
     files:
       recipe:
         - tests/test_bytes.mojo
