@@ -1,5 +1,5 @@
 context:
-  version: "0.0.1"
+  version: "0.0.2"
 
 package:
   name: "mist"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: 3c07884d8ff5c823859bf4aebf532d8c4042357d
+    rev: bfe093f4d6fb74295b607d72b0a0ccb25447284d
 
 build:
   number: 0
@@ -15,7 +15,7 @@ build:
     - mojo package src/mist -o ${{ PREFIX }}/lib/mojo/mist.mojopkg
 requirements:
   host:
-    - max =24.6
+    - max =25.2
   run:
     - ${{ pin_compatible('max') }}
 
