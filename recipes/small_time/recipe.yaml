@@ -1,5 +1,5 @@
 context:
-  version: "0.0.3"
+  version: "25.2.0"
 
 package:
   name: "small_time"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/small-time.git
-    rev: 34c801cd378c22695f3fb4f1dd04b0c10115f569
+    rev: 3d16b2d4be7a0666725a4412ba827c9a122ec623
 
 build:
   number: 0
@@ -15,7 +15,7 @@ build:
     - mojo package src/small_time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
 requirements:
   host:
-    - max =25.1
+    - max =25.2
   run:
     - ${{ pin_compatible('max') }}
 
