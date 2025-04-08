@@ -1,0 +1,46 @@
+context:
+  version: "0.1.0"
+  max_requirement: "max = 25.3.0.dev2025040705"
+
+package:
+  name: "larecs"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/samufi/larecs.git
+    rev: v0.1.0
+
+build:
+  number: 0
+  script:
+    - mojo package src/larecs -o ${{ PREFIX }}/lib/mojo/larecs.mojopkg
+requirements:
+  host:
+    - ${{ max_requirement }}
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test --sanitize address -D ASSERT=all test
+    requirements:
+      run:
+        - ${{ max_requirement }}
+    files:
+      source:
+        test/
+
+about:
+  homepage: https://samufi.github.io/larecs/
+  license: LGPL-3.0-only
+  license_file: LICENSE
+  summary: A performance-oriented archetype-based ECS for Mojo🔥.
+  repository: https://github.com/samufi/larecs
+
+extra:
+  maintainers:
+    - samufi
+    - mlange-42
+  project_name: Larecs🌲
