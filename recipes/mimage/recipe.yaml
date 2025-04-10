@@ -1,5 +1,5 @@
 context:
-  version: "0.2.2"
+  version: "0.2.3"
 
 package:
   name: "mimage"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/fnands/mimage.git
-    tag: "0.2.2"
+    tag: "0.2.3"
 
 build:
   number: 0

@@ -1,5 +1,5 @@
 <br/>
-<p align="center">
+<div align="center">
   <a href="https://github.com/fnands/mimage">
     <img src="image.jpeg" alt="Logo" width="200" height="200">
   </a>
@@ -8,11 +8,10 @@
 
   <p align="center">
     A library for reading images in pure* Mojo 🔥
-  </p>
-</p>
 
-<div align="center">
-  <img src="https://img.shields.io/badge/%F0%9F%94%A5%20Mojo-020B14?style=for-the-badge&link=https%3A%2F%2Fwww.modular.com%2Fmax%2Fmojo" />
+  ![Language Badge](https://img.shields.io/badge/language-mojo-orange)
+  ![CodeQL](https://github.com/fnands/mimage/workflows/CodeQL/badge.svg)
+  </p>
 </div>
 
 *Not pure Mojo yet, but hopefully soon.
