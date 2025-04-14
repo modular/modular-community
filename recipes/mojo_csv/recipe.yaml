@@ -6,7 +6,7 @@ package:
   version: ${{ version }}
 
 source:
-  - git: https://github.com/Phelsong/mojo_csv
+  - git: https://github.com/Phelsong/mojo_csv.git
     rev: e642c060a6fad04b1a42727501c386f812b88e8d
 
 build:
