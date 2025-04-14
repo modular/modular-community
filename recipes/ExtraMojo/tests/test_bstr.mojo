@@ -5,7 +5,6 @@ from ExtraMojo.bstr.bstr import (
     to_ascii_uppercase,
 )
 from ExtraMojo.bstr.memchr import memchr, memchr_wide
-from memory import Span
 from testing import *
 
 
@@ -28,29 +27,35 @@ fn s(bytes: Span[UInt8]) -> String:
 
 
 fn test_memchr() raises:
-    var cases = List[(StringLiteral, Int)](
-        (
-            "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
-            49,
-        ),
-        (
-            "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
-            124,
-        ),
-    )
+    alias check = InlineArray[Bool, 2](True, False)
 
-    for kase in cases:
-        var index = memchr(kase[][0].as_bytes(), ord("|"))
-        assert_equal(
-            index,
-            kase[][1],
-            "Expected "
-            + String(kase[][1])
-            + " Found "
-            + String(index)
-            + " in "
-            + kase[][0],
+    @parameter
+    for do_alignment in range(0, len(check)):
+        var cases = List[(StringLiteral, Int)](
+            (
+                "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+                49,
+            ),
+            (
+                "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+                124,
+            ),
         )
+
+        for kase in cases:
+            var index = memchr[do_alignment = check[do_alignment]](
+                kase[][0].as_bytes(), ord("|")
+            )
+            assert_equal(
+                index,
+                kase[][1],
+                "Expected "
+                + String(kase[][1])
+                + " Found "
+                + String(index)
+                + " in "
+                + kase[][0],
+            )
 
 
 fn test_memchr_wide() raises:
