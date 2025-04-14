@@ -1,5 +1,5 @@
 context:
-  version: "0.1.2"
+  version: "0.2.0"
 
 package:
   name: "websockets"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/msaelices/mojo-websockets.git
-    rev: 86ff5744e437fe2203ed8a1be5db62964f084e02
+    rev: 751c48ed576fe5a6113afd8ae83f6e48dedf832b
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max == 25.1
+    - max == 25.2
   run:
     - ${{ pin_compatible('max') }}
 
@@ -27,7 +27,7 @@ tests:
           - mojo test tests/test_bytes.mojo
     requirements:
       run:
-        - max=25.1
+        - max=25.2
     files:
       recipe:
         - tests/test_bytes.mojo

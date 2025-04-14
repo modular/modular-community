@@ -1,0 +1,51 @@
+context:
+  version: "0.2.3"
+
+package:
+  name: "mimage"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/fnands/mimage.git
+    tag: "0.2.3"
+
+build:
+  number: 0
+  script:
+    - mojo package mimage -o ${{ PREFIX }}/lib/mojo/mimage.mojopkg
+requirements:
+  host:
+    - max=25.2
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run -I ${{ PREFIX }}/lib/mojo/mimage.mojopkg  tests/test_open_png.mojo
+
+    requirements:
+      run:
+        - max=25.2
+        - pillow
+        - numpy
+
+    files:
+      recipe:
+        - tests/test_open_png.mojo
+        - tests/testing_utils.mojo
+        - tests/__init__.mojo
+        - tests/images/hopper.png
+
+about:
+  homepage: https://github.com/fnands/mimage
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: mimage is a library for image processing in Mojo 🔥.
+  repository: https://github.com/fnands/mimage
+
+extra:
+  project_name: mimage
+  maintainers:
+    - fnands
