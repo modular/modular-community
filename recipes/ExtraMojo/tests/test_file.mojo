@@ -1,6 +1,5 @@
-from collections import Optional, Dict
+from collections import Dict
 from utils import StringSlice
-from memory import Span
 from pathlib import Path
 from python import Python
 from tensor import Tensor
