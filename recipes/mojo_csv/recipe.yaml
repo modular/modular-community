@@ -24,7 +24,10 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test.mojo test.csv
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.csv
 
 about:
   homepage: https://github.com/Phelsong/mojo_csv
