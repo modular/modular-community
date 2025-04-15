@@ -1,5 +1,5 @@
 context:
-  version: "0.2.0"
+  version: "0.3.0"
 
 package:
   name: "decimojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/forFudan/decimojo.git
-    rev: fba2fa810382d34f36907b18312340ff730bcec8
+    rev: f2930f0832f1096207cb93bb2cc52b028b06b429
 
 build:
   number: 0
@@ -35,7 +35,7 @@ about:
   homepage: https://github.com/forFudan/decimojo.git
   license: Apache-2.0
   license_file: LICENSE
-  summary: A comprehensive decimal and integer mathematics library for Mojo
+  summary: An arbitrary-precision decimal and integer mathematics library for Mojo
   repository: https://github.com/forFudan/decimojo.git
 
 extra:
