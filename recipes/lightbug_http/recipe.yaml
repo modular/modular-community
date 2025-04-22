@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.1.17"
+  version: "0.1.18"
 
 package:
   name: "lightbug_http"
@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/saviorand/lightbug_http.git
-    rev: 1d8a75c6f567d5b0de7f5419aeac209c4d1724f8
+    rev: 0ebd3287a923519c887f59496ced6fdb804e6889
 
 build:
   number: 0
@@ -22,7 +22,6 @@ requirements:
       - max =25.2
   run:
     - ${{ pin_compatible('max') }}
-    - small_time == 25.2.0
 
 tests:
   - script:
@@ -32,7 +31,6 @@ tests:
     requirements:
       run:
         - max =25.2
-        - small_time =25.2.0
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
