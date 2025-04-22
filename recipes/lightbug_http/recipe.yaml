@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.1.18"
+  version: "0.1.19"
 
 package:
   name: "lightbug_http"
@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/saviorand/lightbug_http.git
-    rev: 0ebd3287a923519c887f59496ced6fdb804e6889
+    rev: 4487b71ccbcfd30ace2db5d6ed975f94509e5a24
 
 build:
   number: 0
