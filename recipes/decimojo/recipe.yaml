@@ -1,0 +1,44 @@
+context:
+  version: "0.3.0"
+
+package:
+  name: "decimojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/forFudan/decimojo.git
+    rev: f2930f0832f1096207cb93bb2cc52b028b06b429
+
+build:
+  number: 0
+  script:
+    - mojo package src/decimojo -o ${{ PREFIX }}/lib/mojo/decimojo.mojopkg
+requirements:
+  host:
+    - max=25.2
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run tests.mojo
+    requirements:
+      run:
+        - max=25.2
+    files:
+      recipe:
+        - tests.mojo
+
+about:
+  homepage: https://github.com/forFudan/decimojo.git
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An arbitrary-precision decimal and integer mathematics library for Mojo
+  repository: https://github.com/forFudan/decimojo.git
+
+extra:
+  project_name: decimojo
+  maintainers:
+    - forfudan

@@ -11,6 +11,15 @@ struct Matrix:
 
     # initialize from UnsafePointer
     @always_inline
+    fn __init__(out self, data: UnsafePointer[Float32], height: Int, width: Int, order: String = 'c'):
+        self.height = height
+        self.width = width
+        self.size = height * width
+        self.data = data
+        self.order = order.lower()
+
+    # initialize by copying from UnsafePointer
+    @always_inline
     fn __init__(out self, height: Int, width: Int, data: UnsafePointer[Float32] = UnsafePointer[Float32](), order: String = 'c'):
         self.height = height
         self.width = width
@@ -62,15 +71,13 @@ struct Matrix:
     @always_inline
     fn __mul__(self, rhs: Self) raises -> Self:
         if self.width != rhs.height:
-            raise Error('Error: Cannot multiply matrices with shapes (' + str(self.height) + ', ' + str(self.width) + ') and (' + str(rhs.height) + ', ' + str(rhs.width) + ')')
+            raise Error('Error: Cannot multiply matrices with shapes (' + String(self.height) + ', ' + String(self.width) + ') and (' + String(rhs.height) + ', ' + String(rhs.width) + ')')
         var A = matmul.Matrix[DType.float32](self.data, (self.height, self.width))
         var B = matmul.Matrix[DType.float32](rhs.data, (rhs.height, rhs.width))
         var C = matmul.Matrix[DType.float32]((self.height, rhs.width))
         memset_zero(C.data, self.height * rhs.width)
         matmul.matmul(self.height, self.width, rhs.width, C, A, B)
-        var mat = Matrix(self.height, rhs.width)
-        mat.data = C.data
-        return mat^
+        return Matrix(C.data, self.height, rhs.width)
 
     @always_inline
     fn __imul__(mut self, rhs: Self) raises:

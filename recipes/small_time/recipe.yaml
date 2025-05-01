@@ -1,21 +1,21 @@
 context:
-  version: "0.2.0"
+  version: "25.2.0"
 
 package:
-  name: "bridge"
+  name: "small_time"
   version: ${{ version }}
 
 source:
-  - git: https://gitlab.com/hylkedonker/bridge.git
-    rev: 87f10144b004ff4ef8e73d6b8b52e3f81effd40f
+  - git: https://github.com/thatstoasty/small-time.git
+    rev: 3d16b2d4be7a0666725a4412ba827c9a122ec623
 
 build:
   number: 0
   script:
-    - mojo package src/bridge -o ${{ PREFIX }}/lib/mojo/bridge.mojopkg
+    - mojo package src/small_time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
 requirements:
   host:
-    - max=25.2
+    - max =25.2
   run:
     - ${{ pin_compatible('max') }}
 
@@ -23,24 +23,26 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test test_numpy.🔥
+          - mojo test test
     files:
       recipe:
-        - test_numpy.🔥
+        - test_small_time.mojo
+        - test_time_delta.mojo
+        - test_time_zone.mojo
+
 about:
-  homepage: https://gitlab.com/hylkedonker/bridge
+  homepage: https://github.com/thatstoasty/small-time
   # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
   # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
   # See https://spdx.org/licenses/
-  license: MIT
+  license: Apache-2.0
   # It is strongly encouraged to include a license file in the package,
   # (even if the license doesn't require it) using the license_file entry.
   # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
-  license_file: LICENSE.txt
-  summary: Convert (bridge) Python objects to Mojo and vice versa.
-  repository: https://gitlab.com/hylkedonker/bridge
+  license_file: LICENSE
+  summary: Datetime library forked from morrow.mojo
+  repository: https://github.com/thatstoasty/small-time
 
 extra:
   maintainers:
-    - hylkedonker
-  project_name: Bridge
+    - thatstoasty

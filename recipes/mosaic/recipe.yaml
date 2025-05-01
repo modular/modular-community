@@ -1,0 +1,57 @@
+#
+# recipe.yaml
+# mosaic
+#
+# Created by Christian Bator on 03/11/2025
+#
+# Usage: rattler-build build --recipe recipe.yaml -c https://conda.modular.com/max -c conda-forge
+#
+
+context:
+  version: "0.0.1"
+
+package:
+  name: mosaic
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/christianbator/mosaic.git
+    rev: 6890114b5189343f0181b3f70574fccb69f04a28
+
+build:
+  number: 1
+  script: build/build.sh
+  dynamic_linking:
+    missing_dso_allowlist:
+      - if: osx
+        then:
+          - /usr/lib/swift/libswift*.dylib
+
+requirements:
+  build:
+    - clang
+  host:
+    - max==25.2.0
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script: |
+      cd test
+      mojo test
+    files:
+      source:
+        - test/
+
+about:
+  homepage: https://mosaiclib.org
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Open source computer vision library in Mojo
+  repository: https://github.com/christianbator/mosaic
+  documentation: https://mosaiclib.org/docs
+
+extra:
+  project_name: Mosaic
+  maintainers:
+    - christianbator

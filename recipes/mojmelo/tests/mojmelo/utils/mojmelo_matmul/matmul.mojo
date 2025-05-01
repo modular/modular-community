@@ -7,7 +7,6 @@ from sys import has_avx512f, num_performance_cores, simdwidthof, sizeof
 import benchmark
 from testing import assert_equal
 from utils import IndexList
-from collections import InlineArray
 import random
 from .params import *
 
@@ -135,7 +134,7 @@ struct Matrix[Type: DType]:
     fn write_to[W: Writer](self, mut writer: W):
         writer.write(
             "Matrix: ",
-            str(self.data),
+            String(self.data),
             ", Layout: ",
             self.layout,
             "\n",
@@ -450,7 +449,7 @@ fn matmul_params[Type: DType]() -> IndexList[5]:
 
     @parameter
     fn compute_kc[mr: Int, nr: Int]() -> Int:
-        alias CBr = int((L1_ASSOCIATIVITY - 1) / (1 + mr / nr))
+        alias CBr = Int((L1_ASSOCIATIVITY - 1) / (1 + mr / nr))
         return (CBr * L1_CACHE_SIZE) // (nr * sizeof[Type]() * L1_ASSOCIATIVITY)
 
     @parameter
@@ -458,7 +457,7 @@ fn matmul_params[Type: DType]() -> IndexList[5]:
         alias p = C // (intsqrt[C]() + 1)
         alias mr = C // p - 1
         alias nr = p * N
-        alias CBr = int((L1_ASSOCIATIVITY - 1) / (1 + mr / nr))
+        alias CBr = Int((L1_ASSOCIATIVITY - 1) / (1 + mr / nr))
         alias kc = compute_kc[mr, nr]()
         alias nc = (L2_ASSOCIATIVITY - 1) * L2_CACHE_SIZE // (
             kc * sizeof[Type]() * L2_ASSOCIATIVITY
