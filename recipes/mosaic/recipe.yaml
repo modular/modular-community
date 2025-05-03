@@ -16,20 +16,22 @@ package:
 
 source:
   - git: https://github.com/christianbator/mosaic.git
-    rev: 6890114b5189343f0181b3f70574fccb69f04a28
+    rev: 7d95b2e6c8e7348e7e18cffa9189dd2c40a41a80
 
 build:
-  number: 1
+  number: 2
   script: build/build.sh
   dynamic_linking:
     missing_dso_allowlist:
       - if: osx
         then:
           - /usr/lib/swift/libswift*.dylib
+          - /usr/lib/libc++*.dylib
 
 requirements:
   build:
-    - clang
+    - clang==20.1.4
+    - lld==20.1.4
   host:
     - max==25.2.0
   run:
@@ -41,7 +43,8 @@ tests:
       mojo test
     files:
       source:
-        - test/
+        - test/**.mojo
+        - test/data/
 
 about:
   homepage: https://mosaiclib.org
