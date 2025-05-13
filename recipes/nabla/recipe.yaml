@@ -12,8 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package nabla -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
-
+    - mojo package nabla -o ${{ PREFIX }}/lib/mojo/nabla.mojopkg
 requirements:
   host:
     - max =25.3
@@ -24,7 +23,7 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test.mojo
+          - mojo test.mojo
     requirements:
       run:
         - max =25.3
@@ -33,10 +32,10 @@ tests:
         - test.mojo
 
 about:
-  homepage: https://nablaml.com
+  homepage: https://github.com/nabla-ml/nabla
   license: Apache-2.0
   license_file: LICENSE
-  summary: Differentiable Programming in Mojo
+  summary: Differtiable Programming in Mojo.
   repository: https://github.com/nabla-ml/nabla
 
 extra:
