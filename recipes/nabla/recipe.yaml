@@ -1,22 +1,22 @@
 context:
-  version: "24.6.0"
+  version: "25.3.0"
 
 package:
-  name: "endia"
+  name: "nabla"
   version: ${{ version }}
 
 source:
-  - git: https://github.com/endia-ai/Endia.git
-    rev: eeafbd1d1a519dbc63fd863c8922f37ec8f84a46
+  - git: https://github.com/nabla-ml/nabla.git
+    rev: f677a02a82caada7d233e11bf4e189fdb702ef7f
 
 build:
   number: 0
   script:
-    - mojo package endia -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
+    - mojo package nabla -o ${{ PREFIX }}/lib/mojo/endia.mojopkg
 
 requirements:
   host:
-    - max =24.6
+    - max =25.3
   run:
     - ${{ pin_compatible('max') }}
 
@@ -27,17 +27,17 @@ tests:
           - mojo run test.mojo
     requirements:
       run:
-        - max =24.6
+        - max =25.3
     files:
       recipe:
         - test.mojo
 
 about:
-  homepage: https://endia.vercel.app/
+  homepage: https://nablaml.com
   license: Apache-2.0
   license_file: LICENSE
-  summary: Dynamic Neural Networks in Mojo
-  repository: https://github.com/endia-ai/Endia
+  summary: Differentiable Programming in Mojo
+  repository: https://github.com/nabla-ml/nabla
 
 extra:
   maintainers:
