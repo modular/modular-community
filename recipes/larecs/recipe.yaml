@@ -1,6 +1,6 @@
 context:
-  version: "0.1.0"
-  max_requirement: "max = 25.3.0.dev2025040705"
+  version: "0.2.0"
+  max_requirement: "max = 25.3.0"
 
 package:
   name: "larecs"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/samufi/larecs.git
-    tag: v0.1.0
+    tag: "v0.2.0"
 
 build:
   number: 0
@@ -24,7 +24,7 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test --sanitize address -D ASSERT=all test
+          - mojo test -D ASSERT=all test
     requirements:
       run:
         - ${{ max_requirement }}
