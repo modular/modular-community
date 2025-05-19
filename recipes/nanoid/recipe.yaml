@@ -1,0 +1,47 @@
+
+context:
+  version: "0.1.0"
+
+package:
+  name: "nanoid"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/cirello-py/nanoid.git
+    rev: 091bab721cac99cf3fcf09fb5b822fecc71ee90e
+
+build:
+  number: 0
+  script:
+    - mojo package src/nanoid -o ${{ PREFIX }}/lib/mojo/nanoid.mojopkg
+requirements:
+  host:
+    - max
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run nanoid/test_nanoid.mojo
+    files:
+      recipe:
+        - nanoid/test_nanoid.mojo
+
+about:
+  homepage: https://github.com/cirello-py/nanoid
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
+  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
+  # See https://spdx.org/licenses/
+  license: Apache-2.0
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
+  license_file: LICENSE.txt
+  summary: A Mojo port of NanoID, a tiny, secure, URL-friendly, unique string ID generator.
+  repository: https://github.com/cirello-py/nanoid
+
+extra:
+  maintainers:
+    - ucirello
