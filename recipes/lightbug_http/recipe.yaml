@@ -20,6 +20,7 @@ build:
 requirements:
   host:
       - max =25.3
+
   run:
     - ${{ pin_compatible('max') }}
 
@@ -31,6 +32,7 @@ tests:
     requirements:
       run:
         - max =25.3
+
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
