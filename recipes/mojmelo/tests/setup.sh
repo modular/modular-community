@@ -1,6 +1,6 @@
 #!/bin/bash
 
-path="./.magic/envs/default/etc/conda/test-files/mojmelo/0/tests"
+path="./.pixi/envs/default/etc/conda/test-files/mojmelo/0/tests"
 curr=$(pwd)
 cd $path
 
@@ -17,4 +17,4 @@ mojo ./setup.mojo 9
 
 cd $curr
 
-mojo package $path/mojmelo/utils/mojmelo_matmul -o ./.magic/envs/default/lib/mojo/mojmelo_matmul.mojopkg
+mojo package $path/mojmelo/utils/mojmelo_matmul -o ./.pixi/envs/default/lib/mojo/mojmelo_matmul.mojopkg

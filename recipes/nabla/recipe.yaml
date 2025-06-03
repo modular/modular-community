@@ -1,0 +1,43 @@
+context:
+  version: "25.3.0"
+
+package:
+  name: "nabla"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/nabla-ml/nabla.git
+    rev: f677a02a82caada7d233e11bf4e189fdb702ef7f
+
+build:
+  number: 0
+  script:
+    - mojo package nabla -o ${{ PREFIX }}/lib/mojo/nabla.mojopkg
+requirements:
+  host:
+    - max =25.3
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test.mojo
+    requirements:
+      run:
+        - max =25.3
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/nabla-ml/nabla
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Differtiable Programming in Mojo.
+  repository: https://github.com/nabla-ml/nabla
+
+extra:
+  maintainers:
+    - TilliFe
