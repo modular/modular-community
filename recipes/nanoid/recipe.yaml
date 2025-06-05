@@ -1,0 +1,39 @@
+
+context:
+  version: "0.2.0"
+
+package:
+  name: "nanoid"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/cirello-py/nanoid.git
+    rev: 637a02ef7fcb627b43c0de2f2fe0fca8d0e5199b
+
+build:
+  number: 0
+  script:
+    - mojo package nanoid -o ${{ PREFIX }}/lib/mojo/nanoid.mojopkg
+
+requirements:
+  host:
+    - max=25.3
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test
+
+about:
+  homepage: https://github.com/cirello-py/nanoid
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: A Mojo port of NanoID, a tiny, secure, URL-friendly, unique string ID generator.
+  repository: https://github.com/cirello-py/nanoid
+
+extra:
+  maintainers:
+    - ucirello

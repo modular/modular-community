@@ -31,13 +31,17 @@ fn test_memchr() raises:
 
     @parameter
     for do_alignment in range(0, len(check)):
-        var cases = List[(StringLiteral, Int)](
+        var cases = List[(String, Int)](
             (
-                "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+                String(
+                    "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
+                ),
                 49,
             ),
             (
-                "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+                String(
+                    "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
+                ),
                 124,
             ),
         )
@@ -59,13 +63,17 @@ fn test_memchr() raises:
 
 
 fn test_memchr_wide() raises:
-    var cases = List[(StringLiteral, Int)](
+    var cases = List[(String, Int)](
         (
-            "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            String(
+                "enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
+            ),
             49,
         ),
         (
-            "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy",
+            String(
+                "enlivened,unleavened,Arnulfo's,Unilever's,unloved,Anouilh,analogue,analogy,enlivened,unleavened,Arnulfo's,Unilever's,unloved|Anouilh,analogue,analogy"
+            ),
             124,
         ),
     )
