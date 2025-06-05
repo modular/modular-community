@@ -2,7 +2,7 @@ from pathlib import Path, cwd
 from sys import argv, exit
 from testing import assert_true
 
-from src.csv_reader import CsvReader
+from mojo_csv import CsvReader
 
 var VALID = List[String](
     "item1",
