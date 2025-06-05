@@ -1,5 +1,4 @@
 from collections import Dict
-from utils import StringSlice
 from pathlib import Path
 from python import Python
 from tensor import Tensor
@@ -49,7 +48,11 @@ fn test_read_until(file: Path, expected_lines: List[String]) raises:
             buffer.clear()
 
         assert_equal(counter, len(expected_lines))
-        print("Successful read_until with buffer capacity of {}".format(cap[]))
+        print(
+            String("Successful read_until with buffer capacity of {}").format(
+                cap[]
+            )
+        )
 
 
 fn test_read_until_return_trailing(
