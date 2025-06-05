@@ -18,7 +18,7 @@ var VALID = List[String](
 
 
 fn main() raises:
-    var in_csv: Path = Path("./test.csv")
+    var in_csv: Path = Path("test.csv")
     var rd = CsvReader(in_csv)
     print("parsing:", in_csv)
     print("----------")
