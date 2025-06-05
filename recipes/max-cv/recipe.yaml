@@ -29,7 +29,7 @@ tests:
           - magic run test
     requirements:
       run:
-        - max =24.6
+        - max >=25.3
         - python >=3.9,<3.13
         - pytest
     files:
