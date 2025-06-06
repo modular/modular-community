@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max == 24.6
+    - max >= 25.2
   run:
     - ${{ pin_compatible('max') }}
 
