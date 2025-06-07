@@ -18,7 +18,7 @@ build:
     # Needed for tests
     - mojo package -o ${{ PREFIX }}/share/mojo/ishlib.mojopkg ./ishlib
     - mkdir -p ${{ PREFIX }}/bin
-    - mojo build -D ISH_LOG_LEVEL=info --march native -o ${{ PREFIX }}/bin/ish main.mojo
+    - mojo build -D ISH_LOG_LEVEL=info -o ${{ PREFIX }}/bin/ish main.mojo
     # Need to remove these or install_name_tool tries and fails to update paths
     - find ${{ PREFIX }} -type d -name .mojo_cache -exec rm -rf {} +
 
