@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "1.1.0"
+  version: "1.1.1"
 
 package:
   name: "ish"
@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/BioRadOpenSource/ish.git
-    rev: 884cde78989382dd5df96fea2cc1bfe7cba3b299
+    rev: 707e862d216cd2b9cae05cc65caaa78ca36f7311
 
 build:
   number: 0
@@ -18,7 +18,7 @@ build:
     # Needed for tests
     - mojo package -o ${{ PREFIX }}/share/mojo/ishlib.mojopkg ./ishlib
     - mkdir -p ${{ PREFIX }}/bin
-    - mojo build -D ISH_LOG_LEVEL=info -o ${{ PREFIX }}/bin/ish main.mojo
+    - mojo build -D ISH_SIMD_TARGET=baseline -D ISH_LOG_LEVEL=info -o ${{ PREFIX }}/bin/ish main.mojo
     # Need to remove these or install_name_tool tries and fails to update paths
     - find ${{ PREFIX }} -type d -name .mojo_cache -exec rm -rf {} +
 
