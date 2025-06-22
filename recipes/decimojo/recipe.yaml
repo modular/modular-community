@@ -1,5 +1,5 @@
 context:
-  version: "0.3.0"
+  version: "0.3.1"
 
 package:
   name: "decimojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/forFudan/decimojo.git
-    rev: f2930f0832f1096207cb93bb2cc52b028b06b429
+    rev: fd82601e93d324a01b4f6770904ba1d11e765e38
 
 build:
   number: 0
@@ -15,7 +15,7 @@ build:
     - mojo package src/decimojo -o ${{ PREFIX }}/lib/mojo/decimojo.mojopkg
 requirements:
   host:
-    - max=25.2
+    - max=25.3
   run:
     - ${{ pin_compatible('max') }}
 
@@ -26,7 +26,7 @@ tests:
           - mojo run tests.mojo
     requirements:
       run:
-        - max=25.2
+        - max=25.3
     files:
       recipe:
         - tests.mojo

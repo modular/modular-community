@@ -1,5 +1,5 @@
 context:
-  version: 0.1.4
+  version: 0.1.5
 
 package:
   name: "emberjson"
@@ -7,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/EmberJson.git
-   rev: f2b2c89ad39fdd96f0b58036ed5e04478a3f2556
+   rev: afbb34ebeb14a2927c798db593055fe4b7091098
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max =25.2
+    - max =25.3
   run:
     - ${{ pin_compatible('max') }}
 
@@ -28,7 +28,7 @@ tests:
 
 about:
   homepage: https://github.com/bgreni/EmberJson
-  license: MIT
+  license: Apache-2.0
   license_file: LICENSE
   summary: A lightweight JSON parsing library written in pure Mojo
   repository: https://github.com/bgreni/EmberJson

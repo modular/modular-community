@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+
+context:
+  version: "1.1.1"
+
+package:
+  name: "ish"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/BioRadOpenSource/ish.git
+    rev: 707e862d216cd2b9cae05cc65caaa78ca36f7311
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/share/mojo
+    # Needed for tests
+    - mojo package -o ${{ PREFIX }}/share/mojo/ishlib.mojopkg ./ishlib
+    - mkdir -p ${{ PREFIX }}/bin
+    - mojo build -D ISH_SIMD_TARGET=baseline -D ISH_LOG_LEVEL=info -o ${{ PREFIX }}/bin/ish main.mojo
+    # Need to remove these or install_name_tool tries and fails to update paths
+    - find ${{ PREFIX }} -type d -name .mojo_cache -exec rm -rf {} +
+
+requirements:
+  host:
+      - max =25.3
+      - extramojo =0.14.0
+
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test -I ${{ PREFIX }}/share/mojo/ishlib.mojopkg tests/test_global.mojo
+          - mojo test -I ${{ PREFIX }}/share/mojo/ishlib.mojopkg tests/test_local_and_profile.mojo
+          - mojo test -I ${{ PREFIX }}/share/mojo/ishlib.mojopkg tests/test_searcher.mojo
+          - mojo test -I ${{ PREFIX }}/share/mojo/ishlib.mojopkg tests/test_semi_global.mojo
+    requirements:
+      run:
+        - max =25.3
+        - extramojo =0.14.0
+
+    files:
+      recipe:
+        - tests/test_global.mojo
+        - tests/test_local_and_profile.mojo
+        - tests/test_searcher.mojo
+        - tests/test_semi_global.mojo
+
+about:
+  homepage: https://github.com/BioRadOpenSource/ish
+  license: Apache-2.0
+  license_file: LICENSE
+  summary:  Alignment-based filtering CLI tool
+  repository: https://github.com/BioRadOpenSource/ish
+
+extra:
+  maintainers:
+    - sstadick
+  project_name: ish
