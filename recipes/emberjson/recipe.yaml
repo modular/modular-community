@@ -1,5 +1,5 @@
 context:
-  version: 0.1.5
+  version: 0.1.6
 
 package:
   name: "emberjson"
@@ -7,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/EmberJson.git
-   rev: afbb34ebeb14a2927c798db593055fe4b7091098
+   rev: c12f69c21311807ddb998ca1a75be0db0ac2f8dc
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max =25.3
+    - max =25.4
   run:
     - ${{ pin_compatible('max') }}
 
