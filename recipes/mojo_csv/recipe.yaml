@@ -1,0 +1,43 @@
+context:
+  version: 1.2.1
+
+package:
+  name: "mojo_csv"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Phelsong/mojo_csv.git
+    rev: c0c5b4b1fd7d7c4db1c504d1104b38f10ef9ff70
+
+build:
+  number: 0
+  script:
+    - mojo package src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojopkg
+
+requirements:
+  host:
+    - max >=25.1.0,<26
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test tests
+    files:
+      recipe:
+        - mojo_csv
+
+about:
+  homepage: https://github.com/Phelsong/mojo_csv
+  license: MIT
+  license_file: LICENSE
+  summary: Csv parsing library written in pure Mojo
+  repository: https://github.com/Phelsong/mojo_csv
+
+extra:
+  maintainers:
+    - phelsong
+  project_name:
+    - mojo_csv
