@@ -1,5 +1,5 @@
 context:
-  version: 0.1.0
+  version: 0.1.1
 
 package:
   name: "kelvin"
@@ -7,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/Kelvin.git
-   rev: 63e9affda4e4b09b1f147f240ad660980ba6daa1
+   rev: e8afbd34e7922e33ab9b5ab75333d1c816cdfe05
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max =25.3
+    - max =25.4
   run:
     - ${{ pin_compatible('max') }}
 
