@@ -1,5 +1,5 @@
 context:
-  version: "0.15.0"
+  version: "0.16.0"
   max_version: "=25.4"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 78575689e61a1f9c46c41105951f66c36e0130a1
+    rev: 75b80da6249467b9df8f16fa432814b987504126
   # path: .
   # use_gitignore: true
 
