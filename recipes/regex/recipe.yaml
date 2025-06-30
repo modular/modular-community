@@ -115,7 +115,7 @@ build:
   number: 0
   script:
   - mkdir -p ${PREFIX}/lib/mojo
-  - pixi run mojo package regex -o ${PREFIX}/lib/mojo/regex.mojopkg
+  - pixi run mojo package src/regex -o ${PREFIX}/lib/mojo/regex.mojopkg
 context:
   version: 13.4.2
 package:
