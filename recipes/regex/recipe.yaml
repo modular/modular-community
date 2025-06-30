@@ -125,5 +125,5 @@ requirements:
   run:
   - max >= 25.4.0
 source:
-- path: src
-- path: LICENSE
+  - git: https://github.com/msaelices/mojo-regex.git
+    rev: 98530668c447b66e2735736182b8da71800fb916
