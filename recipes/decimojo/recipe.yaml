@@ -1,21 +1,21 @@
 context:
-  version: "0.1.0"
+  version: "0.4.0"
 
 package:
   name: "decimojo"
   version: ${{ version }}
 
 source:
-  - git: https://github.com/forFudan/DeciMojo.git
-    rev: 47f0a517f5a8e350b18531bd07798a7e22be23bd
+  - git: https://github.com/forFudan/decimojo.git
+    rev: 8ed3dabd731f8948c6b9b04ff9ca16b55734fe3b
 
 build:
   number: 0
   script:
-    - mojo package decimojo -o ${{ PREFIX }}/lib/mojo/decimojo.mojopkg
+    - mojo package src/decimojo -o ${{ PREFIX }}/lib/mojo/decimojo.mojopkg
 requirements:
   host:
-    - max=25.1
+    - max=25.4
   run:
     - ${{ pin_compatible('max') }}
 
@@ -26,19 +26,19 @@ tests:
           - mojo run tests.mojo
     requirements:
       run:
-        - max=25.1
+        - max=25.4
     files:
       recipe:
         - tests.mojo
 
 about:
-  homepage: https://github.com/forFudan/DeciMojo.git
+  homepage: https://github.com/forFudan/decimojo.git
   license: Apache-2.0
   license_file: LICENSE
-  summary: DeciMojo is a fixed-point decimal arithmetic library in Mojo
-  repository: https://github.com/forFudan/DeciMojo.git
+  summary: An arbitrary-precision decimal and integer mathematics library for Mojo
+  repository: https://github.com/forFudan/decimojo.git
 
 extra:
-  project_name: DeciMojo
+  project_name: decimojo
   maintainers:
-    - forFudan
+    - forfudan

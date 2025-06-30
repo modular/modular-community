@@ -1,15 +1,14 @@
 from sys import external_call, os_is_linux, os_is_macos, argv
 from sys.ffi import *
 from memory import UnsafePointer
-from collections import InlineArray
 
 fn cachel1() -> Int32:
     var l1_cache_size: c_int = 0
     alias length: c_size_t = 4
     # Get L1 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l1_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
         if l1_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l1_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
                 if l1_cache_size <= 1:
                     return 65536
                 return l1_cache_size
@@ -17,7 +16,7 @@ fn cachel1() -> Int32:
                 return 65536
         return l1_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l1_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
             if l1_cache_size <= 1:
                 return 65536
             return l1_cache_size
@@ -29,9 +28,9 @@ fn cachel2() -> Int32:
     var l2_cache_size: c_int = 0
     alias length: c_size_t = 4
     # Get L2 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l2_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
         if l2_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l2_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
                 if l2_cache_size <= 1:
                     return 4194304
                 return l2_cache_size
@@ -39,7 +38,7 @@ fn cachel2() -> Int32:
                 return 4194304
         return l2_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer.address_of(l2_cache_size), UnsafePointer.address_of(length), OpaquePointer(), 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer(), 0) == 0:
             if l2_cache_size <= 1:
                 return 4194304
             return l2_cache_size
@@ -136,7 +135,6 @@ fn main() raises:
             return
 
         from mojmelo.utils.Matrix import Matrix
-        from collections import InlineArray
         import time
 
         alias NUM_ITER = 16

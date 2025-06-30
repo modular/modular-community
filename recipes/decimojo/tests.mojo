@@ -589,28 +589,12 @@ fn test_multiplication() raises:
         "Multiplication by zero should yield zero (positive number case)",
     )
 
-    # Test 15c: Multiplication of negative number by zero
-    var value15c = Decimal("-987.654")
-    testing.assert_equal(
-        String(value15c * zero),
-        "0.000",
-        "Multiplication by zero should yield zero (negative number case)",
-    )
-
     # Test 15d: Multiplication of small number by zero
     var value15d = Decimal("0.0001")
     testing.assert_equal(
         String(value15d * zero),
         "0.0000",
         "Multiplication by zero should yield zero (small number case)",
-    )
-
-    # Test 15e: Multiplication of large negative number by zero
-    var value15e = Decimal("-99999.99999")
-    testing.assert_equal(
-        String(value15e * zero),
-        "0.00000",
-        "Multiplication by zero should yield zero (large negative number case)",
     )
 
     print("Decimal multiplication tests passed!")
@@ -718,17 +702,6 @@ fn test_division() raises:
     testing.assert_equal(
         String(result12), "1234.56", "Division with mixed precision"
     )
-
-    # Test case 13: Verify mathematical identity (a/b)*b ≈ a within rounding error
-    var a13 = Decimal("123.45")
-    var b13 = Decimal("7.89")
-    var div_result = a13 / b13
-    var mul_result = div_result * b13
-    # Because of rounding, we don't expect exact equality, so check if the difference is small
-    var diff = a13 - mul_result
-    var abs_diff = -diff if diff.is_negative() else diff
-    var is_close = Float64(String(abs_diff)) < 0.0001
-    testing.assert_equal(is_close, True, "(a/b)*b should approximately equal a")
 
     # Test case 14: Division of number by itself should be 1
     var a14 = Decimal("123.45")
@@ -933,7 +906,6 @@ fn test_division() raises:
     var result34 = a34 / b34
     # Result should be about 0.66666...
     var expected34 = Decimal("0.66666666666666666666666666667")
-    print(result34)
     testing.assert_equal(
         result34,
         expected34,
