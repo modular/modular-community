@@ -24,4 +24,4 @@ requirements:
   - max >= 25.4.0
 source:
   - git: https://github.com/msaelices/mojo-regex.git
-    rev: 25f2f6c7e7399098302ab04752d790fd9093d263
+    rev: 05621b7ad2f66d156a28c04adae1138aedfc2854
