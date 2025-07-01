@@ -1,5 +1,5 @@
 context:
-  version: "0.4.0"
+  version: "0.4.1"
 
 package:
   name: "decimojo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/forFudan/decimojo.git
-    rev: 8ed3dabd731f8948c6b9b04ff9ca16b55734fe3b
+    rev: 51c983229749df1caf490ccb9ddea19e7f220441
 
 build:
   number: 0
