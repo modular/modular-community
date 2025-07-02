@@ -13,7 +13,7 @@ build:
   number: 0
   script:
   - mkdir -p ${PREFIX}/lib/mojo
-  - pixi run mojo package src/regex -o ${PREFIX}/lib/mojo/regex.mojopkg
+  - mojo package src/regex -o ${PREFIX}/lib/mojo/regex.mojopkg
 context:
   version: 13.4.2
 package:
@@ -21,7 +21,7 @@ package:
   version: 0.1.0
 requirements:
   run:
-  - max >= 25.4.0
+  - max =25.4.0
 source:
   - git: https://github.com/msaelices/mojo-regex.git
     rev: b37e0e5c7d0548449d35fff2b419cf17eb91827c
