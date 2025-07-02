@@ -1,7 +1,7 @@
 # Mojo Regex
 Regular Expressions Library for Mojo
 
-`regex` is a regex library featuring a hybrid DFA/NFA engine architecture that automatically optimizes pattern matching based on complexity.
+`mojo-regex` is a regex library featuring a hybrid DFA/NFA engine architecture that automatically optimizes pattern matching based on complexity.
 
 It aims to provide a similar interface as the [re](https://docs.python.org/3/library/re.html) stdlib package while leveraging Mojo's performance capabilities.
 
@@ -61,7 +61,7 @@ This software is in an early stage of development. Even though it is functional,
 2. **Add the Package** (at the top level of your project):
 
     ```bash
-    pixi add regex
+    pixi add mojo-regex
     ```
 
 ## Example Usage
@@ -191,6 +191,10 @@ mojo benchmarks/bench_engine.mojo
 ## Contributing
 
 Contributions are welcome! If you'd like to contribute, please follow the contribution guidelines in the [CONTRIBUTING.md](CONTRIBUTING.md) file in the repository.
+
+## Acknowledgments
+
+Thanks to Claude Code for helping a lot with the implementation and testing of the mojo-regex library, and to the Mojo community for their support and feedback.
 
 ## License
 
