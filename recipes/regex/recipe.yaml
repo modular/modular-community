@@ -20,8 +20,10 @@ package:
   name: regex
   version: 0.1.0
 requirements:
+  host:
+    - max =25.4.0
   run:
-  - max =25.4.0
+    - ${{ pin_compatible('max') }}
 source:
   - git: https://github.com/msaelices/mojo-regex.git
     rev: b37e0e5c7d0548449d35fff2b419cf17eb91827c
