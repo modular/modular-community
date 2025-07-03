@@ -10,7 +10,7 @@ about:
   repository: https://github.com/msaelices/mojo-regex
   summary: Library for dealing with regular expressions in Mojo
 build:
-  number: 1
+  number: 0
   script:
   - mkdir -p ${PREFIX}/lib/mojo
   - mojo package src/regex -o ${PREFIX}/lib/mojo/mojo-regex.mojopkg
