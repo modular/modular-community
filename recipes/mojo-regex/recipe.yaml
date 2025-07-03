@@ -26,4 +26,4 @@ requirements:
     - ${{ pin_compatible('max') }}
 source:
   - git: https://github.com/msaelices/mojo-regex.git
-    rev: 7b7d82138dc5c224ec01a9488cbb49403865e23a
+    rev: cc187a5987143b0eb7d9497e6ddb7546f2296e9c
