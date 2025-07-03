@@ -1,5 +1,6 @@
 context:
-  version: "0.14.0"
+  version: "0.16.0"
+  max_version: "=25.4"
 
 package:
   name: "extramojo"
@@ -7,7 +8,9 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 3282009a7cad20b77072b1cb930d96ea4bb73668
+    rev: 75b80da6249467b9df8f16fa432814b987504126
+  # path: .
+  # use_gitignore: true
 
 build:
   number: 0
@@ -15,36 +18,26 @@ build:
     - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
 requirements:
   host:
-    - max =25.3
+    - max ${{ max_version }}
   run:
-    - max =25.3
-    - ${{ pin_compatible('max') }}
+    - max ${{ max_version }}
 
 tests:
   - script:
       - if: unix
         then:
           - mojo run -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_file.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_regex.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_bstr.mojo
+          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests
     requirements:
       run:
-        - max =25.3
+        - max ${{ max_version }}
     files:
-      recipe:
-        - tests/test_file.mojo
-        - tests/test_regex.mojo
-        - tests/test_bstr.mojo
+      source:
+        - tests/
 
 about:
   homepage: https://github.com/ExtraMojo/ExtraMojo
-  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
-  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
-  # See https://spdx.org/licenses/
   license: "Unlicense OR MIT"
-  # It is strongly encouraged to include a license file in the package,
-  # (even if the license doesn't require it) using the license_file entry.
-  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
   license_file:
     - LICENSE-MIT
     - UNLICENSE

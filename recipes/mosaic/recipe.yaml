@@ -16,10 +16,10 @@ package:
 
 source:
   - git: https://github.com/christianbator/mosaic.git
-    rev: 7d95b2e6c8e7348e7e18cffa9189dd2c40a41a80
+    rev: 9be5ccdc0c00b5bc90e5d72db6774a068c925ae4
 
 build:
-  number: 2
+  number: 3
   script: build/build.sh
   dynamic_linking:
     missing_dso_allowlist:
@@ -33,7 +33,7 @@ requirements:
     - clang==20.1.4
     - lld==20.1.4
   host:
-    - max==25.2.0
+    - max==25.3.0
   run:
     - ${{ pin_compatible('max') }}
 
@@ -50,7 +50,7 @@ about:
   homepage: https://mosaiclib.org
   license: Apache-2.0
   license_file: LICENSE
-  summary: Open source computer vision library in Mojo
+  summary: An open source computer vision library in Mojo
   repository: https://github.com/christianbator/mosaic
   documentation: https://mosaiclib.org/docs
 
