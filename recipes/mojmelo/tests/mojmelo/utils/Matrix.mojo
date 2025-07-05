@@ -2,7 +2,7 @@ from .mojmelo_matmul import matmul
 from memory import memcpy, memset_zero, UnsafePointer
 import random
 
-struct Matrix:
+struct Matrix(Copyable, Movable, Sized):
     var height: Int
     var width: Int
     var size: Int
