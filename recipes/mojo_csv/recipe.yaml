@@ -1,5 +1,5 @@
 context:
-  version: 1.2.1
+  version: 1.3.0
 
 package:
   name: "mojo_csv"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: c0c5b4b1fd7d7c4db1c504d1104b38f10ef9ff70
+    rev: 4d6643f27fe15e86263cdc66fd383cf345811228
 
 build:
   number: 0
