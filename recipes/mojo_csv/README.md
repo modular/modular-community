@@ -18,6 +18,7 @@ channels = ["conda-forge", "https://conda.modular.com/max", "https://repo.prefix
 
 `pixi add mojo_csv`
 
+
 ##### Basic Usage
 
 ```mojo
@@ -43,6 +44,7 @@ fn main():
     for i in range(len(reader)):
         print(reader[i])
 ```
+
 #### BETA
 ```mojo
 ThreadedCsvReader(
@@ -83,6 +85,7 @@ var reader = ThreadedCsvReader(
     num_threads=8
 )
 
+
 ### Attributes
 
 ```mojo
@@ -93,7 +96,8 @@ reader.row_count : Int  # total number of rows T->B
 reader.column_count : Int # total number of columns L->R
 reader.elements : List[String] # all delimited elements
 reader.length : Int # total number of elements
-````
+
+```
 
 ##### Indexing
 
@@ -102,6 +106,7 @@ currently the array is only 1D, so indexing is fairly manual.
 ```Mojo
 reader[0] # first element
 ```
+
 
 ### Performance
 

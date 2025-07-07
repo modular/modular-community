@@ -1,0 +1,29 @@
+about:
+  description: "# Mojo Regex\nRegular Expressions Library for Mojo\n\n`mojo-regex` is a\
+    \ regex library featuring a hybrid DFA/NFA engine architecture that automatically\
+    \ optimizes pattern matching based on complexity.\n\nIt aims to provide a similar\
+    \ interface as the [re](https://docs.python.org/3/library/re.html) stdlib package\
+    \ while leveraging Mojo's performance capabilities."
+  homepage: https://github.com/msaelices/mojo-regex
+  license: MIT
+  license_file: LICENSE
+  repository: https://github.com/msaelices/mojo-regex
+  summary: Library for dealing with regular expressions in Mojo
+build:
+  number: 0
+  script:
+  - mkdir -p ${PREFIX}/lib/mojo
+  - mojo package src/regex -o ${PREFIX}/lib/mojo/mojo-regex.mojopkg
+context:
+  version: 13.4.2
+package:
+  name: mojo-regex
+  version: 0.2.1
+requirements:
+  host:
+    - max =25.4.0
+  run:
+    - ${{ pin_compatible('max') }}
+source:
+  - git: https://github.com/msaelices/mojo-regex.git
+    rev: cc187a5987143b0eb7d9497e6ddb7546f2296e9c
