@@ -9,15 +9,16 @@ package:
 
 source:
   - git: https://github.com/Hammad-hab/MojoINI.git
-    rev: c46a801e938c1fd2d24de516f04f9176b12a6895
+    rev: 6ebe2f95e092582c254fd3bfcd59006371fe3d85
 
 build:
   number: 0
   script:
     - mojo package src/mojoini -o ${{ PREFIX }}/lib/mojo/mojoini.mojopkg
+
 requirements:
   host:
-    - max
+    - max='25.4'
   run:
     - ${{ pin_compatible('max') }}
 
@@ -25,10 +26,11 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test test_parser.mojo
+          - mojo test
     files:
-      recipe:
+      source:
         - test_parser.mojo
+        - test_perf.mojo
 
 about:
   homepage: https://github.com/Hammad-hab/MojoINI.git
