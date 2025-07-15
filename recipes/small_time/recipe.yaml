@@ -1,5 +1,5 @@
 context:
-  version: "25.4.0"
+  version: "25.4.1"
 
 package:
   name: "small_time"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/small-time.git
-    rev: 04d8c7a3febbbb6707b11aeebb55b42d7f7d4129
+    rev: 5eb887d8efcf2d401d7ebef82f332550bcffbdb9
 
 build:
   number: 0
