@@ -1,18 +1,21 @@
+
+
 context:
-  version: "25.4.1"
+  version: "0.1.0"
 
 package:
-  name: "small_time"
+  name: "mojo-ini"
   version: ${{ version }}
 
 source:
-  - git: https://github.com/thatstoasty/small-time.git
-    rev: 5eb887d8efcf2d401d7ebef82f332550bcffbdb9
+  - git: https://github.com/Hammad-hab/MojoINI.git
+    rev: 6ebe2f95e092582c254fd3bfcd59006371fe3d85
 
 build:
   number: 0
   script:
-    - mojo package src/small_time -o ${{ PREFIX }}/lib/mojo/small_time.mojopkg
+    - mojo package src/mojoini -o ${{ PREFIX }}/lib/mojo/mojoini.mojopkg
+
 requirements:
   host:
     - max =25.4
@@ -23,26 +26,25 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test test
+          - mojo test
     files:
-      recipe:
-        - test_small_time.mojo
-        - test_time_delta.mojo
-        - test_time_zone.mojo
+      source:
+        - test_parser.mojo
+        - test_perf.mojo
 
 about:
-  homepage: https://github.com/thatstoasty/small-time
+  homepage: https://github.com/Hammad-hab/MojoINI.git
   # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
   # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
   # See https://spdx.org/licenses/
-  license: Apache-2.0
+  license: MIT
   # It is strongly encouraged to include a license file in the package,
   # (even if the license doesn't require it) using the license_file entry.
   # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
   license_file: LICENSE
-  summary: Datetime library forked from morrow.mojo
-  repository: https://github.com/thatstoasty/small-time
+  summary: Simple INI file parser for Mojo
+  repository: https://github.com/Hammad-hab/MojoINI.git
 
 extra:
   maintainers:
-    - thatstoasty
+    - Hammad-hab
