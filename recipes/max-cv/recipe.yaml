@@ -16,8 +16,11 @@ build:
 requirements:
   host:
     - max =25.4
+    - python
+    - pip
   run:
     - ${{ pin_compatible('max') }}
+    - python
 
 tests:
   - script:
