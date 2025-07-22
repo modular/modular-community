@@ -1,3 +1,4 @@
+
 <!-- ![mojo_csv_logo](./mojo_csv_logo.png) -->
 <image src='./mojo_csv_logo.png' width='900'/>
 
@@ -17,7 +18,6 @@ channels = ["conda-forge", "https://conda.modular.com/max", "https://repo.prefix
 ```
 
 `pixi add mojo_csv`
-
 
 ##### Basic Usage
 
@@ -46,6 +46,8 @@ fn main():
 ```
 
 #### BETA
+1.4.0 will be the last version where this isn't the default
+
 ```mojo
 ThreadedCsvReader(
     file_path: Path,
@@ -85,7 +87,6 @@ var reader = ThreadedCsvReader(
     num_threads=8
 )
 
-
 ### Attributes
 
 ```mojo
@@ -96,8 +97,7 @@ reader.row_count : Int  # total number of rows T->B
 reader.column_count : Int # total number of columns L->R
 reader.elements : List[String] # all delimited elements
 reader.length : Int # total number of elements
-
-```
+````
 
 ##### Indexing
 
@@ -106,7 +106,6 @@ currently the array is only 1D, so indexing is fairly manual.
 ```Mojo
 reader[0] # first element
 ```
-
 
 ### Performance
 
@@ -125,31 +124,52 @@ large file benchmark (2m rows)
 ✨ Pixi task (bench): mojo bench.mojo
 running benchmark for micro csv:
 average time in ms for micro file:
-0.007699
+0.01875
 -------------------------
 running benchmark for mini csv:
 average time in ms for mini file:
-0.241136
+0.07328
 -------------------------
 running benchmark for small csv:
 average time in ms for small file:
-1.388513
+0.417368
 -------------------------
 running benchmark for medium csv:
 average time in ms for medium file:
-121.217188
+36.45899
 -------------------------
 running benchmark for large csv:
 average time in ms for large file:
-3582.876541
+1253.19458
 ```
 
-Performance comparison on various file sizes (average of multiple runs):
+=== ThreadedCsvReader Performance Comparison ===
 
-| File Size    | Single-threaded | Multi-threaded | Speedup |
-| ------------ | --------------- | -------------- | ------- |
-| 1,000 rows   | 1.42ms          | 1.30ms         | 1.09x   |
-| 100,000 rows | 125ms           | 105ms          | 1.19x   |
+Small file benchmark (1,000 rows):
+Single-threaded:
+Average time: 0.500384 ms
+Multi-threaded:
+Average time: 0.451094 ms
+Speedup: 1.11 x
+-------------------------
+Medium file benchmark (100,000 rows):
+Single-threaded:
+Average time: 38.124275 ms
+Multi-threaded:
+Average time: 24.650092 ms
+Speedup: 1.55 x
+-------------------------
+Large file benchmark (2,000,000 rows):
+Single-threaded:
+Average time: 1175.345429 ms
+Multi-threaded:
+Average time: 830.02685 ms
+Speedup: 1.42 x
+-------------------------
+Summary:
+Small file speedup: 1.11 x
+Medium file speedup: 1.55 x
+Large file speedup: 1.42 x
 
 _Tested on AMD 7950x (16 cores) @ 5.8GHz_
 
