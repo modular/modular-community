@@ -1,0 +1,46 @@
+context:
+  version: "1.0.0"
+
+package:
+  name: "bridge"
+  version: ${{ version }}
+
+source:
+  - git: https://gitlab.com/hylkedonker/bridge.git
+    rev: 7b5d8bec7b8ae9b547afdec33cfce05d1c01abd2
+
+build:
+  number: 0
+  script:
+    - mojo package src/bridge -o ${{ PREFIX }}/lib/mojo/bridge.mojopkg
+requirements:
+  host:
+    - max=25.4
+  run:
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test test_numpy.🔥
+    files:
+      recipe:
+        - test_numpy.🔥
+about:
+  homepage: https://gitlab.com/hylkedonker/bridge
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
+  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
+  # See https://spdx.org/licenses/
+  license: MIT
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
+  license_file: LICENSE.txt
+  summary: Convert (bridge) Python objects to Mojo and vice versa.
+  repository: https://gitlab.com/hylkedonker/bridge
+
+extra:
+  maintainers:
+    - hylkedonker
+  project_name: Bridge
