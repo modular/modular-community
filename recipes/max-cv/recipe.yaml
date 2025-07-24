@@ -51,12 +51,12 @@ requirements:
       python_version: ["${{ python_min ~ '.*' }}", "3.12.*"]  
 
 tests:
- - script:
+  - script:
       - pytest ./tests
-    requirements:  
+    requirements:
       run:
          - pytest
-    files:  
+    files:
       source:
         - tests/
 # tests:
