@@ -25,6 +25,7 @@ requirements:
     - setuptools
     - max=25.4
     - wheel
+    - PIL
   run:
     - python
     - ${{ pin_compatible('max') }}
