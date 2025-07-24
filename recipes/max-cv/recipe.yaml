@@ -44,11 +44,12 @@ requirements:
 tests:
   - python:
       imports:
+        - pytest
         - numpy
         - pathlib
-        - pytest
   - script:
     - pixi run test
+    - pytest
 
 about:
   homepage: https://github.com/bradLarson/max-cv
