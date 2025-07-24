@@ -14,7 +14,7 @@ source:
 #   script: python -m pip install .
 
 build:
-  noarch: python 
+  noarch: python
   script: pip install . -v
 
 requirements:
