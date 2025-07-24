@@ -39,6 +39,15 @@ requirements:
 #         - python >=3.9,<3.13
 #         - pytest
 
+tests:
+  - python:
+      imports:
+        - numpy
+        - pathlib
+        - pytest
+  - script:
+    - pixi run test
+
 about:
   homepage: https://github.com/bradLarson/max-cv
   license: Apache-2.0
