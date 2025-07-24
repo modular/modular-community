@@ -25,7 +25,7 @@ requirements:
     - setuptools
     - max=25.4
     - wheel
-    - pillow
+    - Pillow
   run:
     - python
     - ${{ pin_compatible('max') }}
