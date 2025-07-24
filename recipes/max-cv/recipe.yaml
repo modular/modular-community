@@ -49,7 +49,7 @@ requirements:
 #     - pixi run test
 #     - pytest
 
-test:
+tests:
   imports:
     - numpy
     - pathlib
