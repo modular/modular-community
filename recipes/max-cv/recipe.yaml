@@ -50,17 +50,19 @@ requirements:
 #     - pytest
 
 tests:
-  imports:
-    - numpy
-    - pathlib
-  requires:
-    - pip
-    - python
-    - pytest
-  commands:
-    - pytest ./tests
-  source_files:
-    - tests/
+  - python
+    imports:
+      - numpy
+      - pathlib
+      - pytest
+    requires:
+      - pip
+      - python
+      - pytest
+    commands:
+      - pytest ./tests
+    source_files:
+      - tests/
 
 about:
   homepage: https://github.com/bradLarson/max-cv
