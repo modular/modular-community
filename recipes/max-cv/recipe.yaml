@@ -29,26 +29,6 @@ requirements:
     - python
     - ${{ pin_compatible('max') }}
 
-# tests:
-#   - script:
-#     - if: unix
-#       then:
-#         - pixi run test
-#     requirements:
-#       run:
-#         - pytest
-#         - max =25.4
-#         - python >=3.9,<3.13
-
-# tests:
-#   - python:
-#       # The Python test type will simply import packages as a sanity check.
-#       imports:
-#         - rattler
-#         - rattler.version.Version
-#       pip_check: true 
-#       # You can select different Python versions to test against.
-      # python_version: ["${{ python_min ~ '.*' }}", "3.12.*"]  
 tests:
   - script:
     - pytest ./tests
@@ -58,29 +38,6 @@ tests:
     files:
       source:
         - tests/
-# tests:
-#   - python:
-#       imports:
-#         - pytest
-
-#   - script:
-#     - pixi run test
-#     - pytest
-
-# tests:
-  # - python
-  #   imports:
-  #     - numpy
-  #     - pathlib
-  #     - pytest
-  #   requires:
-  #     - pip
-  #     - python
-  #     - pytest
-  #   commands:
-  #     - pytest ./tests
-  #   source_files:
-  #     - tests/
 
 about:
   homepage: https://github.com/bradLarson/max-cv
