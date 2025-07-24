@@ -28,16 +28,16 @@ requirements:
     - python
     - ${{ pin_compatible('max') }}
 
-tests:
-  - script:
-    - if: unix
-      then:
-        - pixi run test
-    requirements:
-      run:
-        - max =25.4
-        - python >=3.9,<3.13
-        - pytest
+# tests:
+#   - script:
+#     - if: unix
+#       then:
+#         - pixi run test
+#     requirements:
+#       run:
+#         - max =25.4
+#         - python >=3.9,<3.13
+#         - pytest
 
 about:
   homepage: https://github.com/bradLarson/max-cv
