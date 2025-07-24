@@ -10,13 +10,19 @@ from scripts.common import (
 import sys
 import os
 
+# Channels are in priority order
+DEFAULT_CHANNELS = [
+    "conda-forge",
+    "https://conda.modular.com/max",
+    "https://prefix.dev/modular-community",
+]
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build all recipes.")
     parser.add_argument(
         "--channel",
         action="append",
-        required=True,
         help="The channels to use for building.",
     )
     parser.add_argument(
@@ -48,12 +54,17 @@ def main() -> None:
             "build",
         ]
 
-        for channel in args.channel:
+        for channel in DEFAULT_CHANNELS:
             command.extend(["--channel", channel])
+
+        if args.channel is not None:
+            for channel in args.channel:
+                if channel in DEFAULT_CHANNELS:
+                    continue
+                command.extend(["--channel", channel])
+
         command.extend(
             [
-                "--channel",
-                "conda-forge",
                 "--variant-config",
                 variant_config,
                 "--skip-existing=all",

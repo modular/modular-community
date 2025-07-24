@@ -49,7 +49,7 @@ def commit_push_changes(message: str, branch_name: str) -> None:
 
 
 def run_command_unchecked(command: list[str]) -> subprocess.CompletedProcess[Any]:
-    eprint(f'Run command: {" ".join(command)}')
+    eprint(f"Run command: {' '.join(command)}")
     result = subprocess.run(command, capture_output=True, text=True)
     return result
 
