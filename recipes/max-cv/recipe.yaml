@@ -9,9 +9,13 @@ source:
  - git: https://github.com/BradLarson/max-cv.git
    rev: 89c15b266a77ab9edae3646708f4615a6a39682a
 
+# build:
+#   number: 0
+#   script: python -m pip install .
+
 build:
-  number: 0
-  script: python -m pip install .
+  noarch: python 
+  script: pip install . -v
 
 requirements:
   host:
