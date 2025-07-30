@@ -57,7 +57,7 @@ def recipe_name_collisions(
         recipe_data = yaml.safe_load(fh)
         name = recipe_data.get("package", {}).get("name", None)
 
-    if name is None:
+    if name is None or len(name.strip()) == 0:
         eprint("Invalid recipe yaml")
         # No collisions possible
         return False
@@ -65,6 +65,7 @@ def recipe_name_collisions(
     cmd = ["conda", "search", "--quiet"]
     for channel in channels:
         cmd.extend(["--channel", channel])
+    cmd.append(name.strip())
 
     p = run_command_unchecked(cmd)
     if p.returncode == 0:
