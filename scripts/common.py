@@ -62,7 +62,7 @@ def recipe_name_collisions(
         # No collisions possible
         return False
 
-    cmd = ["conda", "search", "--quiet"]
+    cmd = ["conda", "search", "--quiet", "--skip-flexible-search"]
     for channel in channels:
         cmd.extend(["--channel", channel])
     cmd.append(name.strip())
