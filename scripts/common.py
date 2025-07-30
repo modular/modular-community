@@ -1,8 +1,10 @@
-from typing import Any, TypedDict
-import json
 from pathlib import Path
-import sys
+from typing import Any, TypedDict
+
+import json
 import subprocess
+import sys
+import yaml
 
 
 class RecipeFailure(TypedDict):
@@ -48,8 +50,35 @@ def commit_push_changes(message: str, branch_name: str) -> None:
     run_command(["git", "push", "--set-upstream", "origin", branch_name])
 
 
+def recipe_name_collisions(
+    recipe_file: Path, *, channels: list[str] = ["conda-forge", "max"]
+) -> bool:
+    with open(recipe_file, "r") as fh:
+        recipe_data = yaml.safe_load(fh)
+        name = recipe_data.get("package", {}).get("name", None)
+
+    if name is None or len(name.strip()) == 0:
+        eprint("Invalid recipe yaml")
+        # No collisions possible
+        return False
+
+    cmd = ["conda", "search", "--quiet", "--skip-flexible-search"]
+    for channel in channels:
+        cmd.extend(["--channel", channel])
+    cmd.append(name.strip())
+
+    p = run_command_unchecked(cmd)
+    if p.returncode == 0:
+        # Name collides with something
+        eprint("Name collision detected:")
+        eprint(f"{p.stdout}")
+        eprint(f"{p.stderr}")
+        return True
+    return False
+
+
 def run_command_unchecked(command: list[str]) -> subprocess.CompletedProcess[Any]:
-    eprint(f'Run command: {" ".join(command)}')
+    eprint(f"Run command: {' '.join(command)}")
     result = subprocess.run(command, capture_output=True, text=True)
     return result
 
