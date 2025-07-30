@@ -16,6 +16,7 @@ python = ">=3.13.0,<3.14"
 pygithub = ">=2.5.0,<3"
 pyyaml = ">=6.0.2,<7"
 types-pyyaml = ">=6.0.12.20240917,<7"
+conda = ">=25.5.1,<26"
 
 [feature.lint.dependencies]
 actionlint = ">=1.7.4,<2"
