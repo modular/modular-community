@@ -31,6 +31,8 @@ tests:
           - mojo run -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/test_file.mojo
           - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests
     requirements:
+      build:
+        - mojo-compiler ${{ mojo_version }}
       run:
         - mojo-compiler ${{ mojo_version }}
     files:
