@@ -28,15 +28,16 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests/test_file.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests
+          - mojo run -I . tests/test_file.mojo
+          - mojo test -I . tests
     requirements:
       build:
-        - mojo-compiler ${{ mojo_version }}
+        - mojo ${{ mojo_version }}
       run:
-        - mojo-compiler ${{ mojo_version }}
+        - mojo ${{ mojo_version }}
     files:
       source:
+        - extramojo/
         - tests/
 
 about:
