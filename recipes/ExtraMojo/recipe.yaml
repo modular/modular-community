@@ -32,7 +32,7 @@ tests:
           - mojo test -I ${{ PREFIX }}/lib/mojo/extramojo.mojopkg tests
     requirements:
       run:
-        - max ${{ mojo_version }}
+        - mojo-compiler ${{ mojo_version }}
     files:
       source:
         - tests/
