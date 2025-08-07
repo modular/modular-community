@@ -3,6 +3,7 @@ from datetime import datetime
 import argparse
 from scripts.common import (
     load_failed_compatibility,
+    recipe_name_collisions,
     run_command_unchecked,
     save_failed_compatibility,
     eprint,
@@ -10,13 +11,17 @@ from scripts.common import (
 import sys
 import os
 
+# Channels are in priority order
+MODULAR_COMMUNITY_CHANNEL = "https://prefix.dev/modular-community"
+MAX_CHANNEL = "https://conda.modular.com/max"
+DEFAULT_CHANNELS = ["conda-forge", MAX_CHANNEL, MODULAR_COMMUNITY_CHANNEL]
+
 
 def main() -> None:
     parser = argparse.ArgumentParser(description="Build all recipes.")
     parser.add_argument(
         "--channel",
         action="append",
-        required=True,
         help="The channels to use for building.",
     )
     parser.add_argument(
@@ -36,6 +41,9 @@ def main() -> None:
     )
 
     exit_code = 0
+    default_channels_without_community = [
+        c for c in DEFAULT_CHANNELS if c != MODULAR_COMMUNITY_CHANNEL
+    ]
 
     for recipe_dir in base_dir.iterdir():
         recipe_file = recipe_dir / "recipe.yaml"
@@ -43,17 +51,30 @@ def main() -> None:
             eprint(f"{recipe_dir} doesn't contain recipe.yaml")
             continue
 
+        if recipe_name_collisions(
+            recipe_file, channels=default_channels_without_community
+        ):
+            eprint(
+                f"SKIPPING: {recipe_file} specifies a recipe whose name collides with another conda package in {default_channels_without_community}."
+            )
+            continue
+
         command = [
             "rattler-build",
             "build",
         ]
 
-        for channel in args.channel:
+        for channel in DEFAULT_CHANNELS:
             command.extend(["--channel", channel])
+
+        if args.channel is not None:
+            for channel in args.channel:
+                if channel in DEFAULT_CHANNELS:
+                    continue
+                command.extend(["--channel", channel])
+
         command.extend(
             [
-                "--channel",
-                "conda-forge",
                 "--variant-config",
                 variant_config,
                 "--skip-existing=all",
