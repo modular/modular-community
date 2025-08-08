@@ -17,11 +17,13 @@ Add the Modular community channel (https://repo.prefix.dev/modular-community) to
 channels = ["conda-forge", "https://conda.modular.com/max", "https://repo.prefix.dev/modular-community"]
 ```
 
+
 ```sh
 pixi add mojo_csv
 ```
 
 ## Usage
+
 
 By default uses all logical cores - 2
 ```mojo
@@ -48,6 +50,7 @@ fn main() raises:
         print(reader[i])
 ```
 
+
 ### Delimiters
 
 ```mojo
@@ -67,6 +70,7 @@ var reader = CsvReader(
     csv_path, num_threads = num_logical_cores()
 )
 ```
+
 
 ### Attributes
 
@@ -150,6 +154,7 @@ Small file speedup: 1.22 x
 Medium file speedup: 1.53 x
 Large file speedup: 1.4 x
 ```
+
 
 ## Future Improvements
 

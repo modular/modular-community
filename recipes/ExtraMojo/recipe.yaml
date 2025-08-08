@@ -1,6 +1,6 @@
 context:
-  version: "0.16.0"
-  max_version: "=25.4"
+  version: "0.17.0"
+  mojo_version: "=25.5"
 
 package:
   name: "extramojo"
@@ -8,31 +8,36 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 75b80da6249467b9df8f16fa432814b987504126
+    rev: 608ca09f3b2e201b8c163f466966af48fa99e1c2
   # path: .
   # use_gitignore: true
 
 build:
   number: 0
   script:
-    - mojo package ExtraMojo -o ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg
+    - mojo package extramojo -o ${{ PREFIX }}/lib/mojo/extramojo.mojopkg
 requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
   host:
-    - max ${{ max_version }}
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - max ${{ max_version }}
+    - mojo-compiler ${{ mojo_version }}
 
 tests:
   - script:
       - if: unix
         then:
-          - mojo run -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests/test_file.mojo
-          - mojo test -I ${{ PREFIX }}/lib/mojo/ExtraMojo.mojopkg tests
+          - mojo run -I . tests/test_file.mojo
+          - mojo test -I . tests
     requirements:
+      build:
+        - mojo ${{ mojo_version }}
       run:
-        - max ${{ max_version }}
+        - mojo ${{ mojo_version }}
     files:
       source:
+        - extramojo/
         - tests/
 
 about:
