@@ -1,5 +1,5 @@
 from .mojmelo_matmul import matmul
-from memory import memcpy, memset_zero, UnsafePointer
+from memory import memcpy, memset_zero
 import random
 
 struct Matrix(Copyable, Movable, Sized):
@@ -37,15 +37,15 @@ struct Matrix(Copyable, Movable, Sized):
         self.order = other.order
         memcpy(self.data, other.data, self.size)
 
-    fn __moveinit__(out self, owned existing: Self):
+    fn __moveinit__(out self, var existing: Self):
         self.height = existing.height
         self.width = existing.width
         self.size = existing.size
         self.data = existing.data
         self.order = existing.order
-        existing.height = existing.width = existing.size = 0
-        existing.order = ''
-        existing.data = UnsafePointer[Float32]()
+        #existing.height = existing.width = existing.size = 0
+        #existing.order = ''
+        #existing.data = UnsafePointer[Float32]()
 
     # access an element
     @always_inline
@@ -60,7 +60,7 @@ struct Matrix(Copyable, Movable, Sized):
         return self.data[loc]
 
     @always_inline
-    fn __del__(owned self):
+    fn __del__(var self):
         if self.data:
             self.data.free()
 
