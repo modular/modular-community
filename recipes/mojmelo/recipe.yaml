@@ -1,5 +1,5 @@
 context:
-  version: "0.0.75"
+  version: "0.0.8"
 
 package:
   name: "mojmelo"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: db1118cbb1eb845de10012d72113080d15f0d9c6
+    rev: 04f2b8b4c2a8e495b8e05ad7d7554e1b644df66d
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
     - mojo package pixi/mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojopkg
 requirements:
   host:
-    - max =25.4
+    - max =25.5
   run:
     - ${{ pin_compatible('max') }}
 
@@ -27,7 +27,7 @@ tests:
           - mojo tests/setup.mojo
     requirements:
       run:
-        - max =25.4
+        - max =25.5
     files:
       recipe:
         - tests/setup.mojo
