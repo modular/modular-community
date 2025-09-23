@@ -2,7 +2,7 @@ from .mojmelo_matmul import matmul
 from memory import memcpy, memset_zero
 import random
 
-struct Matrix(Copyable, Movable, Sized):
+struct Matrix(Copyable, Movable, ImplicitlyCopyable, Sized):
     var height: Int
     var width: Int
     var size: Int
@@ -37,7 +37,7 @@ struct Matrix(Copyable, Movable, Sized):
         self.order = other.order
         memcpy(self.data, other.data, self.size)
 
-    fn __moveinit__(out self, var existing: Self):
+    fn __moveinit__(out self, deinit existing: Self):
         self.height = existing.height
         self.width = existing.width
         self.size = existing.size
@@ -55,12 +55,12 @@ struct Matrix(Copyable, Movable, Sized):
             loc = (row * self.width) + column
         else:
             loc = (column * self.height) + row
-        if loc > self.size - 1:
+        if loc > self.size - 1 or loc < 0:
             raise Error("Error: Location is out of range!")
         return self.data[loc]
 
     @always_inline
-    fn __del__(var self):
+    fn __del__(deinit self):
         if self.data:
             self.data.free()
 
