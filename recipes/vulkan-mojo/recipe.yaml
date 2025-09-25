@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package vulkan-mojo -o ${{ PREFIX }}/lib/mojo/vulkan.mojopkg
+    - mojo package vk -o ${{ PREFIX }}/lib/mojo/vulkan.mojopkg
 requirements:
   host:
     - max=25.6
