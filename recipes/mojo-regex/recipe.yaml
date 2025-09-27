@@ -1,3 +1,6 @@
+context:
+  version: 0.5.0
+  mojo_version: "=0.25.6"
 about:
   description: "# Mojo Regex\nRegular Expressions Library for Mojo\n\n`mojo-regex` is a\
     \ regex library featuring a hybrid DFA/NFA engine architecture that automatically\
@@ -13,17 +16,17 @@ build:
   number: 0
   script:
   - mkdir -p ${PREFIX}/lib/mojo
-  - mojo package src/regex -o ${PREFIX}/lib/mojo/mojo-regex.mojopkg
-context:
-  version: 13.4.2
+  - mojo package src/regex -o ${PREFIX}/lib/mojo/regex.mojopkg
 package:
   name: mojo-regex
-  version: 0.4.0
+  version: ${{ version }}
 requirements:
   host:
-    - max =25.5.0
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('max') }}
+    - ${{ pin_compatible('mojo-compiler') }}
 source:
   - git: https://github.com/msaelices/mojo-regex.git
-    rev: 7241fc7435b0516eaf24fe812ead25077a87491b
+    rev: 7913f1c7f0f95e1befa5730e934ca39f14ed44ca
