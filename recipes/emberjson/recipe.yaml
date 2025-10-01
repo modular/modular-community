@@ -1,6 +1,6 @@
 context:
-  version: 0.1.7
-  mojo_version: "=25.5"
+  version: 0.2.0
+  mojo_version: "=0.25.6"
 
 package:
   name: "emberjson"
@@ -8,7 +8,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/EmberJson.git
-   rev: 0700a32337a7f348d92434240e52a62b881e92b3
+   rev: 5a456cc8286753d3fcdc5686f0ec48fe2dcee316
 
 build:
   number: 0
@@ -17,7 +17,7 @@ build:
 
 requirements:
   host:
-    - mojo-compiler ${{ mojo_version }}
+    - mojo-compiler =0.25.6
   build:
     - mojo-compiler ${{ mojo_version }}
   run:
