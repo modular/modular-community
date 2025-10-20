@@ -1,6 +1,6 @@
 context:
-  version: "0.17.0"
-  mojo_version: "=25.5"
+  version: "0.18.0"
+  mojo_version: "=0.25.6"
 
 package:
   name: "extramojo"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 608ca09f3b2e201b8c163f466966af48fa99e1c2
+    rev: 01b09557f73fb3a1a64bf48d3ef39fa826b24703
   # path: .
   # use_gitignore: true
 
