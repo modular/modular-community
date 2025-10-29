@@ -1,5 +1,6 @@
 context:
-  version: "25.5.0"
+  version: "25.6.0"
+  mojo_version: "=0.25.6"
 
 package:
   name: "mist"
@@ -7,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: 1c89c766f2827607c2fe64cfdc13b8680d55d6c0
+    rev: 21c2b6ccaf6b34fabaad89113858a41b413ba1e5
 
 build:
   number: 0
@@ -15,9 +16,11 @@ build:
     - mojo package mist -o ${{ PREFIX }}/lib/mojo/mist.mojopkg
 requirements:
   host:
-    - max =25.5
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('max') }}
+    - ${{ pin_compatible('mojo-compiler') }}
 
 tests:
   - script:
