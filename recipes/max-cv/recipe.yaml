@@ -1,0 +1,50 @@
+context:
+  version: 0.0.1
+
+package:
+  name: max-cv
+  version: ${{ version }}
+
+source:
+ - git: https://github.com/BradLarson/max-cv.git
+   rev: 27e24a8ee7028a0b721760ed627ad6926acd8329
+
+build:
+  number: 0
+  noarch: python
+  script: pip install . -v
+
+requirements:
+  host:
+    - python
+    - pip
+    - setuptools
+    - max=25.5
+    - wheel
+  run:
+    - python
+    - ${{ pin_compatible('max') }}
+
+tests:
+  - script:
+    - pytest ./tests
+    requirements:
+      run:
+       - pytest
+       - pillow
+    files:
+      source:
+        - tests/
+
+about:
+  homepage: https://github.com/bradLarson/max-cv
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An image processing framework built upon MAX
+  repository: https://github.com/bradLarson/max-cv
+
+extra:
+  maintainers:
+    - BradLarson
+  project_name:
+    - MAX-CV
