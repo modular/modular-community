@@ -8,12 +8,12 @@ package:
 
 source:
   - git: https://github.com/ssslakter/opengl-mojo.git
-    rev: 3c1d340832c447952590988f1740fb756b0fb65e
+    rev: a33040b26b17e6d0d85e395417c8b594bba3c7a8
 
 build:
   number: 0
   script:
-    - mojo package out -o ${{ PREFIX }}/lib/mojo/opengl-mojo.mojopkg
+    - mojo package src -o ${{ PREFIX }}/lib/mojo/opengl.mojopkg
 requirements:
   host:
     - mojo-compiler ${{ mojo_version }}
