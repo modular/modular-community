@@ -19,7 +19,7 @@ build:
 
 requirements:
   host:
-      - max =0.25.6
+      - mojo =0.25.6
   run:
     - ${{ pin_compatible('max') }}
 
