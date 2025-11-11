@@ -1,0 +1,34 @@
+context:
+  version: "0.0.4"
+  mojo_version: "=0.25.7"
+
+package:
+  name: "opengl-mojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/ssslakter/opengl-mojo.git
+    rev: 3c1d340832c447952590988f1740fb756b0fb65e
+
+build:
+  number: 0
+  script:
+    - mojo package out -o ${{ PREFIX }}/lib/mojo/opengl-mojo.mojopkg
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+about:
+  homepage: https://github.com/ssslakter/opengl-mojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: OpenGL bindings for Mojo
+  repository: https://github.com/ssslakter/opengl-mojo
+
+extra:
+  maintainers:
+    - ssslakter
