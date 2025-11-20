@@ -1,6 +1,5 @@
 context:
-  version: 0.1.3
-  mojo_version: "=0.25.6"
+  version: 0.1.4
 
 package:
   name: "kelvin"
@@ -8,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/Kelvin.git
-   rev: d10f89ac05c178e7537906fb5834e10764f3291f
+   rev: 3018ba56fa762a3090bbf4ca26438b6c506278ea
 
 build:
   number: 0
@@ -17,9 +16,9 @@ build:
 
 requirements:
   host:
-    - mojo-compiler ${{ mojo_version }}
+    - mojo-compiler =0.25.7
   build:
-    - mojo-compiler ${{ mojo_version }}
+    - mojo-compiler =0.25.7
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
@@ -27,14 +26,21 @@ tests:
   - script:
     - if: unix
       then:
-        - mojo test
-        # Can't convince PR build to find this file
-        # - python3 scripts/run_reject_tests.py
+        - python run_test.py
+        - python scripts/generate_tests.py && python scripts/run_reject_tests.py
+
+    files:
+      source:
+        - kelvin/
+        - test/
+        - run_test.py
+        - scripts/run_reject_tests.py
+        - scripts/generate_tests.py
     requirements:
       build:
-        - mojo ${{ mojo_version }}
+        - mojo =0.25.7
       run:
-        - mojo ${{ mojo_version }}
+        - mojo =0.25.7
 
 about:
   homepage: https://github.com/bgreni/Kelvin
