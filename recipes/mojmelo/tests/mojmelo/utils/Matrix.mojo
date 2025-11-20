@@ -76,13 +76,13 @@ struct Matrix(Copyable, Movable, ImplicitlyCopyable, Sized):
     fn __mul__(self, rhs: Self) raises -> Self:
         if self.width != rhs.height:
             raise Error('Error: Cannot multiply matrices with shapes (' + String(self.height) + ', ' + String(self.width) + ') and (' + String(rhs.height) + ', ' + String(rhs.width) + ')')
-        
+
         if self.height == 1 and rhs.width == 1:
             # Dot product
             var mat = Self(1, 1)
             mat.data[0] = self.ele_mul(rhs.T()).sum()
             return mat^
-        
+
         if self.height * self.width * rhs.width <= 4096:
             # matmul naive
             var mat = Self(self.height, rhs.width)
