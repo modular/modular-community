@@ -1,5 +1,5 @@
 context:
-  version: 1.5.0
+  version: 1.6.0
 
 package:
   name: "mojo_csv"
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: b3a9dc4422efbea7a94939e3a48ff4a3b03e3505
+    rev: 79dfe70cfc3088548aafc490ca1fa1b7133970e6
 
 build:
   number: 0
@@ -16,7 +16,7 @@ build:
 
 requirements:
   host:
-    - max >=25.4.0,<26
+    - max >=0.25.6,<26
   run:
     - ${{ pin_compatible('max') }}
 
