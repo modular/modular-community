@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.1.19"
+  version: "0.25.7"
 
 package:
   name: "lightbug_http"
@@ -19,7 +19,7 @@ build:
 
 requirements:
   host:
-      - max =25.2
+      - max =0.25.7
   run:
     - ${{ pin_compatible('max') }}
 
@@ -30,7 +30,7 @@ tests:
           - mojo test
     requirements:
       run:
-        - max =25.2
+        - mojo =0.25.7
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
