@@ -1,5 +1,6 @@
 context:
-  version: "25.5.0"
+  version: "25.7.0"
+  mojo_version: "=0.25.7"
 
 package:
   name: "mist"
@@ -7,23 +8,34 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: 1c89c766f2827607c2fe64cfdc13b8680d55d6c0
+    rev: 60788f6603930a099954a255c918492a7648bf41
 
 build:
   number: 0
   script:
     - mojo package mist -o ${{ PREFIX }}/lib/mojo/mist.mojopkg
 requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
   host:
-    - max =25.5
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('max') }}
+    - mojo-compiler ${{ mojo_version }}
 
 tests:
   - script:
       - if: unix
         then:
-          - mojo test test
+          - sh -c 'find ./test -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'
+    requirements:
+      build:
+        - mojo ${{ mojo_version }}
+      run:
+        - mojo ${{ mojo_version }}
+    files:
+      source:
+        - mist/
+        - test/
 
 about:
   homepage: https://github.com/thatstoasty/mist
