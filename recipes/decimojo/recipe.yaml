@@ -22,7 +22,7 @@ requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('mojo-compiler') }}
+    - mojo-compiler ${{ mojo_version }}
 
 about:
   homepage: https://github.com/forFudan/decimojo.git
