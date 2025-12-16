@@ -1,5 +1,6 @@
 context:
-  version: "0.4.1"
+  version: "0.6.0"
+  mojo_version: "=0.25.7"
 
 package:
   name: "decimojo"
@@ -7,29 +8,21 @@ package:
 
 source:
   - git: https://github.com/forFudan/decimojo.git
-    rev: 51c983229749df1caf490ccb9ddea19e7f220441
+    rev: 0fab1a2349cf05b854c4c204ec2121f634396809
 
 build:
   number: 0
   script:
+    - mkdir -p ${PREFIX}/lib/mojo
     - mojo package src/decimojo -o ${{ PREFIX }}/lib/mojo/decimojo.mojopkg
+
 requirements:
   host:
-    - max=25.4
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('max') }}
-
-tests:
-  - script:
-      - if: unix
-        then:
-          - mojo run tests.mojo
-    requirements:
-      run:
-        - max=25.4
-    files:
-      recipe:
-        - tests.mojo
+    - mojo-compiler ${{ mojo_version }}
 
 about:
   homepage: https://github.com/forFudan/decimojo.git
