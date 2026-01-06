@@ -1,5 +1,5 @@
 context:
-  version: "0.2.0"
+  version: "0.2.1"
 
 package:
   name: mojo-dotenv
@@ -45,4 +45,4 @@ about:
     - Multiline values and escape sequences
     - Auto-discovery with find_dotenv()
     - 98%+ compatible with python-dotenv
-    - 42 comprehensive tests using Mojo's TestSuite framework
+    - 49 comprehensive tests using Mojo's TestSuite framework
