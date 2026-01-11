@@ -17,9 +17,9 @@ build:
 
 requirements:
   host:
-      - max =0.25.7
+      - mojo-compiler =0.25.7
   run:
-    - ${{ pin_compatible('max') }}
+    - ${{ pin_compatible('mojo-compiler') }}
 
 tests:
   - script:
