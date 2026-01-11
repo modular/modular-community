@@ -1,0 +1,63 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+
+context:
+  version: "1.4.0"
+  mojo_version: "=0.25.6"
+  extramojo_version: "=0.18"
+
+
+package:
+  name: "ish"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/BioRadOpenSource/ish.git
+    rev: 304233bc80b14c18f6f1497d17116d2328d2474f
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/share/mojo
+    # Needed for tests
+    - mojo package -o ${{ PREFIX }}/share/mojo/ishlib.mojopkg ./ishlib
+    - mkdir -p ${{ PREFIX }}/bin
+    - mojo build -D ISH_SIMD_TARGET=baseline -D ISH_LOG_LEVEL=info -o ${{ PREFIX }}/bin/ish main.mojo
+    # Need to remove these or install_name_tool tries and fails to update paths
+    - find ${{ PREFIX }} -type d -name .mojo_cache -exec rm -rf {} +
+
+requirements:
+  host:
+      - mojo-compiler ${{ mojo_version }}
+      - extramojo ${{ extramojo_version }}
+      - zlib >=1.3.1,<2
+
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - zlib >=1.3.1,<2
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo test -I ${{ PREFIX }}/share/mojo/ishlib.mojopkg tests
+    requirements:
+      run:
+        - mojo-compiler ${{ mojo_version }}
+        - extramojo ${{ extramojo_version }}
+        - zlib >=1.3.1,<2
+
+    files:
+      source:
+        - tests
+
+about:
+  homepage: https://github.com/BioRadOpenSource/ish
+  license: Apache-2.0
+  license_file: LICENSE
+  summary:  Alignment-based filtering CLI tool
+  repository: https://github.com/BioRadOpenSource/ish
+
+extra:
+  maintainers:
+    - sstadick
+  project_name: ish
