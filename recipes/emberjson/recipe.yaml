@@ -1,6 +1,5 @@
 context:
-  version: 0.2.0
-  mojo_version: "=0.25.6"
+  version: 0.2.1
 
 package:
   name: "emberjson"
@@ -8,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/EmberJson.git
-   rev: 5a456cc8286753d3fcdc5686f0ec48fe2dcee316
+   rev: 6c6ed09fba6c426546e099af886deb53824bb4ba
 
 build:
   number: 0
@@ -17,9 +16,9 @@ build:
 
 requirements:
   host:
-    - mojo-compiler =0.25.6
+    - mojo-compiler =0.25.7
   build:
-    - mojo-compiler ${{ mojo_version }}
+    - mojo-compiler =0.25.7
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
@@ -27,12 +26,18 @@ tests:
   - script:
     - if: unix
       then:
-        - mojo test
+        - python run_tests.py
+    files:
+      source:
+        - run_tests.py
+        - test/
+        - emberjson/
+        - bench_data/
     requirements:
       build:
-        - mojo ${{ mojo_version }}
+        - mojo =0.25.7
       run:
-        - mojo ${{ mojo_version }}
+        - mojo =0.25.7
 
 about:
   homepage: https://github.com/bgreni/EmberJson

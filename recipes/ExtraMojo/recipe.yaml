@@ -1,6 +1,6 @@
 context:
-  version: "0.17.0"
-  mojo_version: "=25.5"
+  version: "0.19.0"
+  mojo_version: "=0.25.7"
 
 package:
   name: "extramojo"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 608ca09f3b2e201b8c163f466966af48fa99e1c2
+    rev: 6afbfc66b7d9840c82a20ea1090443934e31b673
   # path: .
   # use_gitignore: true
 
@@ -28,8 +28,7 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run -I . tests/test_file.mojo
-          - mojo test -I . tests
+          - sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'
     requirements:
       build:
         - mojo ${{ mojo_version }}
