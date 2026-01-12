@@ -38,7 +38,7 @@ about:
   summary: Load environment variables from .env files in Mojo
   description: |
     A production-ready .env file parser and loader for Mojo with near-100% python-dotenv compatibility.
-    
+
     Features:
     - Parse .env files to Dict or load into environment
     - Variable expansion (${VAR} and $VAR syntax)
