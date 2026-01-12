@@ -1,10 +1,10 @@
 package:
   name: mojo-toml
-  version: 0.3.0
+  version: 0.5.0
 
 source:
   git: https://github.com/DataBooth/mojo-toml.git
-  tag: v0.3.0
+  tag: v0.5.0
 
 build:
   number: 0
@@ -25,26 +25,33 @@ test:
     - test -f $PREFIX/lib/mojo/toml/__init__.mojo
     - test -f $PREFIX/lib/mojo/toml/lexer.mojo
     - test -f $PREFIX/lib/mojo/toml/parser.mojo
+    - test -f $PREFIX/lib/mojo/toml/writer.mojo
 
 about:
   homepage: https://github.com/DataBooth/mojo-toml
   license: MIT
   license_file: LICENSE
-  summary: A native TOML 1.0 parser for Mojo 🔥
+  summary: Native TOML 1.0 parser and writer for Mojo - Complete + Partial 1.1 🔥
   description: |
-    mojo-toml is the first native TOML 1.0 parser for Mojo, enabling fast and 
-    efficient parsing of TOML configuration files with zero Python dependencies.
-    
+    mojo-toml is a native TOML 1.0 parser and writer for Mojo, enabling
+    fast and efficient parsing and writing of TOML configuration files with zero
+    Python dependencies.
+
     Features:
-    - Complete TOML 1.0 syntax support (strings, numbers, arrays, tables)
+    - Complete TOML 1.0 specification support
+    - Array of tables [[section]] syntax
+    - Alternative number bases (hex 0xDEAD, octal 0o755, binary 0b1101)
+    - Partial TOML 1.1: \xHH and \e escape sequences
+    - TOML writer with full round-trip fidelity
     - Nested table structures with proper Dict navigation
     - Dotted keys for creating nested structures
     - Duplicate key detection
     - Clear error messages with line/column context
-    - 96 comprehensive tests ensuring reliability
-    - Performance: 26μs for simple parses, 2ms for real-world files
-    
-    Perfect for configuration files, build systems, and any Mojo application 
+    - 168 comprehensive tests (127 parser + 41 writer)
+    - Performance: 24μs for simple parses, 2ms for real-world files
+    - Comprehensive benchmark system
+
+    Perfect for configuration files, build systems, and any Mojo application
     needing structured configuration.
   doc_url: https://github.com/DataBooth/mojo-toml/blob/main/README.md
   dev_url: https://github.com/DataBooth/mojo-toml
