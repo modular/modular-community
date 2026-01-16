@@ -14,7 +14,15 @@ class RecipeFailure(TypedDict):
 def load_failed_compatibility(file_path: Path) -> dict[str, RecipeFailure]:
     if file_path.exists():
         with file_path.open("r") as file:
-            return dict(json.load(file))
+            content = file.read().strip()
+            if not content:
+                eprint(f"Warning: {file_path} is empty, returning empty dict")
+                return {}
+            try:
+                return dict(json.loads(content))
+            except json.JSONDecodeError as e:
+                eprint(f"Error parsing {file_path}: {e}")
+                return {}
     return {}
 
 
