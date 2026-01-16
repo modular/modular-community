@@ -1,0 +1,54 @@
+package:
+  name: mojo-toml
+  version: 0.3.0
+
+source:
+  git: https://github.com/DataBooth/mojo-toml.git
+  tag: v0.3.0
+
+build:
+  number: 0
+  script:
+    - mkdir -p $PREFIX/lib/mojo/toml
+    - cp -r src/toml/* $PREFIX/lib/mojo/toml/
+
+requirements:
+  build:
+    - mojo >=25.1
+  host:
+    - mojo >=25.1
+  run:
+    - mojo >=25.1
+
+test:
+  commands:
+    - test -f $PREFIX/lib/mojo/toml/__init__.mojo
+    - test -f $PREFIX/lib/mojo/toml/lexer.mojo
+    - test -f $PREFIX/lib/mojo/toml/parser.mojo
+
+about:
+  homepage: https://github.com/DataBooth/mojo-toml
+  license: MIT
+  license_file: LICENSE
+  summary: A native TOML 1.0 parser for Mojo 🔥
+  description: |
+    mojo-toml is the first native TOML 1.0 parser for Mojo, enabling fast and 
+    efficient parsing of TOML configuration files with zero Python dependencies.
+    
+    Features:
+    - Complete TOML 1.0 syntax support (strings, numbers, arrays, tables)
+    - Nested table structures with proper Dict navigation
+    - Dotted keys for creating nested structures
+    - Duplicate key detection
+    - Clear error messages with line/column context
+    - 96 comprehensive tests ensuring reliability
+    - Performance: 26μs for simple parses, 2ms for real-world files
+    
+    Perfect for configuration files, build systems, and any Mojo application 
+    needing structured configuration.
+  doc_url: https://github.com/DataBooth/mojo-toml/blob/main/README.md
+  dev_url: https://github.com/DataBooth/mojo-toml
+
+extra:
+  recipe-maintainers:
+    - mjboothaus
