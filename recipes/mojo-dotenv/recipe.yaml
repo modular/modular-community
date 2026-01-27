@@ -1,0 +1,48 @@
+context:
+  version: "0.2.2"
+
+package:
+  name: mojo-dotenv
+  version: ${{ version }}
+
+source:
+  git: https://github.com/DataBooth/mojo-dotenv
+  tag: v${{ version }}
+
+build:
+  number: 0
+  noarch: generic
+  script:
+    - mkdir -p $PREFIX/lib/mojo/dotenv
+    - cp -r src/dotenv/* $PREFIX/lib/mojo/dotenv/
+
+requirements:
+  host:
+    - max >=25.1.0
+  run:
+    - max >=25.1.0
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/dotenv/__init__.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/parser.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/loader.mojo
+      - test -f $PREFIX/lib/mojo/dotenv/finder.mojo
+
+about:
+  homepage: https://github.com/DataBooth/mojo-dotenv
+  repository: https://github.com/DataBooth/mojo-dotenv
+  documentation: https://github.com/DataBooth/mojo-dotenv/blob/main/README.md
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Load environment variables from .env files in Mojo
+  description: |
+    A production-ready .env file parser and loader for Mojo with near-100% python-dotenv compatibility.
+
+    Features:
+    - Parse .env files to Dict or load into environment
+    - Variable expansion (${VAR} and $VAR syntax)
+    - Multiline values and escape sequences
+    - Auto-discovery with find_dotenv()
+    - 98%+ compatible with python-dotenv
+    - 49 comprehensive tests using Mojo's TestSuite framework
