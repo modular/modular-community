@@ -1,0 +1,53 @@
+package:
+  name: mojo-asciichart
+  version: 1.1.1
+
+source:
+  git: https://github.com/DataBooth/mojo-asciichart.git
+  tag: v1.1.1
+
+build:
+  number: 0
+  script:
+    - mkdir -p $PREFIX/lib/mojo/asciichart
+    - cp -r src/asciichart/* $PREFIX/lib/mojo/asciichart/
+
+requirements:
+  build:
+    - mojo >=25.1
+  host:
+    - mojo >=25.1
+  run:
+    - mojo >=25.1
+
+test:
+  commands:
+    - test -f $PREFIX/lib/mojo/asciichart/__init__.mojo
+    - test -f $PREFIX/lib/mojo/asciichart/plot.mojo
+
+about:
+  homepage: https://github.com/DataBooth/mojo-asciichart
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Nice-looking lightweight console ASCII line charts for Mojo
+  description: |
+    mojo-asciichart is a native Mojo port of the popular asciichartpy Python library.
+    Generate beautiful ASCII line charts in your terminal with no dependencies.
+
+    Features:
+    - Basic plot() function for single series
+    - Configurable height and appearance
+    - Automatic min/max detection and scaling
+    - NaN value handling (gaps in data)
+    - UTF-8 box-drawing characters for smooth curves
+    - ANSI color support (6 predefined themes)
+    - Python interop tests for compatibility validation
+    - Pixel-perfect output matching asciichartpy
+    - Performance: 1.4-4.3x faster than Python
+    - Comprehensive test suite (29 tests passing)
+  doc_url: https://github.com/DataBooth/mojo-asciichart/blob/main/README.md
+  dev_url: https://github.com/DataBooth/mojo-asciichart
+
+extra:
+  recipe-maintainers:
+    - mjboothaus
