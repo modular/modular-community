@@ -24,12 +24,12 @@ requirements:
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
-test:
-  commands:
-    - test -f $PREFIX/lib/mojo/yaml/__init__.mojo
-    - test -f $PREFIX/lib/mojo/yaml/parser.mojo
-    - test -f $PREFIX/lib/mojo/yaml/lexer.mojo
-    - test -f $PREFIX/lib/mojo/yaml/value.mojo
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/yaml/__init__.mojo
+      - test -f $PREFIX/lib/mojo/yaml/parser.mojo
+      - test -f $PREFIX/lib/mojo/yaml/lexer.mojo
+      - test -f $PREFIX/lib/mojo/yaml/value.mojo
 
 about:
   homepage: https://github.com/DataBooth/mojo-yaml
@@ -58,8 +58,8 @@ about:
 
     Perfect for configuration files, CI/CD pipelines, and any Mojo application
     needing YAML configuration support.
-  doc_url: https://github.com/DataBooth/mojo-yaml/blob/main/README.md
-  dev_url: https://github.com/DataBooth/mojo-yaml
+  documentation: https://github.com/DataBooth/mojo-yaml/blob/main/README.md
+  repository: https://github.com/DataBooth/mojo-yaml
 
 extra:
   recipe-maintainers:
