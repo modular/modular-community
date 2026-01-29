@@ -4,7 +4,7 @@ package:
 
 source:
   git: https://github.com/DataBooth/mojo-toml.git
-  tag: v0.5.0
+  tag: v0.5.1
 
 build:
   number: 0
@@ -29,7 +29,7 @@ test:
 
 about:
   homepage: https://github.com/DataBooth/mojo-toml
-  license: MIT
+  license: Apache-2.0
   license_file: LICENSE
   summary: Native TOML 1.0 parser and writer for Mojo - Complete + Partial 1.1 🔥
   description: |
