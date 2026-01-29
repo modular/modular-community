@@ -24,12 +24,12 @@ requirements:
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
-test:
-  commands:
-    - test -f $PREFIX/lib/mojo/toml/__init__.mojo
-    - test -f $PREFIX/lib/mojo/toml/lexer.mojo
-    - test -f $PREFIX/lib/mojo/toml/parser.mojo
-    - test -f $PREFIX/lib/mojo/toml/writer.mojo
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/toml/__init__.mojo
+      - test -f $PREFIX/lib/mojo/toml/lexer.mojo
+      - test -f $PREFIX/lib/mojo/toml/parser.mojo
+      - test -f $PREFIX/lib/mojo/toml/writer.mojo
 
 about:
   homepage: https://github.com/DataBooth/mojo-toml
@@ -57,8 +57,8 @@ about:
 
     Perfect for configuration files, build systems, and any Mojo application
     needing structured configuration.
-  doc_url: https://github.com/DataBooth/mojo-toml/blob/main/README.md
-  dev_url: https://github.com/DataBooth/mojo-toml
+  documentation: https://github.com/DataBooth/mojo-toml/blob/main/README.md
+  repository: https://github.com/DataBooth/mojo-toml
 
 extra:
   recipe-maintainers:
