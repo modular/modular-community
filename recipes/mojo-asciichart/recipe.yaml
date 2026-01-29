@@ -24,10 +24,10 @@ requirements:
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
-test:
-  commands:
-    - test -f $PREFIX/lib/mojo/asciichart/__init__.mojo
-    - test -f $PREFIX/lib/mojo/asciichart/plot.mojo
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/asciichart/__init__.mojo
+      - test -f $PREFIX/lib/mojo/asciichart/plot.mojo
 
 about:
   homepage: https://github.com/DataBooth/mojo-asciichart
@@ -49,8 +49,8 @@ about:
     - Pixel-perfect output matching asciichartpy
     - Performance: 1.4-4.3x faster than Python
     - Comprehensive test suite (29 tests passing)
-  doc_url: https://github.com/DataBooth/mojo-asciichart/blob/main/README.md
-  dev_url: https://github.com/DataBooth/mojo-asciichart
+  documentation: https://github.com/DataBooth/mojo-asciichart/blob/main/README.md
+  repository: https://github.com/DataBooth/mojo-asciichart
 
 extra:
   recipe-maintainers:
