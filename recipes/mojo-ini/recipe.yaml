@@ -24,12 +24,12 @@ requirements:
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
-test:
-  files:
-    source:
-      - test_package.mojo
-  commands:
-    - mojo -I ${PREFIX}/lib/mojo test_package.mojo
+tests:
+  - files:
+      source:
+        - test_package.mojo
+    script:
+      - mojo -I ${PREFIX}/lib/mojo test_package.mojo
 
 about:
   homepage: https://github.com/DataBooth/mojo-ini
@@ -40,8 +40,8 @@ about:
     mojo-ini provides native INI parsing and writing in Mojo with zero Python dependencies.
     It supports classic INI syntax, multiline values (indented continuation), comments,
     and includes a clean public API: parse(), to_ini(), parse_file(), write_file().
-  doc_url: https://github.com/DataBooth/mojo-ini#readme
-  dev_url: https://github.com/DataBooth/mojo-ini
+  documentation: https://github.com/DataBooth/mojo-ini#readme
+  repository: https://github.com/DataBooth/mojo-ini
 
 extra:
   recipe-maintainers:
