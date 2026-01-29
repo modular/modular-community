@@ -1,5 +1,6 @@
 context:
   version: "0.2.2"
+  mojo_version: "=0.25.7"
 
 package:
   name: mojo-dotenv
@@ -17,10 +18,12 @@ build:
     - cp -r src/dotenv/* $PREFIX/lib/mojo/dotenv/
 
 requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
   host:
-    - max >=25.1.0
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - max >=25.1.0
+    - ${{ pin_compatible('mojo-compiler') }}
 
 tests:
   - script:
