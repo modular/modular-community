@@ -17,7 +17,7 @@ jobs:
         label:
           - ubuntu-latest
           - macos-latest
-          - magic_arm64_8core
+          - ubuntu-24.04-arm
     runs-on: ${{ matrix.label }}
     env:
       DATA_FILE: data/failed-compatibility-${{ matrix.label }}.json
