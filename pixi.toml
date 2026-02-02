@@ -1,4 +1,4 @@
-[project]
+[workspace]
 name = "modular-community"
 channels = ["conda-forge"]
 platforms = ["linux-64", "linux-aarch64", "osx-arm64"]
@@ -19,7 +19,7 @@ types-pyyaml = ">=6.0.12.20240917,<7"
 conda = ">=25.5.1,<26"
 
 [feature.lint.dependencies]
-actionlint = ">=1.7.4,<2"
+actionlint = ">=1.7.10,<2"
 ruff = ">=0.7.3,<0.8"
 check-jsonschema = ">=0.29.4,<0.30"
 shellcheck = ">=0.10.0,<0.11"
