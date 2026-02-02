@@ -1,5 +1,5 @@
 context:
-  version: 0.2.1
+  version: 0.3.0
 
 package:
   name: "emberjson"
@@ -7,7 +7,7 @@ package:
 
 source:
  - git: https://github.com/bgreni/EmberJson.git
-   rev: 6c6ed09fba6c426546e099af886deb53824bb4ba
+   rev: 8ad6a4cd82853ecdad94f4dc3249c599694e251f
 
 build:
   number: 0
@@ -16,9 +16,9 @@ build:
 
 requirements:
   host:
-    - mojo-compiler =0.25.7
+    - mojo-compiler =0.26.1
   build:
-    - mojo-compiler =0.25.7
+    - mojo-compiler =0.26.1
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
@@ -35,9 +35,9 @@ tests:
         - bench_data/
     requirements:
       build:
-        - mojo =0.25.7
+        - mojo =0.26.1
       run:
-        - mojo =0.25.7
+        - mojo =0.26.1
 
 about:
   homepage: https://github.com/bgreni/EmberJson
