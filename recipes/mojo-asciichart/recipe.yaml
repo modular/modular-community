@@ -1,6 +1,6 @@
 context:
   version: 1.1.2
-  mojo_version: "=0.25.7"
+  mojo_version: "=0.26.1"
 
 package:
   name: mojo-asciichart
