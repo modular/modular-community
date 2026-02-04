@@ -1,0 +1,66 @@
+context:
+  version: 0.1.2
+  mojo_version: "=0.26.1"
+
+package:
+  name: mojo-yaml
+  version: ${{ version }}
+
+source:
+  git: https://github.com/DataBooth/mojo-yaml.git
+  tag: v0.1.2
+
+build:
+  number: 0
+  script:
+    - mkdir -p $PREFIX/lib/mojo/yaml
+    - cp -r src/yaml/* $PREFIX/lib/mojo/yaml/
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/yaml/__init__.mojo
+      - test -f $PREFIX/lib/mojo/yaml/parser.mojo
+      - test -f $PREFIX/lib/mojo/yaml/lexer.mojo
+      - test -f $PREFIX/lib/mojo/yaml/value.mojo
+
+about:
+  homepage: https://github.com/DataBooth/mojo-yaml
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: YAML Lite parser for Mojo - Native, zero-dependency YAML reader
+  description: |
+    mojo-yaml is a YAML Lite parser covering ~80% of common YAML patterns,
+    providing native YAML configuration file parsing in Mojo with zero Python dependencies.
+
+    Features:
+    - Nested mappings and sequences (any depth)
+    - Inline list-mappings (- name: value\\n  key2: value2)
+    - All scalar types (int, float, bool, null, string)
+    - Comments anywhere in files
+    - Mixed structures (lists in dicts, dicts in lists)
+    - Type-safe value access (as_string(), as_int(), as_bool())
+    - 91/91 tests passing (100% test coverage)
+    - Works with real configuration files (pre-commit, custom YAMLs)
+    - Performance: 9-21x faster than Python's pyyaml
+
+    Limitations:
+    - Multi-word strings require quotes
+    - Flow-style syntax not supported (use block style)
+    - Reader-only in v0.1.x (writer planned for future)
+
+    Perfect for configuration files, CI/CD pipelines, and any Mojo application
+    needing YAML configuration support.
+  documentation: https://github.com/DataBooth/mojo-yaml/blob/main/README.md
+  repository: https://github.com/DataBooth/mojo-yaml
+
+extra:
+  recipe-maintainers:
+    - mjboothaus
