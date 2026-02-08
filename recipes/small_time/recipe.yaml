@@ -1,6 +1,6 @@
 context:
-  version: "25.7.0"
-  mojo_version: "=0.25.7"
+  version: "26.1.0"
+  mojo_version: "=0.26.1.0"
 
 package:
   name: "small_time"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/small-time.git
-    rev: 0dbf6349ef13d7009abca777702146b1438ff5fe
+    rev: afc04a3923b10a70a92f56bcd04794dc73139b04
 
 build:
   number: 0
