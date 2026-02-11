@@ -1,7 +1,6 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
-
 context:
-  version: "0.1.19"
+  version: "0.26.1"
 
 package:
   name: "lightbug_http"
@@ -9,8 +8,7 @@ package:
 
 source:
   - git: https://github.com/saviorand/lightbug_http.git
-    rev: 4487b71ccbcfd30ace2db5d6ed975f94509e5a24
-
+    rev: 1097de6dc66bea4c1e4e40523a42e4cf551147f1
 build:
   number: 0
   script:
@@ -19,9 +17,9 @@ build:
 
 requirements:
   host:
-      - max =25.2
+      - mojo-compiler =0.26.1
   run:
-    - ${{ pin_compatible('max') }}
+    - ${{ pin_compatible('mojo-compiler') }}
 
 tests:
   - script:
@@ -30,7 +28,7 @@ tests:
           - mojo test
     requirements:
       run:
-        - max =25.2
+        - mojo =0.26.1
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
