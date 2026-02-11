@@ -1,0 +1,56 @@
+context:
+  version: 0.2.0
+
+package:
+  name: "kelvin"
+  version: ${{ version }}
+
+source:
+ - git: https://github.com/bgreni/Kelvin.git
+   rev: bbbc69c2997d819054794d3fc6104204b08a6649
+
+build:
+  number: 0
+  script:
+    - mojo package kelvin -o ${{ PREFIX }}/lib/mojo/kelvin.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler =0.26.1
+  build:
+    - mojo-compiler =0.26.1
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+    - if: unix
+      then:
+        - python run_test.py
+        - python scripts/generate_tests.py && python scripts/run_reject_tests.py
+
+    files:
+      source:
+        - kelvin/
+        - test/
+        - run_test.py
+        - scripts/run_reject_tests.py
+        - scripts/generate_tests.py
+    requirements:
+      build:
+        - mojo =0.26.1
+      run:
+        - mojo =0.26.1
+
+about:
+  homepage: https://github.com/bgreni/Kelvin
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: A powerful dimensional analysis library written in Mojo
+  repository: https://github.com/bgreni/Kelvin
+
+extra:
+  maintainers:
+    - bgreni
+  project_name:
+    - Kelvin

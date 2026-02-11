@@ -1,21 +1,24 @@
+
+
 context:
-  version: "0.0.1"
+  version: "0.1.0"
 
 package:
-  name: "hue"
+  name: "mojo-ini"
   version: ${{ version }}
 
 source:
-  - git: https://github.com/thatstoasty/hue.git
-    rev: 32ff979d86393cf91068ead70e96ce18cd701106
+  - git: https://github.com/Hammad-hab/MojoINI.git
+    rev: 6ebe2f95e092582c254fd3bfcd59006371fe3d85
 
 build:
-  number: 3
+  number: 0
   script:
-    - mojo package src/hue -o ${{ PREFIX }}/lib/mojo/hue.mojopkg
+    - mojo package src/mojoini -o ${{ PREFIX }}/lib/mojo/mojoini.mojopkg
+
 requirements:
   host:
-    - max
+    - max =25.4
   run:
     - ${{ pin_compatible('max') }}
 
@@ -23,13 +26,14 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test.mojo
+          - mojo test
     files:
-      recipe:
-        - test.mojo
+      source:
+        - test_parser.mojo
+        - test_perf.mojo
 
 about:
-  homepage: https://github.com/thatstoasty/hue
+  homepage: https://github.com/Hammad-hab/MojoINI.git
   # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
   # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
   # See https://spdx.org/licenses/
@@ -38,9 +42,9 @@ about:
   # (even if the license doesn't require it) using the license_file entry.
   # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
   license_file: LICENSE
-  summary: A library for playing with colors in Mojo.
-  repository: https://github.com/thatstoasty/hue
+  summary: Simple INI file parser for Mojo
+  repository: https://github.com/Hammad-hab/MojoINI.git
 
 extra:
   maintainers:
-    - thatstoasty
+    - Hammad-hab

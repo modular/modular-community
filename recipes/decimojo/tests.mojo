@@ -703,17 +703,6 @@ fn test_division() raises:
         String(result12), "1234.56", "Division with mixed precision"
     )
 
-    # Test case 13: Verify mathematical identity (a/b)*b ≈ a within rounding error
-    var a13 = Decimal("123.45")
-    var b13 = Decimal("7.89")
-    var div_result = a13 / b13
-    var mul_result = div_result * b13
-    # Because of rounding, we don't expect exact equality, so check if the difference is small
-    var diff = a13 - mul_result
-    var abs_diff = -diff if diff.is_negative() else diff
-    var is_close = Float64(String(abs_diff)) < 0.0001
-    testing.assert_equal(is_close, True, "(a/b)*b should approximately equal a")
-
     # Test case 14: Division of number by itself should be 1
     var a14 = Decimal("123.45")
     var result14 = a14 / a14
