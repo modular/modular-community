@@ -1,6 +1,6 @@
 context:
-  version: "0.6.0"
-  mojo_version: "=0.25.7"
+  version: "0.7.0"
+  mojo_version: "=0.26.1"
 
 package:
   name: "decimojo"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/forFudan/decimojo.git
-    rev: 0fab1a2349cf05b854c4c204ec2121f634396809
+    rev: 00a47934d25e69ab76137aae3898e0b6bc800a66
 
 build:
   number: 0
