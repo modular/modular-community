@@ -27,12 +27,13 @@ tests:
   - script:
       - if: unix
         then:
-          - pixi run mojo test
+          - sh -c 'find ./tests -name test_*.mojo | xargs -I % mojo run -I . -D ASSERT=all %'
     requirements:
       build:
         - mojo ${{ mojo_version }}
       run:
         - mojo ${{ mojo_version }}
+        - small_time >=26.1.0,<26.2.0
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
