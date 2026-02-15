@@ -27,7 +27,7 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo test
+          - pixi run mojo test
     requirements:
       build:
         - mojo ${{ mojo_version }}
