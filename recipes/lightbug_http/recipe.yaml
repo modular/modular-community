@@ -16,10 +16,13 @@ build:
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
+    - small_time >=26.1.0,<26.2.0
   host:
     - mojo-compiler ${{ mojo_version }}
+    - small_time >=26.1.0,<26.2.0
   run:
     - mojo-compiler ${{ mojo_version }}
+    - small_time >=26.1.0,<26.2.0
 tests:
   - script:
       - if: unix
