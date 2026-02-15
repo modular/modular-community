@@ -1,5 +1,5 @@
 context:
-  version: "26.1.0"
+  version: "26.1.1"
   mojo_version: "=0.26.1.0"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: 379832b7b3c6d9c15a31c8daccada2bc18e104c5
+    rev: 628290c9b667c58c5697818c60c3a47e86db8d2f
 
 build:
   number: 0
