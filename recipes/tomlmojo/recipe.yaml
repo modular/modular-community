@@ -1,0 +1,46 @@
+context:
+  version: "0.7.0"
+  mojo_version: "=0.26.1"
+
+package:
+  name: "tomlmojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mojomath/decimojo.git
+    rev: 3d5ce72f8e2f1cb989787c9a95daed3cc05a2cc5
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package src/tomlmojo -o ${{ PREFIX }}/lib/mojo/tomlmojo.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/tomlmojo.mojopkg
+
+about:
+  homepage: https://github.com/mojomath/decimojo/docs/readme_tomlmojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: A native TOML v1.0 parser for Mojo
+  description: |
+    tomlmojo is a native TOML v1.0 parser for Mojo with zero dependencies.
+    Initially developed to support DeciMojo's test data and configuration,
+    it can be used as a standalone library for parsing TOML files.
+  documentation: https://github.com/mojomath/decimojo/docs/readme_tomlmojo
+  repository: https://github.com/mojomath/decimojo
+
+extra:
+  project_name: tomlmojo
+  maintainers:
+    - forfudan
