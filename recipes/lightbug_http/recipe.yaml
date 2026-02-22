@@ -1,13 +1,13 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 context:
-  version: "0.26.1.1"
+  version: "0.26.1.2"
   mojo_version: "=0.26.1"
 package:
   name: "lightbug_http"
   version: ${{ version }}
 source:
   - git: https://github.com/saviorand/lightbug_http.git
-    rev: dff42863edbe9d1e04fa2946bb3a7e95a442bc18
+    rev: 3aae65f46a728bc5e1482b75e0dd9b8063c69b2e
 build:
   number: 0
   script:
