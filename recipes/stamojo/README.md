@@ -1,6 +1,6 @@
 # StaMojo <!-- omit in toc -->
 
-![icon](stamojo.png)
+![icon](image.jpeg)
 
 A statistical computing library for [Mojo](https://www.modular.com/mojo), inspired by `scipy.stats` and `statsmodels` in Python.
 
