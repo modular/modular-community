@@ -1,6 +1,6 @@
 # ArgMojo
 
-![icon](argmojo.jpg)
+![icon](image.jpeg)
 
 A command-line argument parser library for [Mojo](https://www.modular.com/mojo).
 
