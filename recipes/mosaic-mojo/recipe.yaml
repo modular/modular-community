@@ -53,7 +53,7 @@ tests:
         - tests/data/
 
 about:
-  homepage: https://mosaiclib.org
+  homepage: https://brainwave.sh/mosaic
   license: Apache-2.0
   license_file: LICENSE
   summary: An image processing library in Mojo
