@@ -31,6 +31,7 @@ pixi add --channel https://repo.prefix.dev/modular-community --channel https://c
 
 An example can be found in https://github.com/winding-lines/pontoneer/tree/main/examples/columnar.
 
+Documentation is available at https://winding-lines.github.io/pontoneer/
 
 ## License
 
