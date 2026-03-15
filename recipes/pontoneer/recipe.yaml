@@ -3,7 +3,7 @@ schema_version: 1
 
 # Bump this to match the git tag before tagging a release (e.g. v0.1.1 → "0.1.1").
 context:
-  version: "0.3.6"
+  version: "0.6.0"
   mojo_version: ">=0.26.0.dev2026030505"
 
 package:
