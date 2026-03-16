@@ -4,7 +4,7 @@ schema_version: 1
 # Bump this to match the git tag before tagging a release (e.g. v0.1.1 → "0.1.1").
 context:
   version: "0.6.0"
-  mojo_version: ">=0.26.0.dev2026030505"
+  mojo_version: "0.26.3.0.dev2026031505"
 
 package:
   name: pontoneer
@@ -16,7 +16,7 @@ source:
   tag: v${{ version }}
 
 build:
-  number: 0
+  number: 1
   # mojopkg files are architecture-independent source; skip the binary prefix
   # rewrite pass by marking this as a noarch package.
   noarch: generic
@@ -25,8 +25,12 @@ build:
     - mojo package pontoneer -o "${PREFIX}/lib/mojo/pontoneer.mojopkg"
 
 requirements:
+  host:
+    - mojo-compiler = ${{ mojo_version }}
   build:
-    - mojo
+    - mojo-compiler = ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
 
 about:
   homepage: https://winding-lines.github.io/pontoneer/
