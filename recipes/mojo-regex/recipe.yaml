@@ -29,4 +29,4 @@ requirements:
     - ${{ pin_compatible('mojo-compiler') }}
 source:
   - git: https://github.com/msaelices/mojo-regex.git
-    rev: b09520413712a18dcd231f13a999c0974403de81
+    rev: 63d1b7b55e5ab9617b846fe24fe7de7891f3255e
