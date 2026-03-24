@@ -1,0 +1,65 @@
+context:
+  version: 0.5.1
+  mojo_version: "=0.26.1"
+
+package:
+  name: mojo-toml
+  version: ${{ version }}
+
+source:
+  git: https://github.com/DataBooth/mojo-toml.git
+  tag: v0.5.1
+
+build:
+  number: 0
+  script:
+    - mkdir -p $PREFIX/lib/mojo/toml
+    - cp -r src/toml/* $PREFIX/lib/mojo/toml/
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/toml/__init__.mojo
+      - test -f $PREFIX/lib/mojo/toml/lexer.mojo
+      - test -f $PREFIX/lib/mojo/toml/parser.mojo
+      - test -f $PREFIX/lib/mojo/toml/writer.mojo
+
+about:
+  homepage: https://github.com/DataBooth/mojo-toml
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Native TOML 1.0 parser and writer for Mojo - Complete + Partial 1.1 🔥
+  description: |
+    mojo-toml is a native TOML 1.0 parser and writer for Mojo, enabling
+    fast and efficient parsing and writing of TOML configuration files with zero
+    Python dependencies.
+
+    Features:
+    - Complete TOML 1.0 specification support
+    - Array of tables [[section]] syntax
+    - Alternative number bases (hex 0xDEAD, octal 0o755, binary 0b1101)
+    - Partial TOML 1.1: \xHH and \e escape sequences
+    - TOML writer with full round-trip fidelity
+    - Nested table structures with proper Dict navigation
+    - Dotted keys for creating nested structures
+    - Duplicate key detection
+    - Clear error messages with line/column context
+    - 168 comprehensive tests (127 parser + 41 writer)
+    - Performance: 24μs for simple parses, 2ms for real-world files
+    - Comprehensive benchmark system
+
+    Perfect for configuration files, build systems, and any Mojo application
+    needing structured configuration.
+  documentation: https://github.com/DataBooth/mojo-toml/blob/main/README.md
+  repository: https://github.com/DataBooth/mojo-toml
+
+extra:
+  recipe-maintainers:
+    - mjboothaus

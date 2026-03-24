@@ -1,0 +1,32 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: "vulkan-mojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Ryul0rd/vulkan-mojo.git
+    rev: 06906c5c563c2f74b3bd5ea53532afb2ae2bc3b3
+
+build:
+  number: 0
+  script:
+    - mojo package vk -o ${{ PREFIX }}/lib/mojo/vulkan.mojopkg
+requirements:
+  host:
+    - max=25.6
+  run:
+    - ${{ pin_compatible('max') }}
+
+about:
+  homepage: https://github.com/Ryul0rd/vulkan-mojo
+  license: MIT
+  license_file: LICENSE
+  summary: Generated Mojo bindings for the Vulkan graphics API
+  repository: https://github.com/Ryul0rd/vulkan-mojo
+
+extra:
+  project_name: vulkan-mojo
+  maintainers:
+    - Ryul0rd
