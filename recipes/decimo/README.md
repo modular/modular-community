@@ -4,16 +4,25 @@
 
 An arbitrary-precision integer and decimal library for [Mojo](https://www.modular.com/mojo), inspired by Python's `int` and `Decimal`.
 
-**[中文·漢字](https://github.com/forfudan/decimo/blob/main/docs/readme_zht.md)**　|　**[Changelog](https://github.com/forfudan/decimo/blob/main/docs/changelog.md)**　|　**[Repository on GitHub»](https://github.com/forfudan/decimo)**　|　**[Discord channel»](https://discord.gg/3rGH87uZTk)**
+[![Version](https://img.shields.io/github/v/tag/forfudan/decimo?label=version&color=blue)](https://github.com/forfudan/decimo/releases)
+[![pixi](https://img.shields.io/badge/pixi%20add-decimo-purple)](https://prefix.dev/channels/modular-community/packages/decimo)
+[![CI](https://img.shields.io/github/actions/workflow/status/forfudan/argmojo/run_tests.yaml?branch=main&label=tests)](https://github.com/forfudan/argmojo/actions/workflows/run_tests.yaml)
+[![Last Commit](https://img.shields.io/github/last-commit/forfudan/argmojo?color=red)](https://github.com/forfudan/argmojo/commits/main)
 
-- [Overview](#overview)
-- [Installation](#installation)
-- [Quick start](#quick-start)
-- [Objective](#objective)
-- [Status](#status)
-- [Tests and benches](#tests-and-benches)
-- [Citation](#citation)
-- [License](#license)
+<!-- 
+[![Mojo](https://img.shields.io/badge/mojo-0.26.1-orange)](https://docs.modular.com/mojo/manual/)
+[![License](https://img.shields.io/github/license/forfudan/argmojo)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/forfudan/argmojo?style=flat)](https://github.com/forfudan/argmojo/stargazers)
+[![Issues](https://img.shields.io/github/issues/forfudan/argmojo)](https://github.com/forfudan/argmojo/issues)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
+-->
+
+<!-- 
+[![中文](https://img.shields.io/badge/中文-介紹-red)](https://github.com/forfudan/decimo/blob/main/docs/readme_zht.md)
+[![Changelog](https://img.shields.io/badge/change-log-yellow)](https://github.com/forfudan/decimo/blob/main/docs/changelog.md)
+[![Repository on GitHub](https://img.shields.io/badge/repo-GitHub-black)](https://github.com/forfudan/decimo)
+[![Discord](https://img.shields.io/badge/discord-join-darkblue)](https://discord.gg/3rGH87uZTk)
+-->
 
 ## Overview
 
@@ -21,7 +30,7 @@ Decimo provides an arbitrary-precision integer and decimal library for Mojo. It 
 
 For Pythonistas, `decimo.BInt` to Mojo is like `int` to Python, and `decimo.Decimal` to Mojo is like `decimal.Decimal` to Python.
 
-The core types are:
+The core types are[^auxiliary]:
 
 - An arbitrary-precision signed integer type `BInt`[^bigint], which is a Mojo-native equivalent of Python's `int`.
 - An arbitrary-precision decimal implementation (`Decimal`) allowing for calculations with unlimited digits and decimal places[^arbitrary], which is a Mojo-native equivalent of Python's `decimal.Decimal`.
@@ -33,11 +42,13 @@ The core types are:
 | `Decimal` | `BDec`, `BigDecimal` | Equivalent to Python's `decimal.Decimal` | Base-10^9               |
 | `Dec128`  | `Decimal128`         | 128-bit fixed-precision decimal type     | Triple 32-bit words     |
 
-The auxiliary types include a base-10 arbitrary-precision signed integer type (`BigInt10`) and a base-10 arbitrary-precision unsigned integer type (`BigUInt`) supporting unlimited digits[^bigint10]. `BigUInt` is used as the internal representation for `BigInt10` and `Decimal`.
+---
+
+**Decimo** combines "**Deci**mal" and "**Mo**jo" - reflecting its purpose and implementation language. "Decimo" is also a Latin word meaning "tenth" and is the root of the word "decimal".
 
 ---
 
-**Decimo** combines "**De**cimal" and "**Mo**jo" - reflecting its purpose and implementation language. "Decimo" is also a Latin word meaning "tenth" and is the root of the word "decimal".
+This repository includes a built-in [TOML parser](./docs/readme_toml.md) (`decimo.toml`), a lightweight pure-Mojo implementation supporting TOML v1.0. It parses configuration files and test data, supporting basic types, arrays, and nested tables. While created for Decimo's testing framework, it offers general-purpose structured data parsing with a clean, simple API.
 
 ## Installation
 
@@ -93,7 +104,7 @@ This will import the following types or aliases into your namespace:
 
 ---
 
-Here are some examples showcasing the arbitrary-precision feature of the `Decimal` type. For some mathematical operations, the default precision (number of significant digits) is set to `36`. You can change the precision by passing the `precision` argument to the function. This default precision will be configurable globally in future when Mojo supports global variables.
+Here are some examples showcasing the arbitrary-precision feature of the `Decimal` type. For some mathematical operations, the default precision (number of significant digits) is set to `28`. You can change the precision by passing the `precision` argument to the function. This default precision will be configurable globally in future when Mojo supports global variables.
 
 ```mojo
 from decimo.prelude import *
@@ -109,7 +120,7 @@ fn main() raises:
     print(a + b)  # 123458023.691346789
     print(a - b)  # 123455554.555566789
     print(a * b)  # 152415787654.32099750190521
-    print(a.true_divide(b + 1))  # 99919.0656560820700835791386582569736
+    print(a.true_divide(b + 1))  # 99919.06565608207008357913866
 
     # === Exponential Functions === #
     print(a.sqrt(precision=80))
@@ -332,5 +343,6 @@ This repository and its contributions are licensed under the Apache License v2.0
 
 [^fixed]: The `Decimal128` type can represent values with up to 29 significant digits and a maximum of 28 digits after the decimal point. When a value exceeds the maximum representable value (`2^96 - 1`), Decimo either raises an error or rounds the value to fit within these constraints. For example, the significant digits of `8.8888888888888888888888888888` (29 eights total with 28 after the decimal point) exceeds the maximum representable value (`2^96 - 1`) and is automatically rounded to `8.888888888888888888888888889` (28 eights total with 27 after the decimal point). Decimo's `Decimal128` type is similar to `System.Decimal` (C#/.NET), `rust_decimal` in Rust, `DECIMAL/NUMERIC` in SQL Server, etc.
 [^bigint]: The `BigInt` implementation uses a base-2^32 representation with a little-endian format, where the least significant word is stored at index 0. Each word is a `UInt32`, allowing for efficient storage and arithmetic operations on large integers. This design choice optimizes performance for binary computations while still supporting arbitrary precision.
+[^auxiliary]: The auxiliary types include a base-10 arbitrary-precision signed integer type (`BigInt10`) and a base-10 arbitrary-precision unsigned integer type (`BigUInt`) supporting unlimited digits[^bigint10]. `BigUInt` is used as the internal representation for `BigInt10` and `Decimal`.
 [^bigint10]: The BigInt10 implementation uses a base-10 representation for users (maintaining decimal semantics), while internally using an optimized base-10^9 storage system for efficient calculations. This approach balances human-readable decimal operations with high-performance computing. It provides both floor division (round toward negative infinity) and truncate division (round toward zero) semantics, enabling precise handling of division operations with correct mathematical behavior regardless of operand signs.
 [^arbitrary]: Built on top of our completed BigInt10 implementation, BigDecimal will support arbitrary precision for both the integer and fractional parts, similar to `decimal` and `mpmath` in Python, `java.math.BigDecimal` in Java, etc.
