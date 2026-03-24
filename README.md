@@ -1,6 +1,6 @@
-# Modular Community Channel ✨
+# Modular Community Channel
 
-Welcome to the repository for the Modular community channel! This conda-based [Prefix.dev](http://Prefix.dev) channel allows Modular community members to distribute their packages built with MAX and Mojo via Pixi 🪄
+Welcome to the repository for the Modular community channel! This conda-based [Prefix.dev](http://Prefix.dev) channel allows Modular community members to distribute their packages built with the Modular stack.
 
 ## Installing a package
 

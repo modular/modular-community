@@ -1,0 +1,37 @@
+context:
+  version: "0.9.0"
+  mojo_version: "=0.26.2"
+
+package:
+  name: "decimo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/forfudan/decimo.git
+    rev: 1132e59aec2b8a586431728cd9760b5a72dcbbb8
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package src/decimo -o ${PREFIX}/lib/mojo/decimo.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/forfudan/decimo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An arbitrary-precision integer and decimal library for Mojo
+  repository: https://github.com/forfudan/decimo.git
+
+extra:
+  project_name: decimo
+  maintainers:
+    - forfudan

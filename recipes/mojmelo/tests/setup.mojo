@@ -1,13 +1,17 @@
-from sys import external_call, CompilationTarget, argv
-from sys.ffi import *
+from std.sys import CompilationTarget, argv
+from std.ffi import *
+import std.os as os
+from mojmelo.utils.Matrix import Matrix
+import std.time as time
+from std.collections import Counter
 
-fn cachel1() -> Int32:
+def cachel1() -> Int32:
     var l1_cache_size: c_int = 0
     comptime length: c_size_t = 4
     # Get L1 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".as_c_string_slice(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
         if l1_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_slice(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
                 if l1_cache_size <= 1:
                     return 65536
                 return l1_cache_size
@@ -15,7 +19,7 @@ fn cachel1() -> Int32:
                 return 65536
         return l1_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".unsafe_cstr_ptr(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_slice(), UnsafePointer(to=l1_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
             if l1_cache_size <= 1:
                 return 65536
             return l1_cache_size
@@ -23,13 +27,13 @@ fn cachel1() -> Int32:
             return 65536
 
 
-fn cachel2() -> Int32:
+def cachel2() -> Int32:
     var l2_cache_size: c_int = 0
     comptime length: c_size_t = 4
     # Get L2 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".as_c_string_slice(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
         if l2_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_slice(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
                 if l2_cache_size <= 1:
                     return 4194304
                 return l2_cache_size
@@ -37,7 +41,7 @@ fn cachel2() -> Int32:
                 return 4194304
         return l2_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l2cachesize".unsafe_cstr_ptr(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutOrigin.external](), 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_slice(), UnsafePointer(to=l2_cache_size), UnsafePointer(to=length), OpaquePointer[MutExternalOrigin](), 0) == 0:
             if l2_cache_size <= 1:
                 return 4194304
             return l2_cache_size
@@ -45,7 +49,7 @@ fn cachel2() -> Int32:
             return 4194304
 
 
-fn initialize(cache_l1_size: Int, cache_l1_associativity: Int, cache_l2_size: Int, cache_l2_associativity: Int) raises:
+def initialize(cache_l1_size: Int, cache_l1_associativity: Int, cache_l2_size: Int, cache_l2_associativity: Int) raises:
     if cache_l1_associativity <= 1 or cache_l2_associativity <= 1:
         possible_l1_associativities = InlineArray[Int, 3](fill=0)
         if cache_l1_associativity > 1:
@@ -86,7 +90,7 @@ fn initialize(cache_l1_size: Int, cache_l1_associativity: Int, cache_l2_size: In
             f.write("done")
     print('Setup initialization done!')
 
-fn main() raises:
+def main() raises:
     if len(argv()) == 1:
         cache_l1_size = 0
         cache_l2_size = 0
@@ -122,8 +126,6 @@ fn main() raises:
     else:
         command = String(argv()[1])
 
-        import os
-
         if os.path.isfile('./done'):
             if command != '9':
                 print('Setup', command + '/8', 'skipped!')
@@ -131,9 +133,6 @@ fn main() raises:
                 os.remove("./done")
                 print('Setup done!')
             return
-
-        from mojmelo.utils.Matrix import Matrix
-        import time
 
         comptime NUM_ITER = 16
         results = InlineArray[Int, 3](fill=0)
@@ -183,9 +182,7 @@ fn main() raises:
                     results_list[i - 1][0] = atol(res[0])
                     results_list[i - 1][1] = atol(res[1])
                     results_list[i - 1][2] = atol(res[2])
-            results_list.append(results)
-
-            from collections import Counter
+            results_list.append(results.copy())
 
             votes = List[Int]()
             for i in range(3):

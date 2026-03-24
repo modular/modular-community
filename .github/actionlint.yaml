@@ -1,5 +1,0 @@
-# Configuration related to self-hosted runner.
-self-hosted-runner:
-  # Labels of self-hosted runner in array of string.
-  labels:
-    - magic_arm64_8core
