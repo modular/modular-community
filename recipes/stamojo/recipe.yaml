@@ -1,0 +1,37 @@
+context:
+  version: "0.1.0"
+  mojo_version: "=0.26.1"
+
+package:
+  name: "stamojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mojomath/stamojo.git
+    rev: 86d5b3ca37c90cab5e0c7c691422856d259d9aed
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package src/stamojo -o ${{ PREFIX }}/lib/mojo/stamojo.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/mojomath/stamojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: A statistical computing library for Mojo
+  repository: https://github.com/mojomath/stamojo.git
+
+extra:
+  project_name: stamojo
+  maintainers:
+    - forfudan
