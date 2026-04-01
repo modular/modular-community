@@ -16,7 +16,7 @@ build:
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
-    - small_time >=26.2.0,<26.3.0
+    - small_time >=26.1.0,<26.3.0
     - emberjson >=0.3.1,<0.4
   host:
     - mojo-compiler ${{ mojo_version }}
