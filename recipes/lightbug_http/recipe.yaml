@@ -1,13 +1,13 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 context:
-  version: "0.26.2.0"
-  mojo_version: "=0.26.2"
+  version: "0.26.1.2"
+  mojo_version: "=0.26.1"
 package:
   name: "lightbug_http"
   version: ${{ version }}
 source:
-  - git: https://github.com/Lightbug-HQ/lightbug_http.git
-    rev: 51b88e9fb8f531e87ceb4a88f1c1fa6ecd93dc28
+  - git: https://github.com/saviorand/lightbug_http.git
+    rev: 3aae65f46a728bc5e1482b75e0dd9b8063c69b2e
 build:
   number: 0
   script:
@@ -16,16 +16,13 @@ build:
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
-    - small_time >=26.2.0,<26.3.0
-    - emberjson >=0.3.1,<0.4
+    - small_time >=26.1.0,<26.2.0
   host:
     - mojo-compiler ${{ mojo_version }}
-    - small_time >=26.2.0,<26.3.0
-    - emberjson >=0.3.1,<0.4
+    - small_time >=26.1.0,<26.2.0
   run:
     - mojo-compiler ${{ mojo_version }}
-    - small_time >=26.2.0,<26.3.0
-    - emberjson >=0.3.1,<0.4
+    - small_time >=26.1.0,<26.2.0
 tests:
   - script:
       - if: unix
@@ -36,8 +33,7 @@ tests:
         - mojo ${{ mojo_version }}
       run:
         - mojo ${{ mojo_version }}
-        - small_time >=26.2.0,<26.3.0
-        - emberjson >=0.3.1,<0.4
+        - small_time >=26.1.0,<26.2.0
     files:
       recipe:
         - tests/lightbug_http/io/test_bytes.mojo
@@ -52,7 +48,7 @@ about:
   license: MIT
   license_file: LICENSE
   summary: Lightbug is a simple and sweet HTTP framework for Mojo
-  repository: https://github.com/Lightbug-HQ/lightbug_http
+  repository: https://github.com/saviorand/lightbug_http
 extra:
   maintainers:
     - saviorand
