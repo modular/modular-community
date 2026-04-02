@@ -1,5 +1,5 @@
 context:
-  version: 0.7.0
+  version: 0.8.0
   mojo_version: "=0.26.2"
 about:
   description: "# Mojo Regex\nRegular Expressions Library for Mojo\n\n`mojo-regex` is a\
@@ -29,4 +29,4 @@ requirements:
     - ${{ pin_compatible('mojo-compiler') }}
 source:
   - git: https://github.com/msaelices/mojo-regex.git
-    rev: 54e49ae347aeea42afe4a5c54f14cabfc4f69805
+    rev: 3232090fce9bdf64b95da44774b665e24f03213f
