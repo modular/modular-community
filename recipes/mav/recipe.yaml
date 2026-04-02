@@ -1,0 +1,39 @@
+context:
+  version: "0.0.4"
+  mojo_version: "=0.26.2"
+
+package:
+  name: "mav"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/josiahls/mav.git
+    rev: 6d4e4b6a996ed6e6b8226c99ebd02eac40de812a
+
+build:
+  number: 0
+  script:
+    - mojo package mav -o ${{ PREFIX }}/lib/mojo/mav.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - "ffmpeg ==8.0.1 *lgpl*"
+  build:
+    - mojo-compiler ${{ mojo_version }}
+    - "ffmpeg ==8.0.1 *lgpl*"
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - "ffmpeg ==8.0.1 *lgpl*"
+
+about:
+  homepage: https://github.com/josiahls/mav
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: MAV (Mojo Audio Video) is a FFmpeg binding library for Mojo.
+  repository: https://github.com/josiahls/mav
+
+extra:
+  project_name: mav
+  maintainers:
+    - josiahls
