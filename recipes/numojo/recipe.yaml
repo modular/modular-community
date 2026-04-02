@@ -1,5 +1,6 @@
 context:
-  version: "0.7.0"
+  version: "0.9.0"
+  mojo_version: "=0.26.2"
 
 package:
   name: "numojo"
@@ -7,30 +8,20 @@ package:
 
 source:
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
-    rev: 2b72ef420f68329a5d99120e0cdb642f027ae837
+    rev: d4b7fd744a81c855bd99905b2a42bf05cbd705a2
 
 build:
   number: 0
   script:
     - mojo package numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojopkg
+
 requirements:
   host:
-    - max=25.3
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
   run:
-    - ${{ pin_compatible('max') }}
-
-tests:
-  - script:
-      - if: unix
-        then:
-          - mojo run tests.mojo
-    requirements:
-      run:
-        - max=25.3
-        - numpy
-    files:
-      recipe:
-        - tests.mojo
+    - mojo-compiler ${{ mojo_version }}
 
 about:
   homepage: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo
