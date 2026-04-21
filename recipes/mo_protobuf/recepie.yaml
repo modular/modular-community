@@ -1,0 +1,49 @@
+context:
+  version: "0.1.0"
+  mojo_version: ">=0.26.2.0,<0.26.3.0"
+
+package:
+  name: "mo_protobuf"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/kivicode/mo_grpc.git
+    rev: 50160ecd26a910051e98c41c829c3be672b9bb3b
+
+build:
+  number: 0
+  script:
+    - mojo package packages/mo_protobuf/mo_protobuf -o ${{ PREFIX }}/lib/mojo/mo_protobuf.mojopkg
+    - mojo build -I packages/protoc-gen-mojo packages/protoc-gen-mojo/main.mojo -o ${{ PREFIX }}/bin/protoc-gen-mojo
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run packages/protoc-gen-mojo/tests/test_runtime.mojo
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+    files:
+      source:
+        - packages/protoc-gen-mojo/tests/test_runtime.mojo
+
+about:
+  homepage: https://github.com/kivicode/mo_grpc
+  license: MIT
+  license_file: LICENSE
+  summary: Pure-Mojo protobuf runtime and protoc plugin for generating Mojo structs from .proto files.
+  repository: https://github.com/kivicode/mo_grpc
+
+extra:
+  maintainers:
+    - kivicode
+  project_name: mo_protobuf
