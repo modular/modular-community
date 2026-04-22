@@ -9,7 +9,7 @@ source:
     rev: 0ee9ea6f5511efbdf48c64c81fea834f23690579
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo package src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojopkg
 
