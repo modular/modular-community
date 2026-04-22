@@ -6,10 +6,10 @@ package:
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: 0ee9ea6f5511efbdf48c64c81fea834f23690579
+    rev: 8e67c53570d3a9beb7c99e81a40079bc1328e692
 
 build:
-  number: 1
+  number: 3
   script:
     - mojo package src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojopkg
 
@@ -23,11 +23,13 @@ tests:
   - script:
       - if: unix
         then:
-          - export MODULAR_MOJO_IMPORT_PATH="${{ PREFIX }}/lib/mojo"
-          - mojo mojo_csv/test_pack.mojo
+          - mojo run -I $PREFIX/lib/mojo/mojo_csv.mojopkg test_pack.mojo
     files:
       recipe:
-        - mojo_csv
+        - test_pack.mojo
+    requirements:
+      run:
+        - max >=26.0,<27.0
 
 about:
   homepage: https://github.com/Phelsong/mojo_csv
