@@ -1,12 +1,12 @@
 context:
-  version: 1.6.1
+  version: 1.6.2
 package:
   name: "mojo_csv"
   version: ${{ version }}
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: 035a354cb4c1493de3b9dbda49715208dd433075
+    rev: 0ee9ea6f5511efbdf48c64c81fea834f23690579
 
 build:
   number: 0
@@ -23,7 +23,8 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo tests/mojo_csv/test_pack.mojo
+          - export MODULAR_MOJO_IMPORT_PATH="${{ PREFIX }}/lib/mojo"
+          - mojo mojo_csv/test_pack.mojo
     files:
       recipe:
         - mojo_csv
