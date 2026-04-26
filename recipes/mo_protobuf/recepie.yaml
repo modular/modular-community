@@ -8,10 +8,10 @@ package:
 
 source:
   - git: https://github.com/kivicode/mo_grpc.git
-    rev: 50160ecd26a910051e98c41c829c3be672b9bb3b
+    rev: 94b445d164ec05a9308308d1c8b74baa31d187de
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo package packages/mo_protobuf/mo_protobuf -o ${{ PREFIX }}/lib/mojo/mo_protobuf.mojopkg
     - mojo build -I packages/protoc-gen-mojo packages/protoc-gen-mojo/main.mojo -o ${{ PREFIX }}/bin/protoc-gen-mojo
