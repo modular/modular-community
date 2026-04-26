@@ -1,5 +1,5 @@
 context:
-  version: "0.1.0"
+  version: "0.2.0"
   mojo_version: ">=0.26.2.0,<0.26.3.0"
 
 package:
@@ -11,7 +11,7 @@ source:
     rev: 94b445d164ec05a9308308d1c8b74baa31d187de
 
 build:
-  number: 1
+  number: 0
   script:
     - mojo package packages/mo_protobuf/mo_protobuf -o ${{ PREFIX }}/lib/mojo/mo_protobuf.mojopkg
     - mojo build -I packages/protoc-gen-mojo packages/protoc-gen-mojo/main.mojo -o ${{ PREFIX }}/bin/protoc-gen-mojo
