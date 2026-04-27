@@ -11,7 +11,6 @@ package:
 source:
   - git: https://github.com/kivicode/mojo-raylib.git
     rev: ${{ rev }}
-    submodules: true
 
 build:
   number: 0
