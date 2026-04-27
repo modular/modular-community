@@ -2,7 +2,7 @@
 context:
   version: "0.1.0"
   mojo_version: "=0.26.2"
-  rev: "ff4d419afaf990089dc2de66f38f51ec3a4e3ba1"
+  rev: "7f7100a0d83f449f0fd124f1e5a22c69462d96cb"
 
 package:
   name: "mojo_raylib"
