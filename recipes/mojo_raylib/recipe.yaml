@@ -2,7 +2,7 @@
 context:
   version: "0.1.0"
   mojo_version: "=0.26.2"
-  rev: "7f7100a0d83f449f0fd124f1e5a22c69462d96cb"
+  rev: "60aca7901fe2a87dc7da94afb70ea11bb218803e"
 
 package:
   name: "mojo_raylib"
@@ -30,24 +30,27 @@ requirements:
     - ninja
   host:
     - mojo-compiler ${{ mojo_version }}
-    # raylib's GLFW backend needs the X11 development libs and OpenGL on Linux.
-    # On macOS GLFW uses the system Cocoa frameworks, so these are no-ops there.
-    - xorg-libx11
-    - xorg-libxrandr
-    - xorg-libxinerama
-    - xorg-libxcursor
-    - xorg-libxi
-    - xorg-libxext
-    - libglvnd
+    - if: linux
+      then:
+        - xorg-xorgproto
+        - xorg-libx11
+        - xorg-libxrandr
+        - xorg-libxinerama
+        - xorg-libxcursor
+        - xorg-libxi
+        - xorg-libxext
+        - libgl-devel
   run:
     - mojo-compiler ${{ mojo_version }}
-    - xorg-libx11
-    - xorg-libxrandr
-    - xorg-libxinerama
-    - xorg-libxcursor
-    - xorg-libxi
-    - xorg-libxext
-    - libglvnd
+    - if: linux
+      then:
+        - xorg-libx11
+        - xorg-libxrandr
+        - xorg-libxinerama
+        - xorg-libxcursor
+        - xorg-libxi
+        - xorg-libxext
+        - libgl
 
 tests:
   - script:
