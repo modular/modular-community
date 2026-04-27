@@ -1,0 +1,56 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+context:
+  version: "0.1.0"
+  mojo_version: "=0.26.2"
+  rev: "ff4d419afaf990089dc2de66f38f51ec3a4e3ba1"
+
+package:
+  name: "mojo_raylib"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/kivicode/mojo-raylib.git
+    rev: ${{ rev }}
+    submodules: true
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        bash shim/build.sh
+        mkdir -p "${PREFIX}/lib/mojo"
+        mojo package mojo_raylib -o "${PREFIX}/lib/mojo/mojo_raylib.mojopkg"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - cmake
+    - ninja
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo --version
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/kivicode/mojo-raylib
+  license: Zlib
+  summary: |
+    Auto-generated Mojo bindings for raylib (2D/3D graphics library)
+  repository: https://github.com/kivicode/mojo-raylib
+
+extra:
+  maintainers:
+    - kivicode
+  project_name: mojo_raylib
