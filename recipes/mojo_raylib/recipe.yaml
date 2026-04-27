@@ -30,8 +30,24 @@ requirements:
     - ninja
   host:
     - mojo-compiler ${{ mojo_version }}
+    # raylib's GLFW backend needs the X11 development libs and OpenGL on Linux.
+    # On macOS GLFW uses the system Cocoa frameworks, so these are no-ops there.
+    - xorg-libx11
+    - xorg-libxrandr
+    - xorg-libxinerama
+    - xorg-libxcursor
+    - xorg-libxi
+    - xorg-libxext
+    - libglvnd
   run:
     - mojo-compiler ${{ mojo_version }}
+    - xorg-libx11
+    - xorg-libxrandr
+    - xorg-libxinerama
+    - xorg-libxcursor
+    - xorg-libxi
+    - xorg-libxext
+    - libglvnd
 
 tests:
   - script:
