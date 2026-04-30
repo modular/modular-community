@@ -1,0 +1,47 @@
+context:
+  version: 0.1.0
+
+source:
+ - git: https://github.com/martinvuyk/mojo_datetime
+
+about:
+  homepage: https://github.com/martinvuyk/mojo_datetime
+  license: Apache-2.0 WITH LLVM-exception
+  license_file: LICENSE
+  summary: A flexible Mojo datetime library implementation
+  repository: https://github.com/martinvuyk/mojo_datetime
+
+extra:
+  maintainers:
+    - martinvuyk
+  project_name:
+    - mojo_datetime
+
+outputs:
+  - package:
+      name: "mojo_datetime"
+      version: ${{ version }}
+    build:
+      number: 0
+      string: 0.1.0-compiler-0.26.2
+    requirements:
+      host:
+        - mojo-compiler "=0.26.2"
+      build:
+        - mojo-compiler "=0.26.2"
+      run:
+        - ${{ pin_compatible('mojo-compiler') }}
+
+  - package:
+      name: "mojo_datetime"
+      version: ${{ version }}
+    build:
+      number: 1
+      string: 0.1.0-compiler-1.0.0b1.dev2026043006
+    requirements:
+      host:
+        - mojo-compiler ">=1.0.0b1.dev2026043006,<2"
+      build:
+        - mojo-compiler ">=1.0.0b1.dev2026043006,<2"
+      run:
+        - ${{ pin_compatible('mojo-compiler') }}
