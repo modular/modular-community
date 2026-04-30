@@ -1,8 +1,7 @@
 context:
-  version: 0.1.0
-
-source:
- - git: https://github.com/martinvuyk/mojo_datetime
+  build_number: 0
+  release: 0.1.0-compiler-0.26.2
+  artifact_sha256: 7187e32432aaaa106b63e000c513bfd25d542acdcc3706058504ade5e677f615
 
 about:
   homepage: https://github.com/martinvuyk/mojo_datetime
@@ -17,31 +16,23 @@ extra:
   project_name:
     - mojo_datetime
 
-outputs:
-  - package:
-      name: "mojo_datetime"
-      version: ${{ version }}
-    build:
-      number: 0
-      string: 0.1.0-compiler-0.26.2
-    requirements:
-      host:
-        - mojo-compiler "=0.26.2"
-      build:
-        - mojo-compiler "=0.26.2"
-      run:
-        - ${{ pin_compatible('mojo-compiler') }}
+source:
+  url: https://github.com/martinvuyk/mojo_datetime/releases/download/${{ release }}/mojo_datetime.mojopkg
+  sha256: ${{ artifact_sha256 }}
 
-  - package:
-      name: "mojo_datetime"
-      version: ${{ version }}
-    build:
-      number: 1
-      string: 0.1.0-compiler-1.0.0b1.dev2026043006
-    requirements:
-      host:
-        - mojo-compiler ">=1.0.0b1.dev2026043006,<2"
-      build:
-        - mojo-compiler ">=1.0.0b1.dev2026043006,<2"
-      run:
-        - ${{ pin_compatible('mojo-compiler') }}
+package:
+  name: "mojo_datetime"
+  version: ${{ release }}
+
+build:
+  number: ${{ build_number }}
+  script:
+    - cp mojo_datetime.mojopkg ${{ PREFIX }}/lib/mojo/
+
+requirements:
+  host:
+    - mojo-compiler "=0.26.2"
+  build:
+    - mojo-compiler "=0.26.2"
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
