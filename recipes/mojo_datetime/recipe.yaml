@@ -1,7 +1,7 @@
 context:
   build_number: 0
-  release: 0.1.0-compiler-0.26.2
-  artifact_sha256: 7187e32432aaaa106b63e000c513bfd25d542acdcc3706058504ade5e677f615
+  release: 0.1.0-compiler-0.26.2.0
+  artifact_sha256: b95bbc01a49af8245363faea68d50d6cc229b7515bf1fc373f8edbcf9c8c14ac
 
 about:
   homepage: https://github.com/martinvuyk/mojo_datetime
