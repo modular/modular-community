@@ -4,17 +4,34 @@
 
 A feature-rich command-line argument parser library for Mojo, with both builder and struct-based declarative APIs. Inspired by Python's `argparse`, Rust's `clap`, Go's `cobra`, and Swift's `swift-argument-parser`.
 
+ArgMojo has been successfully deployed in production in [Decimo](https://github.com/forfudan/decimo), an arbitrary-precision integer and decimal library for Mojo. You can see the [code of Decimo CLI calculator](https://github.com/forfudan/decimo/blob/main/src/cli/main.mojo) as a real-world example of ArgMojo usage.
+
+<!-- 
+> **A**rguments **R**esolved and **G**rouped into **M**eaningful **O**ptions and **J**oined **O**bjects
+ -->
+
 [![Version](https://img.shields.io/github/v/tag/forfudan/argmojo?label=version&color=blue)](https://github.com/forfudan/argmojo/releases)
-[![Mojo](https://img.shields.io/badge/mojo-0.26.2-orange)](https://docs.modular.com/mojo/manual/)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
 [![pixi](https://img.shields.io/badge/pixi%20add-argmojo-brightgreen)](https://prefix.dev/channels/modular-community/packages/argmojo)
 [![User manual](https://img.shields.io/badge/user-manual-purple)](https://github.com/forfudan/argmojo/wiki)
 
 ![Shell tab-completion powered by ArgMojo](https://raw.githubusercontent.com/forfudan/forfudan-github-data/main/argmojo/completions.gif)  
 *Demo: Shell tab-completion powered by ArgMojo*
 
+<!-- 
+[![CI](https://img.shields.io/github/actions/workflow/status/forfudan/argmojo/run_tests.yaml?branch=main&label=tests)](https://github.com/forfudan/argmojo/actions/workflows/run_tests.yaml)
+[![License](https://img.shields.io/github/license/forfudan/argmojo)](LICENSE)
+[![Stars](https://img.shields.io/github/stars/forfudan/argmojo?style=flat)](https://github.com/forfudan/argmojo/stargazers)
+[![Issues](https://img.shields.io/github/issues/forfudan/argmojo)](https://github.com/forfudan/argmojo/issues)
+[![Last Commit](https://img.shields.io/github/last-commit/forfudan/argmojo)](https://github.com/forfudan/argmojo/commits/main)
+![Platforms](https://img.shields.io/badge/platform-macOS%20%7C%20Linux-lightgrey)
+ -->
+
 ## Overview
 
 ArgMojo provides two complementary styles for defining and parsing command-line arguments in Mojo: a **builder API** for maximum control (`Command` + `Argument` chains) and an optional **struct-based declarative API** inspired by Swift's [swift-argument-parser](https://github.com/apple/swift-argument-parser) (define a `Parsable` struct, call `MyArgs.parse()`, get typed results). You can mix both freely — put most of your arguments in a struct and drop down to builder methods whenever you need finer control.
+
+ArgMojo v0.6.0 targets Mojo v1.0.0b1.
 
 ArgMojo currently supports:
 
@@ -23,18 +40,18 @@ ArgMojo currently supports:
 - **Boolean flags**: options that take no value
 - **Positional arguments**: matched by position
 - **Default values**: fallback when an argument is not provided
-- **Required arguments**: validation that mandatory args are present
-- **Auto-generated help**: `--help` / `-h` / `-?` with dynamic column alignment, pixi-style ANSI colours, and customisable header/arg colours
-- **Help on no args**: optionally show help when invoked with no arguments
+- **Required arguments**: validation that mandatory arguments are present
+- **Auto-generated help**: `--help` / `-h` / `-?` with dynamic column alignment, pixi-style ANSI colours, and customisable header/argument colours
+- **Help on no arguments**: optionally show help when invoked with no arguments
 - **Version display**: `--version` / `-V` (also auto-generated)
 - **`--` stop marker**: everything after `--` is treated as positional
 - **Short flag merging**: `-abc` expands to `-a -b -c`
 - **Attached short values**: `-ofile.txt` means `-o file.txt`
 - **Choices validation**: restrict values to a set (e.g., `json`, `csv`, `table`)
 - **Value name**: custom display name for values in help text
-- **Hidden arguments**: exclude internal args from `--help` output
+- **Hidden arguments**: exclude internal arguments from `--help` output
 - **Count flags**: `-vvv` → `get_count("verbose") == 3`
-- **Positional arg count validation**: reject extra positional args
+- **Positional argument count validation**: reject extra positional arguments
 - **Negatable flags**: `--color` / `--no-color` paired flags with `.negatable()`
 - **Mutually exclusive groups**: prevent conflicting flags (e.g., `--json` vs `--yaml`)
 - **Required-together groups**: enforce that related flags are provided together (e.g., `--username` + `--password`)
@@ -70,12 +87,13 @@ ArgMojo currently supports:
 - **Partial parsing**: `parse_known_arguments()` collects unrecognised options instead of erroring
 - **Compile-time validation**: builder parameters validated at `mojo build` time via `comptime assert`
 - **Registration-time validation**: group constraint typos caught when the program starts, not when the user runs it
+- **Auto-dispatch**: `set_run_function(handler)` + `execute()` for Cobra-style automatic subcommand dispatch — no manual `if/elif` chains
 
 ---
 
 I created this project to support my experiments with a CLI-based Chinese character search engine in Mojo, as well as a CLI-based calculator for [Decimo](https://github.com/forfudan/decimo). It is inspired by Python's `argparse`, Rust's `clap`, Go's `cobra`, Swift's `swift-argument-parser`, and other popular argument parsing libraries, but designed to fit Mojo's unique features and constraints.
 
-My goal is to provide a Mojo-idiomatic argument parsing library that can be easily adopted by the growing Mojo community for their CLI applications. **Before Mojo v1.0** (which means Mojo is not yet stable), my focus is on building core features and ensuring correctness. "Core features" refer to those who are commonly used in famous CLI apps. "Correctness" means that the library should handle edge cases properly, provide clear error messages, and have good test coverage. Some fancy features will be piloted depending on my time and interest, and will be optional for users.
+My goal is to provide a Mojo-idiomatic argument parsing library that can be easily adopted by the growing Mojo community for their CLI applications. While Mojo is still in beta, my focus is on building core features and ensuring correctness. "Core features" refer to those commonly used in famous CLI apps. "Correctness" means that the library should handle edge cases properly, provide clear error messages, and have good test coverage. Some fancy features will be piloted depending on my time and interest, and will be optional for users.
 
 ## Installation
 
@@ -181,30 +199,30 @@ struct Search(Parsable):
 
 
 def main() raises:
-    var args = Search.parse()    # one line — typed results
+    var arguments = Search.parse()    # one line — typed results
     
-    print("pattern:", args.pattern.value)
-    print("format: ", args.format.value)
-    print("verbose:", args.verbose.value)
+    print("pattern:", arguments.pattern.value)
+    print("format: ", arguments.format.value)
+    print("verbose:", arguments.verbose.value)
 ```
 
 Need builder-level features (mutually exclusive groups, implications, custom help colours) on top of a declarative struct? Use the hybrid bridge:
 
 ```mojo
-var cmd = Deploy.to_command()              # struct → Command
-cmd.mutually_exclusive(["force", "dry_run"])
-cmd.implies("force", "validated")
-var deploy = Deploy.parse_from_command(cmd^)     # Command → typed struct
+var command = Deploy.to_command()              # struct → Command
+command.mutually_exclusive(["force", "dry_run"])
+command.implies("force", "validated")
+var deploy = Deploy.parse_from_command(command^)     # Command → typed struct
 ```
 
 The `Parsable` trait provides four parsing methods:
 
-|                  | `sys.argv()`     | from `Command`                  |
-| ---------------- | ---------------- | ------------------------------- |
-| returns `Self`   | `parse()`        | `parse_from_command(cmd^)`      |
-| returns `Tuple`  | `parse_full()`   | `parse_full_from_command(cmd^)` |
+|                 | `sys.argv()`   | from `Command`                      |
+| --------------- | -------------- | ----------------------------------- |
+| returns `Self`  | `parse()`      | `parse_from_command(command^)`      |
+| returns `Tuple` | `parse_full()` | `parse_full_from_command(command^)` |
 
-Plus: `parse_args(args)` for testing, `to_command()` to reflect a struct into a `Command`, and `from_parse_result(result)` for subcommand write-back.
+Plus: `parse_arguments(arguments)` for testing, `to_command()` to reflect a struct into a `Command`, and `from_parse_result(result)` for subcommand write-back.
 
 See `examples/declarative/` for more patterns: pure declarative, hybrid, full parse, and subcommands.
 
@@ -214,17 +232,17 @@ For detailed explanations and more examples of every feature, see the **[User Ma
 
 ArgMojo ships with two complete example CLIs:
 
-| Example                     | File                                | Features                                                                                                                                                                                                                                                                                                                          |
-| --------------------------- | ----------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `mgrep` — simulated grep    | `examples/mgrep.mojo`               | Positional args, flags, count flags, negatable flags, choices, value_name, append/collect, value delimiter, nargs, mutually exclusive groups, required-together groups, conditional requirements, numeric range, key-value map, aliases, deprecated args, hidden args, negative-number passthrough, `--` stop marker, custom tips |
-| `mgit` — simulated git      | `examples/mgit.mojo`                | Subcommands (clone/init/add/commit/push/pull/log/remote/branch/diff/tag/stash), nested subcommands (remote add/remove/rename/show), persistent (global) flags, per-command args, mutually exclusive groups, choices, aliases, deprecated args, custom tips, shell completion script generation                                    |
-| `demo` — feature showcase   | `examples/demo.mojo`                | Comprehensive showcase of all ArgMojo features in a single CLI                                                                                                                                                                                                                                                                    |
-| `yu` — Chinese CLI          | `examples/yu.mojo`                  | CJK-aware help formatting, full-width auto-correction, CJK punctuation detection                                                                                                                                                                                                                                                  |
-| **Declarative examples**    |                                     |                                                                                                                                                                                                                                                                                                                                   |
-| `search` — pure declarative | `examples/declarative/search.mojo`  | Positional args, flags, count flags, choices, range clamping, append/collect — all via `Parsable` struct                                                                                                                                                                                                                          |
-| `deploy` — hybrid           | `examples/declarative/deploy.mojo`  | Declarative struct + builder customisation (`mutually_exclusive`, `implies`, tips, colours)                                                                                                                                                                                                                                       |
-| `convert` — full parse      | `examples/declarative/convert.mojo` | Declarative fields + extra builder args; `parse_full_from_command()` dual return                                                                                                                                                                                                                                                  |
-| `jomo` — subcommands        | `examples/declarative/jomo.mojo`    | Declarative root + mix of declarative and builder subcommands; `subcommands()` hook, `from_parse_result()` dispatch                                                                                                                                                                                                               |
+| Example                     | File                                | Features                                                                                                                                                                                                                                                                                                                                         |
+| --------------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `mgrep` — simulated grep    | `examples/mgrep.mojo`               | Positional arguments, flags, count flags, negatable flags, choices, value_name, append/collect, value delimiter, nargs, mutually exclusive groups, required-together groups, conditional requirements, numeric range, key-value map, aliases, deprecated arguments, hidden arguments, negative-number passthrough, `--` stop marker, custom tips |
+| `mgit` — simulated git      | `examples/mgit.mojo`                | Subcommands (clone/init/add/commit/push/pull/log/remote/branch/diff/tag/stash), nested subcommands (remote add/remove/rename/show), persistent (global) flags, per-command arguments, mutually exclusive groups, choices, aliases, deprecated arguments, custom tips, shell completion script generation                                         |
+| `demo` — feature showcase   | `examples/demo.mojo`                | Comprehensive showcase of all ArgMojo features in a single CLI                                                                                                                                                                                                                                                                                   |
+| `yu` — Chinese CLI          | `examples/yu.mojo`                  | CJK-aware help formatting, full-width auto-correction, CJK punctuation detection                                                                                                                                                                                                                                                                 |
+| **Declarative examples**    |                                     |                                                                                                                                                                                                                                                                                                                                                  |
+| `search` — pure declarative | `examples/declarative/search.mojo`  | Positional arguments, flags, count flags, choices, range clamping, append/collect — all via `Parsable` struct                                                                                                                                                                                                                                    |
+| `deploy` — hybrid           | `examples/declarative/deploy.mojo`  | Declarative struct + builder customisation (`mutually_exclusive`, `implies`, tips, colours)                                                                                                                                                                                                                                                      |
+| `convert` — full parse      | `examples/declarative/convert.mojo` | Declarative fields + extra builder arguments; `parse_full_from_command()` dual return                                                                                                                                                                                                                                                            |
+| `jomo` — subcommands        | `examples/declarative/jomo.mojo`    | Declarative root + mix of declarative and builder subcommands; `subcommands()` hook, `from_parse_result()` dispatch                                                                                                                                                                                                                              |
 
 Build both example binaries:
 
