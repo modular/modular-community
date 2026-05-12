@@ -24,14 +24,14 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
 
     # initialize by copying from UnsafePointer
     @always_inline
-    def __init__(out self, height: Int, width: Int, data: UnsafePointer[Float32, MutAnyOrigin] = UnsafePointer[Float32, MutAnyOrigin](), order: String = 'c'):
+    def __init__(out self, height: Int, width: Int, data: OptionalUnsafePointer[Float32, MutAnyOrigin] = None, order: String = 'c'):
         self.height = height
         self.width = width
         self.size = height * width
         self.data = alloc[Float32](self.size)
         self.order = order.lower()
         if data:
-            memcpy(dest=self.data, src=data, count=self.size)
+            memcpy(dest=self.data, src=data.value(), count=self.size)
 
     def __init__(out self, *, copy: Self):
         self.height = copy.height
@@ -65,8 +65,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
 
     @always_inline
     def __del__(deinit self):
-        if self.data:
-            self.data.free()
+        self.data.free()
 
     @always_inline
     def __len__(self) -> Int:
