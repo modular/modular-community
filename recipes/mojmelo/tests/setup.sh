@@ -4,7 +4,7 @@ path="./.pixi/envs/default/etc/conda/test-files/mojmelo/0/tests"
 curr=$(pwd)
 cd $path
 
-mojo build setup.mojo -o setup
+pixi run mojo build setup.mojo -o setup
 ./setup
 ./setup 1
 ./setup 2
@@ -19,4 +19,4 @@ rm -f ./setup
 
 cd $curr
 
-mojo package $path/mojmelo/utils/mojmelo_matmul -o ./.pixi/envs/default/lib/mojo/mojmelo_matmul.mojopkg
+pixi run mojo package $path/mojmelo/utils/mojmelo_matmul -o ./.pixi/envs/default/lib/mojo/mojmelo_matmul.mojopkg
