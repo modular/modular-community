@@ -4,16 +4,11 @@
 
 A statistical computing library for [Mojo](https://www.modular.com/mojo), inspired by `scipy.stats` and `statsmodels` in Python.
 
-**[Repository on GitHub»](https://github.com/mojomath/stamojo)**　|　**[Discord channel»](https://discord.gg/3rGH87uZTk)**
-
-- [Overview](#overview)
-- [Status](#status)
-- [Background](#background)
-- [Installation](#installation)
-- [Examples](#examples)
-- [Architecture](#architecture)
-- [Roadmap](#roadmap)
-- [License](#license)
+[![Version](https://img.shields.io/github/v/tag/forfudan/argmojo?label=version&color=blue)](https://github.com/forfudan/argmojo/releases)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![pixi](https://img.shields.io/badge/pixi%20add-argmojo-brightgreen)](https://prefix.dev/channels/modular-community/packages/argmojo)
+[![Rrepo](https://img.shields.io/badge/Repo-red)](https://github.com/forfudan/decimo)
+[![Discord](https://img.shields.io/badge/Discord-darkblue)](https://discord.gg/z7VZUTn3)
 
 ## Overview
 
@@ -22,7 +17,7 @@ StaMojo (Statistics + Mojo) brings comprehensive statistical computing to the Mo
 | Part                                          | Scope                                                                                   | Dependencies                                                                                                            |
 | --------------------------------------------- | --------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | **Part I — Statistical Computing Foundation** | Special functions, distributions, descriptive statistics, hypothesis tests, correlation | Mojo stdlib only                                                                                                        |
-| **Part II — Statistical Modeling**            | OLS, GLM, logistic regression, and model diagnostics                                    | [NuMojo](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo) + [MatMojo](https://github.com/mojomath/matmojo)  |
+| **Part II — Statistical Modeling**            | OLS, GLM, logistic regression, and model diagnostics                                    | [NuMojo](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo) + [MatMojo](https://github.com/mojomath/matmojo) |
 
 Part I is **available now** with zero external dependencies. Part II will begin once the upstream linear-algebra ecosystem stabilizes on a compatible Mojo release.
 
@@ -42,17 +37,21 @@ Placing `scipy.stats`-like functionality and `statsmodels`-like regression in **
 
 ## Status
 
-**v0.1** — Part I is complete and ready for use. The current release provides:
+**v0.2** — Part I is complete and ready for use, now compatible with Mojo **v1.0.0b1**. The current release provides:
 
-| Category          | Functions                                                                                       |
-| ----------------- | ----------------------------------------------------------------------------------------------- |
-| Special functions | `gammainc`, `gammaincc`, `beta`, `lbeta`, `betainc`, `erfinv`, `ndtri`                          |
-| Distributions     | `Normal`, `StudentT`, `ChiSquared`, `FDist` — each with PDF, log-PDF, CDF, SF, PPF, `rvs`       |
-| Descriptive stats | `mean`, `variance`, `std`, `median`, `quantile`, `skewness`, `kurtosis`, `data_min`, `data_max` |
-| Correlation       | `pearsonr`, `spearmanr`, `kendalltau` (with p-values)                                           |
-| Hypothesis tests  | `ttest_1samp`, `ttest_ind`, `ttest_rel`, `chi2_gof`, `chi2_ind`, `ks_1samp`, `f_oneway`         |
+| Category          | Functions                                                                    |
+| ----------------- | ---------------------------------------------------------------------------- |
+| Special functions | `gammainc`, `gammaincc`, `beta`, `lbeta`, `betainc`, `erfinv`, `ndtri`,      |
+|                   | Bessel `j0`, `j1`, `jn`, `y0`, `y1`, `i0`, `i1`, `i0e`, `i1e`                |
+| Distributions     | `Normal`, `StudentT`, `ChiSquared`, `FDist`, `Exponential`, `Binomial`,      |
+|                   | `Gamma`, `Beta`, `Poisson` — each with PDF/PMF, log-PDF, CDF, SF, PPF, `rvs` |
+| Descriptive stats | `mean`, `variance`, `stddev`, `median`, `quantile`, `skewness`, `kurtosis`,  |
+|                   | `data_min`, `data_max`, `gmean`, `hmean`                                     |
+| Correlation       | `pearsonr`, `spearmanr`, `kendalltau` (with p-values)                        |
+| Hypothesis tests  | `ttest_1samp`, `ttest_ind`, `ttest_rel`, `chi2_gof`, `chi2_ind`, `ks_1samp`, |
+|                   | `f_oneway`                                                                   |
 
-All 30 functions are self-contained (Mojo stdlib only) and covered by unit tests validated against SciPy reference values.
+All functions are self-contained (Mojo stdlib only) and covered by unit tests validated against SciPy reference values.
 
 > **What about Part II (statistical models)?**
 > OLS regression and GLMs require matrix operations that depend on [NuMojo](https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo) and [MatMojo](https://github.com/mojomath/matmojo). These upstream libraries are still fast evolving. Part II will resume once the ecosystem catches up. See the [full roadmap](docs/roadmap.md) for details.
@@ -83,7 +82,7 @@ Then, you can install StaMojo using any of these methods:
 1. In the `mojoproject.toml` file of your project, add the following dependency:
 
     ```toml
-    stamojo = "==0.1.0"
+    stamojo = "==0.2.0"
     ```
 
     Then run `pixi install` to download and install the package.
@@ -99,9 +98,10 @@ Then, you can install StaMojo using any of these methods:
 
 The following table summarizes the package versions and their corresponding Mojo versions:
 
-| `stamojo` | `mojo`   | package manager |
-| --------- | -------- | --------------- |
-| v0.1.0    | ==0.26.1 | pixi            |
+| `stamojo` | `mojo`    | package manager |
+| --------- | --------- | --------------- |
+| v0.1.0    | ==0.26.1  | pixi            |
+| v0.2.0    | ==1.0.0b1 | pixi            |
 
 ## Examples
 
@@ -115,14 +115,14 @@ mojo run -I src examples/examples.mojo
 from stamojo.special import gammainc, gammaincc, beta, lbeta, betainc, erfinv, ndtri
 from stamojo.distributions import Normal, StudentT, ChiSquared, FDist
 from stamojo.stats import (
-    mean, variance, std, median, quantile, skewness, kurtosis,
+    mean, variance, stddev, median, quantile, skewness, kurtosis,
     pearsonr, spearmanr, kendalltau,
     ttest_1samp, ttest_ind, ttest_rel,
     chi2_gof, chi2_ind, ks_1samp, f_oneway,
 )
 
 
-fn main() raises:
+def main() raises:
     # --- Special functions ---------------------------------------------------
     print("gammainc(1, 2) =", gammainc(1.0, 2.0))           # 0.8646647167628346
     print("gammaincc(1, 2) =", gammaincc(1.0, 2.0))         # 0.13533528323716537
