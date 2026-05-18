@@ -1,15 +1,15 @@
 context:
-  version: 1.6.2
+  version: 1.6.3
 package:
   name: "mojo_csv"
   version: ${{ version }}
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: 8e67c53570d3a9beb7c99e81a40079bc1328e692
+    rev: eb72d0b61a62b8e51754ab0b235bf12e7092cd57
 
 build:
-  number: 3
+  number: 0
   script:
     - mojo package src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojopkg
 
