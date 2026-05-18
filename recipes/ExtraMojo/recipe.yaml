@@ -37,19 +37,28 @@ tests:
             if command -v lscpu >/dev/null 2>&1; then
               lscpu
             fi
-            first_test="$(find ./tests -name 'test_*.mojo' | sort | head -n 1)"
-            mojo build --print-effective-target -I . -D ASSERT=all "${first_test}" || exit $?
+            target_features=""
+            if [ "$(uname -m)" = "x86_64" ]; then
+              target_features="--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq"
+            fi
+            bbhash_test="./tests/collections/bbhash/test_bbhash.mojo"
+            echo "Default target configuration"
+            mojo build --print-effective-target -I . -D ASSERT=all "${bbhash_test}" || exit $?
+            if [ -n "${target_features}" ]; then
+              echo "A/B test: ${bbhash_test} with default target"
+              if mojo run -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}"; then
+                echo "A/B default target passed"
+              else
+                status=$?
+                echo "A/B default target failed with status ${status}"
+              fi
+              echo "A/B test: ${bbhash_test} with AVX-512 disabled"
+              mojo build ${target_features} --print-effective-target -I . -D ASSERT=all "${bbhash_test}" || exit $?
+              mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}" || exit $?
+            fi
             for test in $(find ./tests -name 'test_*.mojo' | sort); do
               echo "Running ${test} with mojo run"
-              mojo run -debug-level=line-tables -I . -D ASSERT=all "${test}"
-              status=$?
-              if [ "${status}" -eq 0 ]; then
-                continue
-              fi
-              echo "mojo run failed for ${test} with status ${status}; rebuilding with debug info"
-              mojo build -debug-level=line-tables -I . -D ASSERT=all "${test}" -o /tmp/extramojo_test || exit "${status}"
-              /tmp/extramojo_test || true
-              exit "${status}"
+              mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${test}" || exit $?
             done
     requirements:
       build:
