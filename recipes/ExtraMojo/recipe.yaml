@@ -28,7 +28,29 @@ tests:
   - script:
       - if: unix
         then:
-          - sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'
+          - |
+            set -u
+            echo "ExtraMojo package test diagnostics"
+            uname -a
+            command -v mojo
+            mojo --version
+            if command -v lscpu >/dev/null 2>&1; then
+              lscpu
+            fi
+            first_test="$(find ./tests -name 'test_*.mojo' | sort | head -n 1)"
+            mojo build --print-effective-target -I . -D ASSERT=all "${first_test}" || exit $?
+            for test in $(find ./tests -name 'test_*.mojo' | sort); do
+              echo "Running ${test} with mojo run"
+              mojo run -debug-level=line-tables -I . -D ASSERT=all "${test}"
+              status=$?
+              if [ "${status}" -eq 0 ]; then
+                continue
+              fi
+              echo "mojo run failed for ${test} with status ${status}; rebuilding with debug info"
+              mojo build -debug-level=line-tables -I . -D ASSERT=all "${test}" -o /tmp/extramojo_test || exit "${status}"
+              /tmp/extramojo_test || true
+              exit "${status}"
+            done
     requirements:
       build:
         - mojo ${{ mojo_version }}
