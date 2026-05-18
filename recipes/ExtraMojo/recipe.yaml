@@ -30,44 +30,11 @@ tests:
         then:
           - |
             set -u
-            echo "ExtraMojo package test diagnostics"
-            uname -a
-            command -v mojo
-            mojo --version
-            if command -v lscpu >/dev/null 2>&1; then
-              lscpu
-            fi
             target_features=""
             if [ "$(uname -m)" = "x86_64" ]; then
+              # Mojo 1.0.0b1's default znver4 target enables AVX-512 on GitHub's
+              # linux-64 runner, whose exposed CPU flags do not include AVX-512.
               target_features="--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq"
-            fi
-            bbhash_test="./tests/collections/bbhash/test_bbhash.mojo"
-            echo "Default target configuration"
-            mojo build --print-effective-target -I . -D ASSERT=all "${bbhash_test}" || exit $?
-            if [ -n "${target_features}" ]; then
-              echo "A/B test: ${bbhash_test} with default target"
-              if mojo run -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}"; then
-                default_status=0
-                echo "A/B default target passed"
-              else
-                default_status=$?
-                echo "A/B default target failed with status ${default_status}"
-              fi
-              echo "A/B test: ${bbhash_test} with AVX-512 disabled"
-              mojo build ${target_features} --print-effective-target -I . -D ASSERT=all "${bbhash_test}" || exit $?
-              if mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}"; then
-                echo "A/B AVX-512-disabled target passed"
-                if [ "${default_status}" -eq 0 ]; then
-                  echo "DIAGNOSTIC RESULT: default target passed; runner did not reproduce the failure."
-                else
-                  echo "DIAGNOSTIC RESULT: default target failed, AVX-512-disabled target passed."
-                fi
-                echo "Intentionally failing this diagnostic run so rattler-build exposes the A/B transcript."
-                exit 86
-              fi
-              limited_status=$?
-              echo "DIAGNOSTIC RESULT: AVX-512-disabled target failed with status ${limited_status}."
-              exit "${limited_status}"
             fi
             for test in $(find ./tests -name 'test_*.mojo' | sort); do
               echo "Running ${test} with mojo run"
