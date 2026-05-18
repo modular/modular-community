@@ -47,14 +47,27 @@ tests:
             if [ -n "${target_features}" ]; then
               echo "A/B test: ${bbhash_test} with default target"
               if mojo run -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}"; then
+                default_status=0
                 echo "A/B default target passed"
               else
-                status=$?
-                echo "A/B default target failed with status ${status}"
+                default_status=$?
+                echo "A/B default target failed with status ${default_status}"
               fi
               echo "A/B test: ${bbhash_test} with AVX-512 disabled"
               mojo build ${target_features} --print-effective-target -I . -D ASSERT=all "${bbhash_test}" || exit $?
-              mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}" || exit $?
+              if mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${bbhash_test}"; then
+                echo "A/B AVX-512-disabled target passed"
+                if [ "${default_status}" -eq 0 ]; then
+                  echo "DIAGNOSTIC RESULT: default target passed; runner did not reproduce the failure."
+                else
+                  echo "DIAGNOSTIC RESULT: default target failed, AVX-512-disabled target passed."
+                fi
+                echo "Intentionally failing this diagnostic run so rattler-build exposes the A/B transcript."
+                exit 86
+              fi
+              limited_status=$?
+              echo "DIAGNOSTIC RESULT: AVX-512-disabled target failed with status ${limited_status}."
+              exit "${limited_status}"
             fi
             for test in $(find ./tests -name 'test_*.mojo' | sort); do
               echo "Running ${test} with mojo run"
