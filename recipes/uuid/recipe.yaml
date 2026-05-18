@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/lczerniawski/uuid.git
-    rev: b672f328840fac831a3d55e247ea744a853ef530
+    rev: 3e928b20ad4071de1bf84ec6666c09bd9dfc1514
 
 build:
   number: 0
