@@ -4,7 +4,7 @@ from std.testing import assert_true
 from mojo_csv import CsvReader
 
 
-fn test_basic_lf() raises:
+def test_basic_lf() raises:
     """Test basic comma-separated parsing with LF line endings."""
     var expected = List[String]()
     expected.append("item1")
@@ -19,9 +19,7 @@ fn test_basic_lf() raises:
 
     var in_csv: Path = cwd().joinpath("test_data_lf.csv")
     in_csv.write_text(
-        'item1,item2,"ite,em3"\n'
-        '"p""ic", pi c,pic,\n'
-        'r_i_1,"r_i_2""",r_i_3,\n'
+        'item1,item2,"ite,em3"\n"p""ic", pi c,pic,\nr_i_1,"r_i_2""",r_i_3,\n'
     )
     var rd = CsvReader(in_csv)
     assert_true(rd.col_count == 3)
@@ -37,7 +35,7 @@ fn test_basic_lf() raises:
     print("✅ test_basic_lf passed")
 
 
-fn test_crlf_single_threaded() raises:
+def test_crlf_single_threaded() raises:
     """Test CRLF line endings parsed single-threaded.
 
     This catches the bug where ord(\"\\r\\n\") was incorrectly used
@@ -69,7 +67,7 @@ fn test_crlf_single_threaded() raises:
     print("✅ test_crlf_single_threaded passed")
 
 
-fn test_threaded_vs_single_threaded() raises:
+def test_threaded_vs_single_threaded() raises:
     """Test that threaded and single-threaded parsers produce identical results.
 
     This catches the bug where single-threaded CRLF handling included
@@ -100,9 +98,7 @@ fn test_threaded_vs_single_threaded() raises:
     )
     assert_true(
         len(single) == len(threaded),
-        String("length: single={0} threaded={1}").format(
-            len(single), len(threaded)
-        ),
+        String("length: single={0} threaded={1}").format(len(single), len(threaded)),
     )
 
     var check_count = min(len(single), len(threaded))
@@ -126,7 +122,7 @@ fn test_threaded_vs_single_threaded() raises:
     print("✅ test_threaded_vs_single_threaded passed")
 
 
-fn test_crlf_threaded_vs_single() raises:
+def test_crlf_threaded_vs_single() raises:
     """Test CRLF consistency between single-threaded and threaded parsers."""
     # Build CSV with CRLF line endings, large enough for threading
     var csv_content = String("header1,header2,header3\r\n")
@@ -163,7 +159,7 @@ fn test_crlf_threaded_vs_single() raises:
     print("✅ test_crlf_threaded_vs_single passed")
 
 
-fn main():
+def main():
     try:
         test_basic_lf()
         test_crlf_single_threaded()
