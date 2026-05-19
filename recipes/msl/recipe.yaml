@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/mojomath/MSL.git
-    rev: 97a36967fd14b9a2ba3a14f7dddc39467dfac9af
+    rev: 7d60ed7b204262002d534529076f2cfec38b904b
 
 build:
   number: 0
