@@ -1,6 +1,6 @@
 context:
-  version: "0.21.1"
-  mojo_version: "=0.26.2"
+  version: "0.22.0"
+  mojo_version: "=1.0.0b1"
 
 package:
   name: "extramojo"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: 6515711dbeb109779fc99007273793d55449e325
+    rev: ce25d17d117b2956e669c808aa326f5a6fb4bbdc
   # path: .
   # use_gitignore: true
 
@@ -28,7 +28,18 @@ tests:
   - script:
       - if: unix
         then:
-          - sh -c 'find ./tests -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'
+          - |
+            set -u
+            target_features=""
+            if [ "$(uname -m)" = "x86_64" ]; then
+              # Mojo 1.0.0b1's default znver4 target enables AVX-512 on GitHub's
+              # linux-64 runner, whose exposed CPU flags do not include AVX-512.
+              target_features="--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq"
+            fi
+            for test in $(find ./tests -name 'test_*.mojo' | sort); do
+              echo "Running ${test} with mojo run"
+              mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${test}" || exit $?
+            done
     requirements:
       build:
         - mojo ${{ mojo_version }}
