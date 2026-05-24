@@ -1,6 +1,10 @@
 # mojoBLAS
 <!-- omit from toc -->
 
+<p align="center">
+  <img src="mojoblas.png" alt="mojoBLAS logo" width="200"/>
+</p>
+
 A high-performance **BLAS (Basic Linear Algebra Subprograms)** implementation written in [Mojo](https://modular.com/mojo).
 
 [![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
