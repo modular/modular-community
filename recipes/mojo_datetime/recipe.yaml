@@ -1,8 +1,8 @@
 context:
   build_number: 0
-  version: 0.1.1
-  release: 0.1.1-compiler-1.0.0b1
-  artifact_sha256: 60638a5b3f3b9f359ff25ff49acb63dfbcf33bcee5969005a31ad218f61a1a89
+  version: 0.1.2
+  release: 0.1.2-compiler-1.0.0b1
+  artifact_sha256: 53f02f5521f1a78c6ea8d29b7a7a829d7bd5fe43c84710ec379e8f425881a791
 
 about:
   homepage: https://github.com/martinvuyk/mojo_datetime
@@ -32,8 +32,8 @@ build:
 
 requirements:
   host:
-    - mojo-compiler "==1.0.0b1"
+    - mojo-compiler =1.0.0b1
   build:
-    - mojo-compiler "==1.0.0b1"
+    - mojo-compiler =1.0.0b1
   run:
     - ${{ pin_compatible('mojo-compiler') }}
