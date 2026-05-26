@@ -1,0 +1,43 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: crypto
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/lczerniawski/crypto.git
+    rev: 3f537eba59563066c2eeb206da4c26405d8b66ab
+
+build:
+  number: 0
+  script:
+    - mojo package src/crypto -o ${{ PREFIX }}/lib/mojo/crypto.mojopkg
+
+requirements:
+  build:
+    - mojo-compiler =1.0.0b1
+  host:
+    - mojo-compiler =1.0.0b1
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/lczerniawski/crypto
+  repository: https://github.com/lczerniawski/crypto
+  license: MIT
+  license_file: LICENSE
+  summary: A Mojo cryptography library intended to cover the commonly used cryptographic algorithms.
+
+extra:
+  maintainers:
+    - lczerniawski
