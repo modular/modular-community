@@ -1,0 +1,37 @@
+context:
+  version: "0.1.0"
+  mojo_version: "=1.0.0b1"
+
+package:
+  name: "mojoblas"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/shivasankarka/mojoBLAS.git
+    rev: 9383e06231b9b15bc26d257a140a24d9c47b1395
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package src -o ${PREFIX}/lib/mojo/mojoblas.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/shivasankarka/mojoBLAS
+  license: MIT
+  license_file: LICENSE
+  summary: mojoBLAS is a pure, high performance Mojo implementation of BLAS (Basic Linear Algebra Subprograms) routines.
+  repository: https://github.com/shivasankarka/mojoBLAS.git
+
+extra:
+  project_name: mojoblas
+  maintainers:
+    - shivasankarka
