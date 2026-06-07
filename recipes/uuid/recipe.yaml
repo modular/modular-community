@@ -1,5 +1,5 @@
 context:
-  version: "1.0.0"
+  version: "1.1.0"
 
 package:
   name: uuid
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/lczerniawski/uuid.git
-    rev: 3e928b20ad4071de1bf84ec6666c09bd9dfc1514
+    rev: 77613ab60c9fcf73c848c5cdd1df5d1cc432ff3d
 
 build:
   number: 0
@@ -17,10 +17,13 @@ build:
 requirements:
   build:
     - mojo-compiler =1.0.0b1
+    - crypto =0.1.0
   host:
     - mojo-compiler =1.0.0b1
+    - crypto =0.1.0
   run:
     - ${{ pin_compatible('mojo-compiler') }}
+    - ${{ pin_compatible('crypto') }}
 
 tests:
   - script:
