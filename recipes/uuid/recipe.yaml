@@ -1,0 +1,46 @@
+context:
+  version: "1.1.0"
+
+package:
+  name: uuid
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/lczerniawski/uuid.git
+    rev: 77613ab60c9fcf73c848c5cdd1df5d1cc432ff3d
+
+build:
+  number: 0
+  script:
+    - mojo package src/uuid -o ${{ PREFIX }}/lib/mojo/uuid.mojopkg
+
+requirements:
+  build:
+    - mojo-compiler =1.0.0b1
+    - crypto =0.1.0
+  host:
+    - mojo-compiler =1.0.0b1
+    - crypto =0.1.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+    - ${{ pin_compatible('crypto') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/lczerniawski/uuid
+  repository: https://github.com/lczerniawski/uuid
+  license: MIT
+  license_file: LICENSE
+  summary: A high-performance Mojo library for generating, parsing, validating, and formatting UUID values in RFC-9562 compatible string forms.
+
+extra:
+  maintainers:
+    - lczerniawski

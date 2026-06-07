@@ -1,0 +1,40 @@
+context:
+  version: "0.1.0"
+  mojo_version: "=1.0.0b1"
+
+package:
+  name: "msl"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mojomath/MSL.git
+    rev: 7d60ed7b204262002d534529076f2cfec38b904b
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package msl -o ${PREFIX}/lib/mojo/msl.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - mojoblas
+  build:
+    - mojo-compiler ${{ mojo_version }}
+    - mojoblas
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - mojoblas
+
+about:
+  homepage: https://github.com/mojomath/MSL
+  license: GPL-3.0-or-later
+  license_file: LICENSE
+  summary: Mojo Scientific Library (MSL) is a comprehensive collection of scientific computation routines derived from GNU Scientific Library (GSL) written in pure Mojo.
+  repository: https://github.com/mojomath/MSL.git
+
+extra:
+  project_name: msl
+  maintainers:
+    - shivasankarka
