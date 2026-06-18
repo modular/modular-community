@@ -31,7 +31,7 @@ ArgMojo has been successfully deployed in production in [Decimo](https://github.
 
 ArgMojo provides two complementary styles for defining and parsing command-line arguments in Mojo: a **builder API** for maximum control (`Command` + `Argument` chains) and an optional **struct-based declarative API** inspired by Swift's [swift-argument-parser](https://github.com/apple/swift-argument-parser) (define a `Parsable` struct, call `MyArgs.parse()`, get typed results). You can mix both freely — put most of your arguments in a struct and drop down to builder methods whenever you need finer control.
 
-ArgMojo v0.6.0 targets Mojo v1.0.0b1.
+ArgMojo v0.7.0 targets Mojo v1.0.0b2.
 
 ArgMojo currently supports:
 
