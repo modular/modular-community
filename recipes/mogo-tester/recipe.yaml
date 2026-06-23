@@ -1,0 +1,57 @@
+context:
+  version: "2.3.1"
+
+package:
+  name: mogo-tester
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/moseschmiedel/mogo_tester
+    tag: v${{ version }}
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    - go-licenses save ./cmd/mogo-tester --save_path="./license-files"
+    - >
+      go build
+      -v
+      -trimpath
+      -ldflags "-s -w -X main.version=${{ version }}"
+      -o "$PREFIX/bin/mogo-tester"
+      ./cmd/mogo-tester
+
+requirements:
+  build:
+    - ${{ compiler('go-nocgo') }}
+    - go-licenses
+  run:
+    - mojo-compiler
+
+tests:
+  - script:
+      - mogo-tester --version
+      - mogo-tester --help
+  - package_contents:
+      bin:
+        - mogo-tester
+
+about:
+  homepage: https://github.com/moseschmiedel/mogo_tester
+  summary: Compile and run top-level Mojo test files.
+  description: |
+    mogo-tester discovers top-level Mojo files in a directory, compiles each
+    one with mojo build, runs the produced binary, and prints per-file results
+    plus a final summary.
+  license: MIT
+  license_file:
+    - LICENSE
+    - license-files/
+  documentation: https://pkg.go.dev/github.com/moseschmiedel/mogo_tester/v2
+  repository: https://github.com/moseschmiedel/mogo_tester
+
+extra:
+  recipe-maintainers:
+    - moseschmiedel
