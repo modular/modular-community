@@ -1,0 +1,37 @@
+context:
+  version: "0.1.0"
+  mojo_version: "=1.0.0b1"
+
+package:
+  name: mojo-intel-gpu
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/andomeder/mojo-intel-gpu.git
+    rev: d0672d2b39d06ee67371308128c65ad46740ed30
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package mojo_intel_gpu -o ${PREFIX}/lib/mojo/mojo_intel_gpu.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/andomeder/mojo-intel-gpu
+  repository: https://github.com/andomeder/mojo-intel-gpu
+  license: MIT
+  license_file: LICENSE
+  summary: Level Zero FFI bindings and high-level API for Intel GPU compute in Mojo
+
+extra:
+  project_name: mojo-intel-gpu
+  maintainers:
+    - andomeder
