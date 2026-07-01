@@ -1,6 +1,6 @@
 context:
-  version: "0.6.0"
-  mojo_version: "=1.0.0b1"
+  version: "0.7.0"
+  mojo_version: "=1.0.0b2"
 
 package:
   name: "argmojo"
@@ -8,13 +8,13 @@ package:
 
 source:
   - git: https://github.com/forfudan/argmojo.git
-    rev: 47df395940e9f9048a4535c2531aeeedfb40a7ca
+    rev: 5e244891daa5c919d344a369f9577b21282f1587
 
 build:
   number: 0
   script:
     - mkdir -p ${PREFIX}/lib/mojo
-    - mojo package src/argmojo -o ${{ PREFIX }}/lib/mojo/argmojo.mojopkg
+    - mojo precompile src/argmojo -o ${{ PREFIX }}/lib/mojo/argmojo.mojoc
 
 requirements:
   host:
