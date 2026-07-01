@@ -1,0 +1,48 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: "turing"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/TuringCore/turing.git
+    rev: 1b04b9115a44c107a4c63c9a65506ed55f133e67
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo package src/hkt_probprog -o ${{ PREFIX }}/lib/mojo/turing.mojopkg
+
+requirements:
+  host:
+    - mojo-compiler
+  build:
+    - mojo-compiler
+  run:
+    - mojo-compiler
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo tests/test_hkt_demo.mojo
+          - mojo tests/test_inference_paths.mojo
+    files:
+      recipe:
+        - tests/test_hkt_demo.mojo
+        - tests/test_inference_paths.mojo
+
+about:
+  homepage: https://github.com/TuringCore/turing
+  license: BSD-3-Clause
+  license_file: LICENSE
+  summary: A focused Mojo library for Bayesian probabilistic programming with HKT-style type safety and practical inference engine paths.
+  repository: https://github.com/TuringCore/turing.git
+
+extra:
+  project_name: Turing
+  maintainers:
+    - jrule
+
