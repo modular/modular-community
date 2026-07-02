@@ -1,6 +1,6 @@
 context:
-  version: "0.10.0"
-  mojo_version: "=1.0.0b1"
+  version: "0.11.0"
+  mojo_version: "=1.0.0b2"
 
 package:
   name: "decimo"
@@ -8,13 +8,13 @@ package:
 
 source:
   - git: https://github.com/forfudan/decimo.git
-    rev: 95f5ca4e9118ea06a2d943c59adedee19c3cb1f7
+    rev: e271f859a1f60f9b44b4edf7223fcec41ff8d052
 
 build:
   number: 0
   script:
     - mkdir -p ${PREFIX}/lib/mojo
-    - mojo package src/decimo -o ${PREFIX}/lib/mojo/decimo.mojopkg
+    - mojo precompile src/decimo -o ${PREFIX}/lib/mojo/decimo.mojoc
 
 requirements:
   host:
