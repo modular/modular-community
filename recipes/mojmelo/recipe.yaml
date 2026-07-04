@@ -32,9 +32,9 @@ tests:
       recipe:
         - tests/setup.mojo
         - tests/setup.sh
-        - tests/mojmelo/__init__.mojo
-        - tests/mojmelo/utils/*.mojo
-        - tests/mojmelo/utils/mojmelo_matmul/*.mojo
+        - tests/mojmelo_tmp/__init__.mojo
+        - tests/mojmelo_tmp/utils/*.mojo
+        - tests/mojmelo_tmp/utils/mojmelo_matmul/*.mojo
 
 about:
   homepage: https://github.com/yetalit/Mojmelo
