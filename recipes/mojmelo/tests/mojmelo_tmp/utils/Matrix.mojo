@@ -1,5 +1,8 @@
 from .mojmelo_matmul import matmul
 from std.memory import memcpy, memset_zero
+from std.sys import simd_width_of, CompilationTarget
+from std.algorithm import vectorize, parallelize
+import std.math as math
 import std.random as random
 
 struct Matrix(Copyable, ImplicitlyCopyable, Sized):
@@ -8,6 +11,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
     var size: Int
     var data: UnsafePointer[Float32, MutAnyOrigin]
     var order: String
+    comptime simd_width: Int = 4 * simd_width_of[DType.float32]() if CompilationTarget.is_apple_silicon() else 2 * simd_width_of[DType.float32]()
 
     # initialize from UnsafePointer
     @always_inline
@@ -18,7 +22,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         if src == DType.float32:
             self.data = data.bitcast[Float32]()
         else:
-            self.data = cast[src=src, des=DType.float32, width=self.simd_width](data, self.size)
+            self.data = cast[src=src, des=DType.float32, width=self.simd_width](data, self.size).as_unsafe_any_origin()
             data.free()
         self.order = order.lower()
 
@@ -28,7 +32,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         self.height = height
         self.width = width
         self.size = height * width
-        self.data = alloc[Float32](self.size)
+        self.data = alloc[Float32](self.size).as_unsafe_any_origin()
         self.order = order.lower()
         if data:
             memcpy(dest=self.data, src=data.value(), count=self.size)
@@ -37,7 +41,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         self.height = copy.height
         self.width = copy.width
         self.size = copy.size
-        self.data = alloc[Float32](self.size)
+        self.data = alloc[Float32](self.size).as_unsafe_any_origin()
         self.order = copy.order
         memcpy(dest=self.data, src=copy.data, count=self.size)
 
@@ -72,37 +76,13 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         return self.size
 
     @always_inline
-    def __mul__(self, rhs: Self) raises -> Self:
-        if self.width != rhs.height:
-            raise Error('Error: Cannot multiply matrices with shapes (' + String(self.height) + ', ' + String(self.width) + ') and (' + String(rhs.height) + ', ' + String(rhs.width) + ')')
-
-        if self.height == 1 and rhs.width == 1:
-            # Dot product
-            var mat = Self(1, 1)
-            mat.data[0] = self.ele_mul(rhs.T()).sum()
-            return mat^
-
-        if self.height * self.width * rhs.width <= 4096:
-            # matmul naive
-            var mat = Self(self.height, rhs.width)
-            for i in range(self.size):
-                var rhsr = i % self.width
-                for j in range(rhsr * rhs.width, rhsr * rhs.width + rhs.width):
-                    if rhsr != 0:
-                        mat.data[(Int(i / self.width) * mat.width) + (j % rhs.width)] += self.data[i] * rhs.data[j]
-                    else:
-                        mat.data[(Int(i / self.width) * mat.width) + (j % rhs.width)] = self.data[i] * rhs.data[j]
-            return mat^
+    def __mul__(self, rhs: Self) -> Self:
         var A = matmul.Matrix[DType.float32](self.data, (self.height, self.width))
         var B = matmul.Matrix[DType.float32](rhs.data, (rhs.height, rhs.width))
         var C = matmul.Matrix[DType.float32]((self.height, rhs.width))
         memset_zero(C.data, self.height * rhs.width)
         matmul.matmul(self.height, self.width, rhs.width, C, A, B)
         return Matrix(C.data, self.height, rhs.width)
-
-    @always_inline
-    def __imul__(mut self, rhs: Self) raises:
-        self = self * rhs
 
     @staticmethod
     @always_inline
@@ -117,3 +97,20 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         var mat = Matrix(height, width, order= order)
         random.rand(mat.data, mat.size, min=0.0, max=1.0)
         return mat^
+
+@always_inline
+def cast[src: DType, des: DType, width: Int](data: UnsafePointer[Scalar[src], MutAnyOrigin], size: Int) -> UnsafePointer[Scalar[des], MutUntrackedOrigin]:
+    var ptr = alloc[Scalar[des]](size)
+    if size < 262144:
+
+        def matrix_vectorize[simd_width: Int](idx: Int) {read}:
+            ptr.store(idx, data.load[width=simd_width](idx).cast[des]())
+        vectorize[width](size, matrix_vectorize)
+    else:
+        var n_vects = Int(math.ceil(size / width))
+        @parameter
+        def matrix_vectorize_parallelize(i: Int):
+            var idx = i * width
+            ptr.store(idx, data.load[width=width](idx).cast[des]())
+        parallelize[matrix_vectorize_parallelize](n_vects)
+    return ptr
