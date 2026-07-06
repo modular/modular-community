@@ -6,8 +6,8 @@ An arbitrary-precision integer and decimal library for [Mojo](https://www.modula
 
 Comes with an interactive arbitrary-precision calculator (REPL + one-shot mode) powered by [ArgMojo](https://github.com/forfudan/argmojo). Install it with `brew install forfudan/tap/decimo`.
 
-[![Version](https://img.shields.io/badge/version-v0.10.0-blue)](https://github.com/forfudan/decimo/releases/tag/v0.10.0)
-[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![Version](https://img.shields.io/badge/version-v0.11.0-blue)](https://github.com/forfudan/decimo/releases/tag/v0.11.0)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0b2-orange)](https://docs.modular.com/mojo/manual/)
 [![pixi](https://img.shields.io/badge/pixi%20add-decimo-purple)](https://prefix.dev/channels/modular-community/packages/decimo)
 [![CI](https://img.shields.io/github/actions/workflow/status/forfudan/decimo/run_tests.yaml?branch=main&label=tests)](https://github.com/forfudan/decimo/actions/workflows/run_tests.yaml)
 
@@ -76,7 +76,7 @@ Then, you can install Decimo using any of these methods:
 1. In the `mojoproject.toml` file of your project, add the following dependency:
 
     ```toml
-    decimo = "==0.10.0"
+    decimo = "==0.11.0"
     ```
 
     Then run `pixi install` to download and install the package.
@@ -98,6 +98,7 @@ The following table summarizes the package versions and their corresponding Mojo
 | `decimo`   | v0.8.0  | ==0.26.1      | pixi            |
 | `decimo`   | v0.9.0  | ==0.26.2      | pixi            |
 | `decimo`   | v0.10.0 | ==1.0.0b1     | pixi            |
+| `decimo`   | v0.11.0 | ==1.0.0b2     | pixi            |
 
 ### Install CLI calculator
 
@@ -402,7 +403,7 @@ Bug reports and feature requests are welcome! If you encounter issues, please [f
 ```text
 decimo/
 ├── src/                          # All source code
-│   ├── decimo/                   # Core library (mojo package)
+│   ├── decimo/                   # Core library (mojo pre-compiled package)
 │   │   ├── bigdecimal/           #   Arbitrary-precision decimal (Decimal)
 │   │   ├── bigint/               #   Arbitrary-precision signed integer (Integer)
 │   │   ├── bigint10/             #   Base-10 signed integer (BigInt10)
@@ -411,7 +412,7 @@ decimo/
 │   │   └── ...                   #   Shared utilities (str, errors, rounding)
 │   └── cli/                      # CLI calculator application
 │       ├── main.mojo             #   Entry point (ArgMojo CLI)
-│       └── calculator/           #   Calculator engine (mojo package)
+│       └── calculator/           #   Calculator engine (mojo pre-compiled package)
 │           ├── tokenizer.mojo    #     Lexer: expression → tokens
 │           ├── parser.mojo       #     Shunting-yard: infix → RPN
 │           └── evaluator.mojo    #     RPN evaluator using Decimal
@@ -427,7 +428,7 @@ decimo/
 └── pixi.toml                     # Project configuration and tasks
 ```
 
-`src/decimo/` is a Mojo package — it is compiled with `mojo package` and can be imported by external projects. The TOML parser (`decimo.toml`) is included as a subpackage. `src/cli/` is an application that consumes the `decimo` package and compiles to a standalone binary via `mojo build`.
+`src/decimo/` is a Mojo package — it is compiled with `mojo precompile` and can be imported by external projects. The TOML parser (`decimo.toml`) is included as a subpackage. `src/cli/` is an application that consumes the `decimo` package and compiles to a standalone binary via `mojo build`.
 
 ## Tests and benches
 
@@ -448,7 +449,7 @@ If you find Decimo useful, consider listing it in your citations.
     year         = {2026},
     title        = {Decimo: An arbitrary-precision integer and decimal library for Mojo},
     url          = {https://github.com/forfudan/decimo},
-    version      = {0.10.0},
+    version      = {0.11.0},
     note         = {Computer Software}
 }
 ```
