@@ -19,4 +19,4 @@ rm -f ./setup
 
 cd $curr
 
-pixi run mojo package $path/mojmelo/utils/mojmelo_matmul -o ./.pixi/envs/default/lib/mojo/mojmelo_matmul.mojopkg
+pixi run mojo precompile $path/mojmelo/utils/mojmelo_matmul -o ./.pixi/envs/default/lib/mojo/mojmelo_matmul.mojoc
