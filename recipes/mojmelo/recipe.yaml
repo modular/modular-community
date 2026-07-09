@@ -10,7 +10,7 @@ source:
     rev: 49ee72f601beb0df51b143a4a5655c8bd515551e
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo precompile pixi/mojmelo/utils/mojmelo_matmul -o ${{ PREFIX }}/lib/mojo/mojmelo_matmul.mojoc
     - mojo precompile pixi/mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojoc
