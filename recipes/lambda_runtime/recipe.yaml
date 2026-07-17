@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/fourlexboehm/mojo-lambda-runtime.git
-    rev: fb83b0133690ff1ea73f49f239e0c8b1f192deb3
+    rev: 677d722ac20976a9c64552cbbef70163f9ddb45d
 
 build:
   number: 0
@@ -19,7 +19,7 @@ build:
     # Mojo library (import lambda_runtime)
     - mojo package lambda_runtime -o ${{ PREFIX }}/lib/mojo/lambda_runtime.mojopkg
     # Scaffold: Dockerfile, build/deploy scripts, starter handler
-    - cp -R scaffold/Dockerfile scaffold/build.sh scaffold/main.mojo scaffold/pixi.toml scaffold/.gitignore ${{ PREFIX }}/share/lambda_runtime/
+    - cp -R scaffold/Dockerfile scaffold/build.sh scaffold/main.mojo scaffold/pixi.toml scaffold/.gitignore scaffold/.dockerignore ${{ PREFIX }}/share/lambda_runtime/
     - mkdir -p ${{ PREFIX }}/share/lambda_runtime/scripts
     - cp scaffold/scripts/deploy.sh ${{ PREFIX }}/share/lambda_runtime/scripts/deploy.sh
     - chmod +x ${{ PREFIX }}/share/lambda_runtime/build.sh ${{ PREFIX }}/share/lambda_runtime/scripts/deploy.sh
@@ -46,6 +46,7 @@ tests:
           - test -f $PREFIX/share/lambda_runtime/Dockerfile
           - test -f $PREFIX/share/lambda_runtime/build.sh
           - test -f $PREFIX/share/lambda_runtime/main.mojo
+          - test -f $PREFIX/share/lambda_runtime/.dockerignore
           - test -x $PREFIX/bin/lambda-runtime-init
           - lambda-runtime-init --list
           - mojo run -I . tests/test_http.mojo
