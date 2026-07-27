@@ -1,0 +1,78 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+context:
+  version: "0.1.0"
+
+package:
+  name: "lambda_runtime"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/fourlexboehm/mojo-lambda-runtime.git
+    rev: 677d722ac20976a9c64552cbbef70163f9ddb45d
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mkdir -p ${PREFIX}/share/lambda_runtime
+    - mkdir -p ${PREFIX}/bin
+    # Mojo library (import lambda_runtime)
+    - mojo package lambda_runtime -o ${{ PREFIX }}/lib/mojo/lambda_runtime.mojopkg
+    # Scaffold: Dockerfile, build/deploy scripts, starter handler
+    - cp -R scaffold/Dockerfile scaffold/build.sh scaffold/main.mojo scaffold/pixi.toml scaffold/.gitignore scaffold/.dockerignore ${{ PREFIX }}/share/lambda_runtime/
+    - mkdir -p ${{ PREFIX }}/share/lambda_runtime/scripts
+    - cp scaffold/scripts/deploy.sh ${{ PREFIX }}/share/lambda_runtime/scripts/deploy.sh
+    - chmod +x ${{ PREFIX }}/share/lambda_runtime/build.sh ${{ PREFIX }}/share/lambda_runtime/scripts/deploy.sh
+    # CLI on PATH after pixi add / conda install
+    - cp scripts/lambda-runtime-init ${{ PREFIX }}/bin/lambda-runtime-init
+    - chmod +x ${{ PREFIX }}/bin/lambda-runtime-init
+
+requirements:
+  host:
+    - mojo-compiler =1.0.0b1
+    - emberjson >=0.3.2,<0.3.3
+  build:
+    - mojo-compiler =1.0.0b1
+    - emberjson >=0.3.2,<0.3.3
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+    - emberjson >=0.3.2,<0.3.3
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - test -f $PREFIX/lib/mojo/lambda_runtime.mojopkg
+          - test -f $PREFIX/share/lambda_runtime/Dockerfile
+          - test -f $PREFIX/share/lambda_runtime/build.sh
+          - test -f $PREFIX/share/lambda_runtime/main.mojo
+          - test -f $PREFIX/share/lambda_runtime/.dockerignore
+          - test -x $PREFIX/bin/lambda-runtime-init
+          - lambda-runtime-init --list
+          - mojo run -I . tests/test_http.mojo
+    files:
+      source:
+        - tests/
+        - lambda_runtime/
+    requirements:
+      build:
+        - mojo =1.0.0b1
+      run:
+        - mojo =1.0.0b1
+        - emberjson >=0.3.2,<0.3.3
+
+about:
+  homepage: https://github.com/fourlexboehm/mojo-lambda-runtime
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: AWS Lambda custom runtime library for Mojo (provided.al2023 / arm64)
+  description: |
+    Implements the AWS Lambda Runtime API over plain HTTP using libc sockets
+    (no libcurl). Install with pixi, then run `lambda-runtime-init` to drop a
+    Dockerfile, build.sh, deploy script, and starter main.mojo into your project.
+  repository: https://github.com/fourlexboehm/mojo-lambda-runtime
+
+extra:
+  maintainers:
+    - fourlexboehm
+  project_name: Mojo Lambda Runtime
