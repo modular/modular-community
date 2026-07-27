@@ -1,0 +1,52 @@
+package:
+  name: mojogp
+  version: "0.26.7.0"
+
+source:
+  git: https://github.com/caspbian/mojogp.git
+  rev: 344eebac24e208d4905f738a2b95f4f0b9da630b
+
+build:
+  number: 0
+  script:
+    - python -m pip install . --no-deps --no-build-isolation --ignore-installed -vv
+
+requirements:
+  host:
+    - python >=3.10,<3.12
+    - pip
+    - setuptools >=61.0
+  run:
+    - python >=3.10,<3.12
+    - numpy
+    - sympy >=1.12
+    - tqdm
+    - mojo =1.0.0b2
+    - max =26.4.0
+
+tests:
+  - script:
+      - |
+        python - <<'PY'
+        import importlib.metadata as md
+        import mojogp
+
+        expected = "0.26.7.0"
+        installed = md.version("mojogp")
+        print("mojogp", installed)
+        if installed != expected:
+            raise SystemExit(f"unexpected installed version: {installed}")
+        if mojogp.__version__ != expected:
+            raise SystemExit(f"unexpected module version: {mojogp.__version__}")
+        PY
+
+about:
+  homepage: https://github.com/caspbian/mojogp
+  repository: https://github.com/caspbian/mojogp
+  license: MIT
+  license_file: LICENSE
+  summary: GPU-accelerated Gaussian Process library using Mojo kernels
+
+extra:
+  maintainers:
+    - caspbian
