@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ratulb/mbpe.git
-    rev: d2ddf1f31c4f7f7b29ef8f92d9a7126aa9470668
+    rev: 32c748d2025e0d8716d1b550b1c56da4640fdb08
 
 build:
   number: 0
