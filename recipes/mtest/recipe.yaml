@@ -1,5 +1,5 @@
 context:
-  version: "1.0.0"
+  version: "1.1.0"
 
 package:
   name: mtest
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/mikeleppane/mtest.git
-    rev: b50ae9a29ef35dfc19ee724278d287e2cb2da286
+    rev: 3b534933892f6bc20312c84fe5585a756ff99248
 
 build:
   number: 0
