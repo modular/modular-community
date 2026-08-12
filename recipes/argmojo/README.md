@@ -12,6 +12,16 @@ ArgMojo has been successfully deployed in production in [Decimo](https://github.
 
 [![Version](https://img.shields.io/github/v/tag/forfudan/argmojo?label=version&color=blue)](https://github.com/forfudan/argmojo/releases)
 [![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![pixi](https://img.shields.ioA feature-rich command-line argument parser library for Mojo, with both builder and struct-based declarative APIs. Inspired by Python's `argparse`, Rust's `clap`, Go's `cobra`, and Swift's `swift-argument-parser`.
+
+ArgMojo has been successfully deployed in production in [Decimo](https://github.com/forfudan/decimo), an arbitrary-precision integer and decimal library for Mojo. You can see the [code of Decimo CLI calculator](https://github.com/forfudan/decimo/blob/main/src/cli/main.mojo) as a real-world example of ArgMojo usage.
+
+<!-- 
+> **A**rguments **R**esolved and **G**rouped into **M**eaningful **O**ptions and **J**oined **O**bjects
+ -->
+
+[![Version](https://img.shields.io/github/v/tag/forfudan/argmojo?label=version&color=blue)](https://github.com/forfudan/argmojo/releases)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0-orange)](https://docs.modular.com/mojo/manual/)
 [![pixi](https://img.shields.io/badge/pixi%20add-argmojo-brightgreen)](https://prefix.dev/channels/modular-community/packages/argmojo)
 [![User manual](https://img.shields.io/badge/user-manual-purple)](https://github.com/forfudan/argmojo/wiki)
 
@@ -31,7 +41,7 @@ ArgMojo has been successfully deployed in production in [Decimo](https://github.
 
 ArgMojo provides two complementary styles for defining and parsing command-line arguments in Mojo: a **builder API** for maximum control (`Command` + `Argument` chains) and an optional **struct-based declarative API** inspired by Swift's [swift-argument-parser](https://github.com/apple/swift-argument-parser) (define a `Parsable` struct, call `MyArgs.parse()`, get typed results). You can mix both freely — put most of your arguments in a struct and drop down to builder methods whenever you need finer control.
 
-ArgMojo v0.7.0 targets Mojo v1.0.0b2.
+ArgMojo v0.8.0 targets Mojo v1.0.0.
 
 ArgMojo currently supports:
 
@@ -41,6 +51,8 @@ ArgMojo currently supports:
 - **Positional arguments**: matched by position
 - **Default values**: fallback when an argument is not provided
 - **Required arguments**: validation that mandatory arguments are present
+- **Typed result accessors**: `get_string()`, `get_int()`, `get_float()`, `get_flag()`, `get_count()`, `get_list()`, `get_map()` read a value back in its own type
+- **User-input detection**: `was_provided()` tells a value the user actually supplied (on the command line, at a prompt, or through `.implies()`) from one that came from a `.default()`
 - **Auto-generated help**: `--help` / `-h` / `-?` with dynamic column alignment, pixi-style ANSI colours, and customisable header/argument colours
 - **Help on no arguments**: optionally show help when invoked with no arguments
 - **Version display**: `--version` / `-V` (also auto-generated)
@@ -75,7 +87,7 @@ ArgMojo currently supports:
 - **Confirmation option**: `confirmation_option()` to add a `--yes`/`-y` skip-confirmation flag
 - **Argument parents**: `add_parent()` to share argument definitions across commands
 - **Custom usage line**: `usage()` to override the auto-generated usage string
-- **Response files**: `@args.txt` expansion (temporarily disabled due to a Mojo compiler bug)
+- **Response files**: `@args.txt` expansion (currently disabled due to a Mojo compiler bug, see the [changelog](docs/changelog.md))
 - **CJK-aware help alignment**: CJK characters treated as 2-column-wide
 - **CJK full-width auto-correction**: fullwidth `－－ｖｅｒｂｏｓｅ` → `--verbose` with a warning
 - **CJK punctuation detection**: em-dash `——verbose` → `--verbose`
@@ -83,7 +95,7 @@ ArgMojo currently supports:
 - **Default-if-no-value**: `--compress` uses a fallback; `--compress=bzip2` overrides
 - **Require equals syntax**: `--key=value` required, `--key value` rejected
 - **Remainder positional**: `.remainder()` consumes all remaining tokens
-- **Allow hyphen values**: `.allow_hyphen_values()` accepts `-` as a regular value (stdin convention)
+- **Allow hyphen values**: `.allow_hyphen_values()` accepts dash-prefixed tokens as values, including registered options (`--cflag --verbose`) and the stdin `-` convention
 - **Partial parsing**: `parse_known_arguments()` collects unrecognised options instead of erroring
 - **Compile-time validation**: builder parameters validated at `mojo build` time via `comptime assert`
 - **Registration-time validation**: group constraint typos caught when the program starts, not when the user runs it
@@ -117,9 +129,9 @@ Then, you can install ArgMojo using any of these methods:
 
     Then run `pixi install` to download and install the package.
 
-### Using mojopkg
+### Using mojoc
 
-The package manager may not be up to date with the latest ArgMojo release. If you want to use the latest version, you can download the `mojopkg` file from the [latest release](https://github.com/forfudan/argmojo/releases) and include it in your project directory.
+The package manager may not be up to date with the latest ArgMojo release. If you want to use the latest version, you can download the `mojoc` file from the [latest release](https://github.com/forfudan/argmojo/releases) and include it in your project directory.
 
 ## Quick Start
 
