@@ -1,6 +1,6 @@
 #!/bin/bash
 
-path="./.pixi/envs/default/etc/conda/test-files/mojmelo/1/tests"
+path="./.pixi/envs/default/etc/conda/test-files/mojmelo/0/tests"
 curr=$(pwd)
 cd $path
 
