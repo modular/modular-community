@@ -1,6 +1,6 @@
 context:
-  version: "0.1.0"
-  mojo_version: "=1.0.0b1"
+  version: "0.2.0"
+  mojo_version: "=1.0.0"
 
 package:
   name: mojo-intel-gpu
@@ -8,13 +8,13 @@ package:
 
 source:
   - git: https://github.com/andomeder/mojo-intel-gpu.git
-    rev: d0672d2b39d06ee67371308128c65ad46740ed30
+    rev: d3936acd5b3802e622b5f222982af57c8a0515f3
 
 build:
   number: 0
   script:
     - mkdir -p ${PREFIX}/lib/mojo
-    - mojo package mojo_intel_gpu -o ${PREFIX}/lib/mojo/mojo_intel_gpu.mojopkg
+    - mojo precompile mojo_intel_gpu -o ${PREFIX}/lib/mojo/mojo_intel_gpu.mojoc
 
 requirements:
   host:
