@@ -7,10 +7,10 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: 4273e5cb6385a5a045f429dc9fe5c82753d3721a
+    rev: 3ea2468262f11ae918f69e6337174a078fa9d3a4
 
 build:
-  number: 0
+  number: 1
   script:
     - mojo precompile pixi/mojmelo/utils/mojmelo_matmul -o ${{ PREFIX }}/lib/mojo/mojmelo_matmul.mojoc
     - mojo precompile pixi/mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojoc
