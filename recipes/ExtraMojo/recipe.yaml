@@ -1,6 +1,6 @@
 context:
-  version: "0.22.0"
-  mojo_version: "=1.0.0b1"
+  version: "0.23.0"
+  mojo_version: "=1.0.0"
 
 package:
   name: "extramojo"
@@ -8,14 +8,15 @@ package:
 
 source:
   - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: ce25d17d117b2956e669c808aa326f5a6fb4bbdc
+    rev: b9d8ee5479f02c007e4d92700e5242928afbd0d8
   # path: .
   # use_gitignore: true
 
 build:
   number: 0
   script:
-    - mojo package extramojo -o ${{ PREFIX }}/lib/mojo/extramojo.mojopkg
+    - mkdir -p "${PREFIX}/lib/mojo"
+    - mojo precompile extramojo -o "${PREFIX}/lib/mojo/extramojo.mojoc"
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
@@ -32,13 +33,13 @@ tests:
             set -u
             target_features=""
             if [ "$(uname -m)" = "x86_64" ]; then
-              # Mojo 1.0.0b1's default znver4 target enables AVX-512 on GitHub's
+              # Mojo 1.0.0's default znver4 target enables AVX-512 on GitHub's
               # linux-64 runner, whose exposed CPU flags do not include AVX-512.
               target_features="--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq"
             fi
             for test in $(find ./tests -name 'test_*.mojo' | sort); do
               echo "Running ${test} with mojo run"
-              mojo run ${target_features} -debug-level=line-tables -I . -D ASSERT=all "${test}" || exit $?
+              mojo run ${target_features} -debug-level=line-tables -I "${PREFIX}/lib/mojo" -D ASSERT=all "${test}" || exit $?
             done
     requirements:
       build:
@@ -47,7 +48,6 @@ tests:
         - mojo ${{ mojo_version }}
     files:
       source:
-        - extramojo/
         - tests/
 
 about:
