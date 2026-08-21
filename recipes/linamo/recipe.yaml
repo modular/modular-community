@@ -1,0 +1,37 @@
+context:
+  version: "0.1.0"
+  mojo_version: ">=1.0.0,<1.1.0"
+
+package:
+  name: "linamo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mojomath/linamo.git
+    rev: 03a2246d982832427a3f27da65152b6ff863a796
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo precompile src/linamo -o ${PREFIX}/lib/mojo/linamo.mojoc
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+
+about:
+  homepage: https://github.com/mojomath/linamo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Linear algebra for Mojo, specialized for two-dimensional matrices.
+  repository: https://github.com/mojomath/linamo.git
+
+extra:
+  project_name: linamo
+  maintainers:
+    - forfudan
