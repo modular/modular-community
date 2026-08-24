@@ -1,0 +1,85 @@
+context:
+  version: "1.1.0"
+
+package:
+  name: mtest
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mikeleppane/mtest.git
+    rev: 3b534933892f6bc20312c84fe5585a756ff99248
+
+build:
+  number: 0
+  skip:
+    - linux and aarch64
+  files:
+    - bin/mtest
+    - share/mtest/companions/assertions/src/mtest/**
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        bash recipe/build.sh
+
+requirements:
+  build:
+    - mojo ==1.0.0b2
+    - clang ==18.1.8
+  host:
+    - mojo-compiler ==1.0.0b2
+  run:
+    - mojo-compiler ==1.0.0b2
+
+tests:
+  - files:
+      recipe:
+        - test_smoke.mojo
+    script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test "$(mtest --version)" = "mtest ${{ version }}"
+          mtest --help >/dev/null
+          mtest --no-config test_smoke.mojo
+          test -x "${PREFIX}/bin/mtest"
+          root="${PREFIX}/share/mtest/companions/assertions/src"
+          test -f "${root}/mtest/__init__.mojo"
+          test -f "${root}/mtest/assertions/__init__.mojo"
+          test -f "${root}/mtest/assertions/_display.mojo"
+          test -f "${root}/mtest/assertions/_mapping.mojo"
+          test -f "${root}/mtest/assertions/_sequence.mojo"
+          test -f "${root}/mtest/assertions/_text.mojo"
+          test -z "$(find "${root}" -type l -print)"
+          actual="$(
+            find "${root}" ! -type d -print |
+              sed "s#^${root}/##" |
+              LC_ALL=C sort
+          )"
+          expected="$(
+            printf '%s\n' \
+              mtest/__init__.mojo \
+              mtest/assertions/__init__.mojo \
+              mtest/assertions/_display.mojo \
+              mtest/assertions/_mapping.mojo \
+              mtest/assertions/_sequence.mojo \
+              mtest/assertions/_text.mojo
+          )"
+          test "${actual}" = "${expected}"
+  - package_contents:
+      bin:
+        - mtest
+
+about:
+  homepage: https://github.com/mikeleppane/mtest
+  repository: https://github.com/mikeleppane/mtest
+  license: MIT
+  license_file: LICENSE
+  summary: A pytest-like test runner for Mojo that orchestrates the stdlib's per-file TestSuite
+
+extra:
+  project_name: mtest
+  maintainers:
+    - mikeleppane
