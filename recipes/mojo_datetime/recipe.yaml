@@ -30,7 +30,6 @@ package:
 build:
   number: ${{ build_number }}
   script:
-    - mkdir -p ${{ PREFIX }}/lib/mojo
     - cp mojo_datetime.mojoc ${{ PREFIX }}/lib/mojo/
 
 requirements:
