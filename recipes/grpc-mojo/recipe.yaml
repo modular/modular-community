@@ -1,0 +1,89 @@
+context:
+  version: "0.2.2"
+  mojo_version: ">=1.0.0,<1.1.0"
+  family_version: ">=0.2.0,<0.3.0"
+  protomojo_version: ">=0.4.0,<0.5.0"
+  tls_version: ">=0.3.0,<0.4.0"
+
+package:
+  name: grpc-mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/nsalerni/grpc-mojo.git
+    rev: 2aee07fdd64a82745f368414f244f4efb664730c
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        mkdir -p "${PREFIX}/lib/mojo"
+        mojo precompile -I "${PREFIX}/lib/mojo" src/grpc \
+          -o "${PREFIX}/lib/mojo/grpc.mojoc"
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-http2 ${{ family_version }}
+    - mojo-net ${{ family_version }}
+    - mojo-tls ${{ tls_version }}
+    - protomojo ${{ protomojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-http2 ${{ family_version }}
+    - mojo-net ${{ family_version }}
+    - mojo-tls ${{ tls_version }}
+    - protomojo ${{ protomojo_version }}
+
+tests:
+  - script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/grpc.mojoc"
+          test ! -e "${PREFIX}/lib/mojo/grpc.mojopkg"
+          test -f "${PREFIX}/lib/mojo/h2.mojoc"
+          test -f "${PREFIX}/lib/mojo/hpack.mojoc"
+          test -f "${PREFIX}/lib/mojo/net.mojoc"
+          test -f "${PREFIX}/lib/mojo/proto.mojoc"
+          test -f "${PREFIX}/lib/mojo/tls.mojoc"
+
+          WORK="$(mktemp -d)"
+          trap 'rm -rf "${WORK}"' EXIT
+          SMOKE="${PWD}/tests/package_smoke.mojo"
+          MOJO="${PREFIX}/bin/mojo"
+          test -x "${MOJO}"
+          cd "${WORK}"
+          export CONDA_PREFIX="${PREFIX}"
+          export MODULAR_HOME="${PREFIX}/share/max"
+          export PATH="${PREFIX}/bin:${PATH}"
+          unset MOJO_PATH MOJO_TLS_SHIM
+          if [ "$(uname -s)" = Linux ]; then
+            "${MOJO}" build --emit object "${SMOKE}" -o package_smoke.o
+            test -s package_smoke.o
+            "${MOJO}" run "${SMOKE}"
+          else
+            "${MOJO}" build "${SMOKE}" -o package_smoke
+            ./package_smoke
+          fi
+    files:
+      recipe:
+        - tests/package_smoke.mojo
+
+about:
+  homepage: https://github.com/nsalerni/grpc-mojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: gRPC client and server runtime for Mojo
+  repository: https://github.com/nsalerni/grpc-mojo
+
+extra:
+  maintainers:
+    - nsalerni
+  project_name: grpc-mojo
