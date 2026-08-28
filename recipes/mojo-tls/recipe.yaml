@@ -1,0 +1,170 @@
+context:
+  version: "0.3.0"
+  mojo_version: ">=1.0.0,<1.1.0"
+  mojo_net_version: ">=0.2.1,<0.3.0"
+  openssl_version: ">=3.0,<4.0a0"
+
+package:
+  name: mojo-tls
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/nsalerni/mojo-tls.git
+    rev: 5c578bd556c64810aec5fa60652780e25570ab4c
+
+build:
+  number: 0
+  dynamic_linking:
+    # The shim sets platform-native relative loader paths below.
+    binary_relocation: false
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        : "${CC:?the package build must provide a C compiler}"
+        mkdir -p "${PREFIX}/lib" "${PREFIX}/lib/mojo"
+
+        case "$(uname -s)" in
+          Darwin)
+            "${CC}" -dynamiclib -fPIC -O2 -Wall -Werror \
+              -I"${PREFIX}/include" \
+              -L"${PREFIX}/lib" \
+              -Wl,-rpath,@loader_path \
+              -Wl,-install_name,@rpath/libmojotls.dylib \
+              -o "${PREFIX}/lib/libmojotls.dylib" \
+              shim/mojotls_shim.c -lssl -lcrypto
+            ;;
+          *)
+            "${CC}" -shared -fPIC -O2 -Wall -Werror -pthread \
+              -I"${PREFIX}/include" \
+              -L"${PREFIX}/lib" \
+              -Wl,-rpath,'$ORIGIN' \
+              -Wl,-soname,libmojotls.so \
+              -o "${PREFIX}/lib/libmojotls.so" \
+              shim/mojotls_shim.c -lssl -lcrypto
+            patchelf --set-rpath '$ORIGIN' "${PREFIX}/lib/libmojotls.so"
+            ;;
+        esac
+
+        mojo precompile -I "${PREFIX}/lib/mojo" src/tls \
+          -o "${PREFIX}/lib/mojo/tls.mojoc"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - mojo-compiler ${{ mojo_version }}
+    - if: linux
+      then: patchelf
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-net ${{ mojo_net_version }}
+    - openssl ${{ openssl_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-net ${{ mojo_net_version }}
+    - openssl ${{ openssl_version }}
+
+tests:
+  - requirements:
+      run:
+        - if: linux
+          then: binutils
+    script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/tls.mojoc"
+          test ! -e "${PREFIX}/lib/mojo/tls.mojopkg"
+
+          case "$(uname -s)" in
+            Darwin)
+              SHIM="${PREFIX}/lib/libmojotls.dylib"
+              test -f "${SHIM}"
+              RPATHS="$(otool -l "${SHIM}" | awk \
+                '$1 == "cmd" && $2 == "LC_RPATH" { getline; getline; print $2 }')"
+              test "${RPATHS}" = '@loader_path'
+              otool -D "${SHIM}" | grep -F '@rpath/libmojotls.dylib'
+              otool -L "${SHIM}" | grep -F '@rpath/libssl.3.dylib'
+              otool -L "${SHIM}" | grep -F '@rpath/libcrypto.3.dylib'
+              ;;
+            *)
+              SHIM="${PREFIX}/lib/libmojotls.so"
+              test -f "${SHIM}"
+              readelf -d "${SHIM}" | \
+                grep -E '\((RPATH|RUNPATH)\).*\[\$ORIGIN\]$'
+              readelf -d "${SHIM}" | grep -F '(SONAME)' | grep -F 'libmojotls.so'
+              readelf -d "${SHIM}" | grep -F '(NEEDED)' | grep -F 'libssl.so.3'
+              readelf -d "${SHIM}" | grep -F '(NEEDED)' | grep -F 'libcrypto.so.3'
+              ;;
+          esac
+
+          WORK="$(mktemp -d)"
+          trap 'rm -rf "${WORK}"' EXIT
+          openssl req -x509 -newkey rsa:2048 -sha256 -nodes \
+            -subj '/CN=mojo-tls package CA' \
+            -addext 'basicConstraints=critical,CA:TRUE' \
+            -addext 'keyUsage=critical,keyCertSign,cRLSign' \
+            -keyout "${WORK}/ca.key" -out "${WORK}/ca.pem" -days 1 \
+            >/dev/null 2>&1
+          openssl req -newkey rsa:2048 -sha256 -nodes \
+            -subj '/CN=localhost' \
+            -keyout "${WORK}/server.key" -out "${WORK}/server.csr" \
+            >/dev/null 2>&1
+          printf '%s\n' \
+            'subjectAltName=DNS:localhost,IP:127.0.0.1,URI:spiffe://example.test/package-server,email:server@example.test' \
+            'keyUsage=critical,digitalSignature,keyEncipherment' \
+            'extendedKeyUsage=serverAuth' 'basicConstraints=CA:FALSE' \
+            > "${WORK}/server.ext"
+          openssl x509 -req -sha256 -in "${WORK}/server.csr" \
+            -CA "${WORK}/ca.pem" -CAkey "${WORK}/ca.key" -CAcreateserial \
+            -extfile "${WORK}/server.ext" \
+            -out "${WORK}/server.pem" -days 1 >/dev/null 2>&1
+          openssl req -newkey rsa:2048 -sha256 -nodes \
+            -subj '/CN=mojo-tls package client' \
+            -keyout "${WORK}/client.key" -out "${WORK}/client.csr" \
+            >/dev/null 2>&1
+          printf '%s\n' \
+            'subjectAltName=DNS:client.example.test,IP:192.0.2.45,URI:spiffe://example.test/package-client,email:client@example.test' \
+            'keyUsage=critical,digitalSignature,keyEncipherment' \
+            'extendedKeyUsage=clientAuth' 'basicConstraints=CA:FALSE' \
+            > "${WORK}/client.ext"
+          openssl x509 -req -sha256 -in "${WORK}/client.csr" \
+            -CA "${WORK}/ca.pem" -CAkey "${WORK}/ca.key" -CAcreateserial \
+            -extfile "${WORK}/client.ext" \
+            -out "${WORK}/client.pem" -days 1 >/dev/null 2>&1
+
+          SMOKE="${PWD}/tests/package_smoke.mojo"
+          MOJO="${PREFIX}/bin/mojo"
+          test -x "${MOJO}"
+          cd "${WORK}"
+          export CONDA_PREFIX="${PREFIX}"
+          export MODULAR_HOME="${PREFIX}/share/max"
+          export PATH="${PREFIX}/bin:${PATH}"
+          unset MOJO_TLS_SHIM
+          test -z "${MOJO_TLS_SHIM:-}"
+          if [ "$(uname -s)" = Linux ]; then
+            "${MOJO}" build --emit object "${SMOKE}" -o package_smoke.o
+            test -s package_smoke.o
+            "${MOJO}" run "${SMOKE}" ca.pem server.pem server.key \
+              client.pem client.key
+          else
+            "${MOJO}" build "${SMOKE}" -o package_smoke
+            ./package_smoke ca.pem server.pem server.key client.pem client.key
+          fi
+    files:
+      recipe:
+        - tests/package_smoke.mojo
+
+about:
+  homepage: https://github.com/nsalerni/mojo-tls
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Strict TLS 1.2 and TLS 1.3 streams for Mojo
+  repository: https://github.com/nsalerni/mojo-tls
+
+extra:
+  maintainers:
+    - nsalerni
+  project_name: mojo-tls
