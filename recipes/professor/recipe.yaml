@@ -8,12 +8,13 @@ package:
 
 source:
   - git: https://github.com/gsmyridis/professor.git
-    rev: a1de3dc427efcfcfc2f9be45686dd81632b49a32
+    rev: d9ba0f75f803ee49ba85d29981f765ec9dbf782c
 
 build:
-  number: 0
+  number: 2
   script:
-    - mojo precompile src/professor -o ${{ PREFIX }}/lib/mojo/professor.mojoc
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - cp -R src/professor ${{ PREFIX }}/lib/mojo/
 
 requirements:
   build:
@@ -27,10 +28,10 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run test_package.mojo
+          - mojo run test.mojo
     files:
       recipe:
-        - tests/package/test.mojo
+        - test.mojo
 
 about:
   homepage: https://github.com/gsmyridis/professor
