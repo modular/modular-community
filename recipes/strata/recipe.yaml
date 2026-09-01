@@ -1,5 +1,5 @@
 context:
-  version: "0.1.0"
+  version: "0.1.1"
   mojo_version: "=1.0.0"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/Strata.git
-    rev: ac9b0d12af65369d3d133b0a684c277122bb6cee
+    rev: 59ee76d1860843ef3fc6356ed316b70f4ce0b08c
 
 build:
   number: 0
@@ -22,9 +22,11 @@ requirements:
   host:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
+    - libblas
   run:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
+    - libblas
     - python >=3.10
     - numpy
     - scipy
