@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/Strata.git
-    rev: 8b1ede199d750c18d361da5264b38bf3b05f24f8
+    rev: ac9b0d12af65369d3d133b0a684c277122bb6cee
 
 build:
   number: 0
