@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/Strata.git
-    rev: ac9b0d12af65369d3d133b0a684c277122bb6cee
+    rev: 4b1c043462517252dce552c6965c8c63d15a50c6
 
 build:
   number: 0
@@ -22,9 +22,11 @@ requirements:
   host:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
+    - libblas
   run:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
+    - libblas
     - python >=3.10
     - numpy
     - scipy
