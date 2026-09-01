@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   script:
-    - mojo package strata -o ${{ PREFIX }}/lib/mojo/strata.mojoc
+    - mojo package strata -o ${{ PREFIX }}/lib/mojo/strata.mojopkg
 
 requirements:
   build:
