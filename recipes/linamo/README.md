@@ -9,7 +9,7 @@ Linear algebra for Mojo, specialized for two-dimensional matrices.
 [![pixi](https://img.shields.io/badge/pixi%20add-linamo-purple)](https://prefix.dev/channels/modular-community/packages/linamo)
 [![CI](https://img.shields.io/github/actions/workflow/status/mojomath/linamo/run_tests.yaml?branch=main&label=tests)](https://github.com/mojomath/linamo/actions/workflows/run_tests.yaml)
 
-**[Manual»](docs/MANUAL.md)** | **[Repository»](https://github.com/mojomath/linamo)** | **[Discord»](https://discord.gg/3rGH87uZTk)**
+**[Manual»](docs/MANUAL.md)** | **[Changelog»](docs/CHANGELOG.md)** | **[Repository»](https://github.com/mojomath/linamo)** | **[Discord»](https://discord.gg/3rGH87uZTk)**
 
 ## Overview
 
@@ -21,6 +21,20 @@ for **linear algebra** workflows in Mojo.
 | `Matrix`       | A 2-dimensional matrix type        |
 | `MatrixView`   | A non-owning view of `Matrix`      |
 | `StaticMatrix` | A matrix with a compile-time shape |
+
+Each is parameterised on an element **type** rather than a `DType`, so the same
+operators and routines run over fixed-width numbers and over exact ones:
+
+| Element type            | Information                                            |
+| ----------------------- | ------------------------------------------------------ |
+| `Float64`, `Int32`, ... | Any Mojo scalar, through SIMD kernels                  |
+| `BInt`                  | Arbitrary-precision integer, with no width to overflow |
+| `Decimal`, `Dec128`     | Base-ten decimals, so `0.1 + 0.2` is `0.3`             |
+
+`la.matrix[Float64]` and `la.matrix[BInt]` differ only in the brackets. The
+exact types come from [Decimo](https://github.com/forfudan/decimo) and are
+re-exported, so reaching for one costs no second import -- see
+[Arbitrary-precision elements](#arbitrary-precision-elements).
 
 The name **Linamo** is **LIN**ear + **A**lgebra + **MO**jo: the field it
 covers, and the language it is written in. It can also be read as
@@ -40,22 +54,23 @@ If you need multi-dimensional arrays, consider the
 Below are some differences between **Linamo** (this package) and **NuMojo** (a
 general-purpose multi-dimensional array library):
 
-| Feature                  | **Linamo**                                | **NuMojo**                                         |
-| ------------------------ | ----------------------------------------- | -------------------------------------------------- |
-| **Primary goal**         | Linear algebra & matrix computation       | General-purpose ndarray / tensor computing         |
-| **Supported dimensions** | 2D only (matrices)                        | Arbitrary dimensions (N-D arrays)                  |
-| **Core abstraction**     | Matrix as a mathematical object           | N-dimensional array container                      |
-| **Target domain**        | BLAS / LAPACK style workflows             | NumPy-style scientific computing                   |
-| **Storage model**        | Matrix-specific storage (row/col strides) | Generic strided N-D storage                        |
-| **Static shapes**        | First-class support (compile-time sizes)  | Not a primary focus                                |
-| **View semantics**       | Safe read-only + mutable views            | General slicing & broadcasting                     |
-| **Indexing model**       | Strict matrix indexing (row, col)         | N-dimensional indexing                             |
-| **Negative indexing**    | Not supported (explicit & safe)           | Typically supported                                |
-| **Broadcasting**         | Minimal / linear-algebra oriented         | Full NumPy-style broadcasting                      |
-| **Specialized kernels**  | Matmul / decompositions / solvers         | Elementwise & tensor ops                           |
-| **Performance focus**    | SIMD & BLAS-style kernels                 | Generic tensor operations                          |
-| **API philosophy**       | Mathematical clarity & safety             | Flexibility & generality                           |
-| **Typical use cases**    | Solvers, decompositions, linear algebra   | Scientific computing, ML preprocessing, tensor ops |
+| Feature                  | **Linamo**                                                   | **NuMojo**                                         |
+| ------------------------ | ------------------------------------------------------------ | -------------------------------------------------- |
+| **Primary goal**         | Linear algebra & matrix computation                          | General-purpose ndarray / tensor computing         |
+| **Supported dimensions** | 2D only (matrices)                                           | Arbitrary dimensions (N-D arrays)                  |
+| **Core abstraction**     | Matrix as a mathematical object                              | N-dimensional array container                      |
+| **Element types**        | Any Mojo scalar, plus arbitrary-precision `BInt` / `Decimal` | `DType` scalars (`NDArray[dtype: DType]`)          |
+| **Target domain**        | BLAS / LAPACK style workflows                                | NumPy-style scientific computing                   |
+| **Storage model**        | Matrix-specific storage (row/col strides)                    | Generic strided N-D storage                        |
+| **Static shapes**        | First-class support (compile-time sizes)                     | Not a primary focus                                |
+| **View semantics**       | Safe read-only + mutable views                               | General slicing & broadcasting                     |
+| **Indexing model**       | Strict matrix indexing (row, col)                            | N-dimensional indexing                             |
+| **Negative indexing**    | Not supported (explicit & safe)                              | Typically supported                                |
+| **Broadcasting**         | Minimal / linear-algebra oriented                            | Full NumPy-style broadcasting                      |
+| **Specialized kernels**  | Matmul / decompositions / solvers                            | Elementwise & tensor ops                           |
+| **Performance focus**    | SIMD & BLAS-style kernels                                    | Generic tensor operations                          |
+| **API philosophy**       | Mathematical clarity & safety                                | Flexibility & generality                           |
+| **Typical use cases**    | Solvers, decompositions, linear algebra                      | Scientific computing, ML preprocessing, tensor ops |
 
 ## Goals
 
@@ -123,7 +138,7 @@ pixi run test
 ```
 
 A program outside the repository compiles against the source tree with the
-source directory on the import path, and Decimo beside it:
+source directory on the import path, and `temp/` beside it:
 
 ```bash
 LINAMO=/path/to/linamo
@@ -138,10 +153,14 @@ pixi run pack                                     # writes tests/linamo.mojoc
 mojo run -I $LINAMO/tests -I $LINAMO/temp my_program.mojo
 ```
 
-`temp/` is on both lines because Decimo is not optional: the matrix types name
-`decimo.Numeric`, so no part of Linamo compiles without it. `pixi run decimo`
-resolves and precompiles it there, and every pixi task in this repository
-depends on that step, so inside the checkout it needs no separate command.
+Decimo is not optional --- the matrix types name `decimo.Numeric`, so no part
+of Linamo compiles without it --- but it is an ordinary workspace dependency,
+so `pixi install` puts it on the import path and `temp/` is normally empty.
+`pixi run decimo` is what confirms that, and it is also the escape hatch: set
+`DECIMO_PATH` to a local checkout, or `LINAMO_DECIMO=git` to build the pinned
+upstream commit, and it precompiles Decimo into `temp/`, which is why `-I temp`
+is on both lines above. Every pixi task in this repository depends on that
+step, so inside the checkout it needs no separate command.
 
 ## Quick start
 
@@ -195,25 +214,55 @@ def main() raises:
 
 A matrix is parameterised on an element *type*, so
 [Decimo](https://github.com/forfudan/decimo)'s exact numbers go in the brackets
-where `Float64` would. The operators and routines are the same names; only the
-arithmetic underneath differs.
+where `Float64` would. The operators and routines keep their names; only the
+arithmetic underneath differs. What changes is the range: `BInt` has no width
+to overflow, and `Decimal` is base ten, so a decimal fraction is stored as
+written.
 
 ```mojo
-import linamo as la
-from linamo import BInt, Decimal
+import linamo as la          # the element types come with it: la.BInt, la.Decimal
 
 def main() raises:
-    var a = la.matrix[BInt]([[1, 2], [3, 4]])
-    print(a @ a)                 # matrix multiplication, exact
-    print(la.trace(a))
+    # The Fibonacci matrix to the 100th power carries F(101) in its corner:
+    # 21 digits, where `Int64` runs out at 19. `**` climbs by repeated
+    # squaring, so this is nine matrix products rather than a hundred.
+    var fib = la.matrix[la.BInt]([[1, 1], [1, 0]])
+    print((fib**100)[0, 0])      # 573147844013817084101
 
-    var prices = la.matrix[Decimal]([[Decimal("0.1"), Decimal("0.2")]])
-    print(la.sum(prices))        # 0.3, which binary floating point cannot say
+    # A product outgrows the entries it came from, and every digit is kept.
+    var big = la.from_string[la.BInt](
+        "[[123456789012345678901234567890, 2],"
+        + " [3, 987654321098765432109876543210]]"
+    )
+    print((big @ big)[0, 0])     # all 59 digits of it, exactly:
+    # 15241578753238836750495351562536198787501905199875019052106
 
-    # Elimination runs over a decimal element too: `lu`, `det`, `solve`, `inv`.
-    var m = la.from_string[Decimal]("[[4, 7], [2, 6]]")
-    print(la.inv(m))             # 0.6 -0.7 / -0.2 0.4, to the type's precision
+    # Decimals add without drift. In `Float64` this same sum comes to
+    # 0.9999999999999999.
+    print(la.sum(la.full[la.Decimal](1, 10, la.Decimal("0.1"))))  # 1.0
 ```
+
+The gain is not only tidier output. `0.1 * 0.6 - 0.2 * 0.3` is exactly zero,
+so the matrix below is singular --- but in binary floating point the
+determinant misses zero by one rounding step, `inv` believes it, and what
+comes back is not an inverse of anything:
+
+```mojo
+    var f = la.matrix[Float64]([[0.1, 0.2], [0.3, 0.6]])
+    print(la.det(f))             # 1.1102230246251562e-18, not 0.0
+    print(la.inv(f))             # entries around 5e17 --- nonsense, unflagged
+
+    # The same elimination over `Decimal` reaches zero exactly and stops.
+    var d = la.from_string[la.Decimal]("[[0.1, 0.2], [0.3, 0.6]]")
+    print(la.inv(d))             # ValueError: Coefficient matrix A is singular.
+```
+
+`Decimal` is the element type to reach for there. The routines that run
+elimination --- `lu`, `det`, `solve`, `inv`, `lstsq` --- divide, so they mean
+whatever `/` means on the element type: over `Decimal` that is a quotient at
+the type's precision, but over `BInt` it truncates, and elimination then
+returns whole numbers that are not the answer without raising. The
+[manual](docs/MANUAL.md#arbitrary-precision-elements) has the details.
 
 ### Linear algebra
 
@@ -250,12 +299,12 @@ linamo
 ├── src/linamo
 │   ├── __init__.mojo            # the public surface: `import linamo as la`
 │   ├── prelude.mojo
+│   ├── errors.mojo              # the error kinds, re-exported from decimo
 │   ├── types/
 │   │   ├── matrix.mojo          # Dynamic Matrix (row/col-major)
 │   │   ├── matrix_view.mojo     # Non-owning view with slicing
 │   │   ├── matrix_iter.mojo     # Row and column iterators
-│   │   ├── static_matrix.mojo   # Compile-time sized Matrix
-│   │   └── errors.mojo          # ValueError, IndexError, etc.
+│   │   └── static_matrix.mojo   # Compile-time sized Matrix
 │   ├── routines/
 │   │   ├── creation.mojo        # matrix, zeros, ones, full, eye, diag, arange, linspace, *_like, from_string
 │   │   ├── math.mojo            # add, sub, mul, div, matmul, scalar ops, min, max, prod
@@ -277,7 +326,7 @@ linamo
 │       ├── test_utils.mojo      # assert_matrices_equal / _close
 │       ├── indexing.mojo
 │       └── str.mojo
-├── docs/                        # MANUAL.md (the full tour), ROADMAP.md
+├── docs/                        # MANUAL.md (the full tour), CHANGELOG.md, ROADMAP.md
 ├── examples/                    # runnable, one per public type
 ├── tools/
 │   └── ensure_decimo.sh         # resolves and precompiles the decimo dependency
@@ -295,10 +344,11 @@ linamo
 - Mojo `>=1.0.0,<1.1.0`
 - MAX `>=26.5.0,<26.6` — supplies `parallelize()`, which moved out of the Mojo
   standard library in 1.0.0
-- [Decimo](https://github.com/forfudan/decimo) — supplies the `Numeric` trait
-  the matrix types are written against. `pixi run decimo` resolves and
-  precompiles it; `pixi run test`, `examples` and `pack` depend on that task,
-  so it needs no separate step
+- [Decimo](https://github.com/forfudan/decimo) `>=0.13.0,<0.14` — supplies the
+  `Numeric` and `Parsable` traits the matrix types are written against, and the
+  error kinds in `linamo.errors`. It is a workspace dependency, so `pixi
+  install` brings it in; `pixi run decimo` resolves it and is the hook for
+  building against a local or unreleased Decimo instead
 
 ## License
 

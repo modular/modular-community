@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/mojomath/linamo.git
-    rev: 03a2246d982832427a3f27da65152b6ff863a796
+    rev: 630ef165a743214211fe99e17a39a973ac407cf6
 
 build:
   number: 0
