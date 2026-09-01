@@ -1,5 +1,5 @@
 context:
-  version: "0.1.0"
+  version: "0.2.0"
 
 package:
   name: crypto
@@ -7,18 +7,18 @@ package:
 
 source:
   - git: https://github.com/lczerniawski/crypto.git
-    rev: 3f537eba59563066c2eeb206da4c26405d8b66ab
+    rev: 86b28833b85cbfa050df8eb8b582958cbf6b6f6f
 
 build:
   number: 0
   script:
-    - mojo package src/crypto -o ${{ PREFIX }}/lib/mojo/crypto.mojopkg
+    - mojo precompile src/crypto -o ${{ PREFIX }}/lib/mojo/crypto.mojoc
 
 requirements:
   build:
-    - mojo-compiler =1.0.0b1
+    - mojo-compiler =1.0.0
   host:
-    - mojo-compiler =1.0.0b1
+    - mojo-compiler =1.0.0
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 

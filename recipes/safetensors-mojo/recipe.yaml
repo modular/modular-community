@@ -1,0 +1,50 @@
+context:
+  version: "0.5.0"
+
+package:
+  name: safetensors-mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/egor-fedorov/safetensors.mojo.git
+    rev: 1dd3450d02a39b4b8b5cfee01e82c88743bec72b
+
+build:
+  number: 0
+  skip:
+    - osx
+    - linux and aarch64
+  script:
+    - mkdir -p "${PREFIX}/lib/mojo"
+    - mojo precompile src/safetensors -o "${PREFIX}/lib/mojo/safetensors.mojoc"
+    - rm -f "${PREFIX}/share/max/firstActivation"
+
+requirements:
+  build:
+    - mojo-compiler =1.0.0
+  host:
+    - mojo-compiler =1.0.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - test -f "${PREFIX}/lib/mojo/safetensors.mojoc"
+          - mojo run test_package.mojo
+    files:
+      recipe:
+        - test_package.mojo
+
+about:
+  homepage: https://github.com/egor-fedorov/safetensors.mojo
+  repository: https://github.com/egor-fedorov/safetensors.mojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: An independent Safetensors format implementation for Mojo with checked validation
+
+extra:
+  maintainers:
+    - egor-fedorov
+  project_name: safetensors.mojo

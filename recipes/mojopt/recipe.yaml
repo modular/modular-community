@@ -1,22 +1,21 @@
 context:
-  version: "0.23.0"
+  version: "0.4.0"
   mojo_version: "=1.0.0"
 
 package:
-  name: "extramojo"
+  name: "mojopt"
   version: ${{ version }}
 
 source:
-  - git: https://github.com/ExtraMojo/ExtraMojo.git
-    rev: b9d8ee5479f02c007e4d92700e5242928afbd0d8
-  # path: .
-  # use_gitignore: true
+  - git: https://github.com/sstadick/mojopt.git
+    rev: ab4c985b3a6e944b934d55b3dee12a1b8f64b0b2
 
 build:
   number: 0
   script:
     - mkdir -p "${PREFIX}/lib/mojo"
-    - mojo precompile extramojo -o "${PREFIX}/lib/mojo/extramojo.mojoc"
+    - mojo precompile mojopt -o "${PREFIX}/lib/mojo/mojopt.mojoc"
+
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
@@ -33,9 +32,9 @@ tests:
             set -u
             target_features=""
             if [ "$(uname -m)" = "x86_64" ]; then
-              # Mojo 1.0.0's default znver4 target enables AVX-512 on GitHub's
-              # linux-64 runner, whose exposed CPU flags do not include AVX-512.
-              target_features="--target-features -avx512bf16,-avx512bitalg,-avx512bw,-avx512cd,-avx512dq,-avx512f,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vl,-avx512vnni,-avx512vpopcntdq"
+              # GitHub AMD runners can select AVX-512 features that the host
+              # does not expose.
+              target_features="--target-features=-avx512f,-avx512bw,-avx512cd,-avx512dq,-avx512vl,-avx512ifma,-avx512vbmi,-avx512vbmi2,-avx512vnni,-avx512bitalg,-avx512vpopcntdq,-avx512fp16,-avx512bf16"
             fi
             for test in $(find ./tests -name 'test_*.mojo' | sort); do
               echo "Running ${test} with mojo run"
@@ -51,15 +50,15 @@ tests:
         - tests/
 
 about:
-  homepage: https://github.com/ExtraMojo/ExtraMojo
+  homepage: https://github.com/sstadick/mojopt
   license: "Unlicense OR MIT"
   license_file:
     - LICENSE-MIT
     - UNLICENSE
-  summary: Extra functionality not yet in the standard library, mostly focused on strings and file IO.
-  repository: https://github.com/ExtraMojo/ExtraMojo
+  summary: A Mojo library for parsing CLI arguments using struct definitions.
+  repository: https://github.com/sstadick/mojopt
 
 extra:
   maintainers:
     - sstadick
-  project_name: extramojo
+  project_name: mojopt
