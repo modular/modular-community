@@ -1,5 +1,5 @@
 context:
-  version: "0.1.1"
+  version: "0.1.2"
 
 package:
   name: mojo-window
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Maelkiz/mojo-window.git
-    rev: a23dd5d1c7dbfc54a474e6687cb5fc549b7eec65
+    rev: 6cadecebd26ec65204c8adc21da0a17783f303e6
 
 build:
   number: 0
