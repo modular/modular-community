@@ -1,0 +1,41 @@
+context:
+  version: "0.2.0"
+  mojo_version: ">=1.0.0,<2"
+  hdf5_version: "2.1.0"
+
+package:
+  name: "hdf5-mojo"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/shivasankarka/hdf5-mojo.git
+    rev: c72216992beced69cfc2557d59207bfca629dfd0
+
+build:
+  number: 0
+  script:
+      - mojo precompile hdf5 -o ${{ PREFIX }}/lib/mojo/hdf5.mojoc
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - hdf5 ==${{ hdf5_version }}
+    - numojo
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - hdf5 ==${{ hdf5_version }}
+    - numojo
+
+about:
+  homepage: https://github.com/shivasankarka/hdf5-mojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: High-level HDF5 bindings for Mojo, exposing an h5py-compatible API over the HDF5 C library.
+  repository: https://github.com/shivasankarka/hdf5-mojo
+
+extra:
+  project_name: hdf5-mojo
+  maintainers:
+    - shivasankarka
