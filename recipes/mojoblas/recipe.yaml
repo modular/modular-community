@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/shivasankarka/mojoBLAS.git
-    rev: a3e166320716cecd5872c27165d9cef5e3d705a7
+    rev: f18ae33809e7034698ac2aa3adad2f0195087289
 
 build:
   number: 0

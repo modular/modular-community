@@ -29,49 +29,114 @@ The codebase is currently optimized for real scalar data types through Mojo `DTy
 - Pixi
 - Mojo `>=1.0.0,<2`
 
-### Modular community
-`mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository. Add the following to your `channels` list in your `pixi.toml` file:
+mojoBLAS offers several installation methods to suit different development needs. Choose the method that best fits your workflow:
 
-```toml
-channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
-```
+### Method 1: Git Installation with pixi-build-mojo (Recommended)
 
-Then, you can install `mojoBLAS` using any of these methods:
+Install mojoBLAS directly from the GitHub repository to access both stable releases and cutting-edge features. This method is perfect for developers who want the latest functionality or need to work with the most recent stable version.
 
-1. From the `pixi` CLI, run the command ```pixi add mojoblas```.
-
-2. In the `pixi.toml` file of your project, add the following dependency:
-    ```toml
-    mojoblas = "==0.2.0"
-    ```
-Then run `pixi install` to download and install the package.
-
-### Use as a dependency
-
-Add the repository to your `pixi.toml`:
+Add the following to your existing `pixi.toml`:
 
 ```toml
 [workspace]
 preview = ["pixi-build"]
 
+[package]
+name = "your_project_name"
+version = "0.1.0"
+
+[package.build]
+backend = {name = "pixi-build-mojo", version = "0.*"}
+
+[package.build.config.pkg]
+name = "your_package_name"
+
+[package.host-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+
+[package.build-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
+
+[package.run-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
+
 [dependencies]
 mojo = ">=1.0.0,<2"
+max-core = ">=26.5.0,<27"
 mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
 ```
 
 Then run:
-
 ```bash
 pixi install
 ```
 
-### Clone locally
+The package will be automatically available in your Pixi environment, and VSCode LSP will provide intelligent code hints.
 
+### Method 2: Stable Release via Pixi (prefix.dev)
+
+For most users, we recommend installing a stable release through Pixi for guaranteed compatibility and reproducibility. `mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository.
+
+Add the following to your `pixi.toml` file:
+
+```toml
+[workspace]
+channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+
+[dependencies]
+mojoblas = "==0.2.0"
+```
+
+Then run:
 ```bash
-git clone https://github.com/shivasankarka/mojoBLAS.git
-cd mojoBLAS
 pixi install
 ```
+
+Or, from the `pixi` CLI, run `pixi add mojoblas` in a project whose `channels` already include `https://repo.prefix.dev/modular-community`.
+
+### Method 3: Build Standalone Package
+
+This method creates a portable `mojoblas.mojoc` file that you can use across multiple projects, perfect for offline development or hermetic builds.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/shivasankarka/mojoBLAS.git
+   cd mojoBLAS
+   ```
+
+2. Build the package:
+   ```bash
+   pixi run package
+   ```
+
+3. Copy `mojoblas.mojoc` to your project directory or add its parent directory to your include paths.
+
+### Method 4: Direct Source Integration
+
+For maximum flexibility and the ability to modify mojoBLAS source code during development:
+
+1. Clone the repository to your desired location:
+   ```bash
+   git clone https://github.com/shivasankarka/mojoBLAS.git
+   ```
+
+2. When compiling your code, include the mojoBLAS source path:
+   ```bash
+   mojo run -I "/path/to/mojoBLAS" your_program.mojo
+   ```
+
+3. **VSCode LSP Setup** (for code hints and autocompletion):
+   - Open VSCode preferences
+   - Navigate to `Mojo › Lsp: Include Dirs`
+   - Click `Add Item` and enter the full path to your mojoBLAS directory (e.g., `/Users/YourName/Projects/mojoBLAS`)
+   - Restart the Mojo LSP server
+
+After setup, VSCode will provide intelligent code completion and hints for mojoBLAS functions!
 
 ## Usage
 
