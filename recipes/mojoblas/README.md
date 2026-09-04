@@ -31,7 +31,28 @@ The codebase is currently optimized for real scalar data types through Mojo `DTy
 
 mojoBLAS offers several installation methods to suit different development needs. Choose the method that best fits your workflow:
 
-### Method 1: Git Installation with pixi-build-mojo (Recommended)
+### Method 1: Stable Release via Pixi (prefix.dev) (Recommended)
+
+For most users, we recommend installing a stable release through Pixi for guaranteed compatibility and reproducibility. `mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository.
+
+Add the following to your `pixi.toml` file:
+
+```toml
+[workspace]
+channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+
+[dependencies]
+mojoblas = "==0.2.0"
+```
+
+Then run:
+```bash
+pixi install
+```
+
+Or, from the `pixi` CLI, run `pixi add mojoblas` in a project whose `channels` already include `https://repo.prefix.dev/modular-community`.
+
+### Method 2: Git Installation with pixi-build-mojo
 
 Install mojoBLAS directly from the GitHub repository to access both stable releases and cutting-edge features. This method is perfect for developers who want the latest functionality or need to work with the most recent stable version.
 
@@ -77,27 +98,6 @@ pixi install
 ```
 
 The package will be automatically available in your Pixi environment, and VSCode LSP will provide intelligent code hints.
-
-### Method 2: Stable Release via Pixi (prefix.dev)
-
-For most users, we recommend installing a stable release through Pixi for guaranteed compatibility and reproducibility. `mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository.
-
-Add the following to your `pixi.toml` file:
-
-```toml
-[workspace]
-channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
-
-[dependencies]
-mojoblas = "==0.2.0"
-```
-
-Then run:
-```bash
-pixi install
-```
-
-Or, from the `pixi` CLI, run `pixi add mojoblas` in a project whose `channels` already include `https://repo.prefix.dev/modular-community`.
 
 ### Method 3: Build Standalone Package
 
