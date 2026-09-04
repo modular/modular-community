@@ -1,0 +1,45 @@
+context:
+  version: "0.1.2"
+
+package:
+  name: mojo-window
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Maelkiz/mojo-window.git
+    rev: 6cadecebd26ec65204c8adc21da0a17783f303e6
+
+build:
+  number: 0
+  script:
+    - mojo precompile src/window -o ${{ PREFIX }}/lib/mojo/window.mojoc
+
+requirements:
+  build:
+    - mojo-compiler =1.0.0
+  host:
+    - mojo-compiler =1.0.0
+    - sdl3 >=3.4,<4
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+    - sdl3 >=3.4,<4
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/Maelkiz/mojo-window
+  repository: https://github.com/Maelkiz/mojo-window
+  license: MIT
+  license_file: LICENSE
+  summary: SDL3-based windowing library for Mojo
+
+extra:
+  maintainers:
+    - Maelkiz
