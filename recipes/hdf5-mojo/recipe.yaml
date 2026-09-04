@@ -14,7 +14,8 @@ source:
 build:
   number: 0
   script:
-      - mojo precompile hdf5 -o ${{ PREFIX }}/lib/mojo/hdf5.mojoc
+      - mkdir -p ${{ PREFIX }}/lib/mojo
+      - mojo precompile -I ${{ PREFIX }}/lib/mojo hdf5 -o ${{ PREFIX }}/lib/mojo/hdf5.mojoc
 
 requirements:
   host:
