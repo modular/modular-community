@@ -14,7 +14,8 @@ source:
 build:
   number: 0
   script:
-      - mojo precompile numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojoc
+      - mkdir -p ${{ PREFIX }}/lib/mojo
+      - mojo precompile -I ${{ PREFIX }}/lib/mojo numojo -o ${{ PREFIX }}/lib/mojo/numojo.mojoc
 
 requirements:
   host:
