@@ -7,7 +7,7 @@
 
 A high-performance **BLAS (Basic Linear Algebra Subprograms)** implementation written in [Mojo](https://modular.com/mojo).
 
-[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0-orange)](https://docs.modular.com/mojo/manual/)
 [![Tests](https://img.shields.io/badge/tests-level1%2F2%2F3-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -27,7 +27,7 @@ The codebase is currently optimized for real scalar data types through Mojo `DTy
 ### Prerequisites
 
 - Pixi
-- Mojo `>=1.0.0b1,<2`
+- Mojo `>=1.0.0,<2`
 
 ### Modular community
 `mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository. Add the following to your `channels` list in your `pixi.toml` file:
@@ -42,7 +42,7 @@ Then, you can install `mojoBLAS` using any of these methods:
 
 2. In the `pixi.toml` file of your project, add the following dependency:
     ```toml
-    mojoblas = "==0.1.0"
+    mojoblas = "==0.2.0"
     ```
 Then run `pixi install` to download and install the package.
 
@@ -55,7 +55,7 @@ Add the repository to your `pixi.toml`:
 preview = ["pixi-build"]
 
 [dependencies]
-mojo = ">=1.0.0b1,<2"
+mojo = ">=1.0.0,<2"
 mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
 ```
 
@@ -78,26 +78,27 @@ pixi install
 ### Basic example
 
 ```mojo
-from mojoblas.src.level1 import dot, axpy, nrm2
+from std.memory.alloc import unsafe_alloc
+from mojoblas.level1 import dot, axpy, nrm2
 
-fn main():
-    var x = alloc[Float32](3)
-    var y = alloc[Float32](3)
+def main():
+    var x = unsafe_alloc[Scalar[DType.float32]](3)
+    var y = unsafe_alloc[Scalar[DType.float32]](3)
 
-    x[0] = 1.0
-    x[1] = 2.0
-    x[2] = 3.0
-    y[0] = 4.0
-    y[1] = 5.0
-    y[2] = 6.0
+    x[unsafe_offset=0] = 1.0
+    x[unsafe_offset=1] = 2.0
+    x[unsafe_offset=2] = 3.0
+    y[unsafe_offset=0] = 4.0
+    y[unsafe_offset=1] = 5.0
+    y[unsafe_offset=2] = 6.0
 
     print(dot(3, x, 1, y, 1))
-    axpy(3, 2.0, x, 1, y, 1)
-    print(y[0], y[1], y[2])
+    axpy(3, Float32(2.0), x, 1, y, 1)
+    print(y[unsafe_offset=0], y[unsafe_offset=1], y[unsafe_offset=2])
     print(nrm2(3, x, 1))
 
-    x.free()
-    y.free()
+    x.unsafe_free()
+    y.unsafe_free()
 ```
 
 ### Available routines
@@ -132,7 +133,7 @@ pixi run -e bench bench_all
 
 ## Project structure
 
-- `src/` - Mojo source for BLAS implementations
+- `mojoblas/` - Mojo source for BLAS implementations
 - `tests/` - Mojo tests and reference data
 - `benchmarks/` - benchmark scripts and plots
 - `docs/` - Reference documentation.
@@ -152,13 +153,17 @@ pixi run -e bench bench_all
 - [ ] Complex number support
 - [ ] GPU acceleration
 
+## Changelog
+
+See [docs/CHANGELOG.md](https://github.com/shivasankarka/mojoBLAS/blob/main/docs/CHANGELOG.md) for release notes.
+
 ## Contributing
 
 Contributions are welcome. If you find a bug or performance issue, please open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License. See [LICENSE](https://github.com/shivasankarka/mojoBLAS/blob/main/LICENSE) for details.
 
 ## Acknowledgments
 
