@@ -1,0 +1,81 @@
+context:
+  name: polars-mojo
+  version: "0.1.0"
+  mojo_version: "=1.0.0"
+
+package:
+  name: ${{ name }}
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/ethqnol/polars-mojo.git
+    rev: f767f7ba56f6805365af4a4915f2d61352e8a8f8
+
+build:
+  number: 0
+  script:
+    - cargo build --release
+    - |
+      TARGET_DIR="target/${CARGO_BUILD_TARGET:-}/release"
+      if [ ! -f "$TARGET_DIR/libpolars_ffi.so" ]; then
+        TARGET_DIR="target/release"
+      fi
+      mkdir -p ${{ PREFIX }}/lib
+      cp "$TARGET_DIR/libpolars_ffi.so" ${{ PREFIX }}/lib/
+      cp "$TARGET_DIR/libpolars_ffi.a" ${{ PREFIX }}/lib/
+
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile molars -o ${{ PREFIX }}/lib/mojo/molars.mojoc
+    - cp -r molars ${{ PREFIX }}/lib/mojo/molars
+
+    - mkdir -p ${{ PREFIX }}/etc/conda/activate.d ${{ PREFIX }}/etc/conda/deactivate.d
+    - |
+      cat << 'EOF' > ${{ PREFIX }}/etc/conda/activate.d/molars.sh
+      export _MOLARS_OLD_LIBRARY_PATH="${LIBRARY_PATH:-}"
+      export _MOLARS_OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
+      export LIBRARY_PATH="${CONDA_PREFIX}/lib${LIBRARY_PATH:+:${LIBRARY_PATH}}"
+      export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+      EOF
+    - |
+      cat << 'EOF' > ${{ PREFIX }}/etc/conda/deactivate.d/molars.sh
+      if [ -n "${_MOLARS_OLD_LIBRARY_PATH+x}" ]; then
+          export LIBRARY_PATH="${_MOLARS_OLD_LIBRARY_PATH}"
+          unset _MOLARS_OLD_LIBRARY_PATH
+      fi
+      if [ -n "${_MOLARS_OLD_LD_LIBRARY_PATH+x}" ]; then
+          export LD_LIBRARY_PATH="${_MOLARS_OLD_LD_LIBRARY_PATH}"
+          unset _MOLARS_OLD_LD_LIBRARY_PATH
+      fi
+      EOF
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('rust') }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - package_contents:
+      files:
+        - lib/libpolars_ffi.so
+        - lib/libpolars_ffi.a
+        - lib/mojo/molars.mojoc
+  - files:
+      source:
+        - tests/
+    script:
+      - mojo run -I $PREFIX/lib/mojo -Xlinker -L$PREFIX/lib -Xlinker -lpolars_ffi tests/test_arrow_abi.mojo
+      - mojo run -I $PREFIX/lib/mojo -Xlinker -L$PREFIX/lib -Xlinker -lpolars_ffi tests/test_dataframe.mojo
+
+about:
+  homepage: https://github.com/ethqnol/polars-mojo
+  author: ethqnol # Ethan Wu
+  license: MIT
+  license_file: LICENSE
+  summary: Polars DataFrame bindings for Mojo via Arrow C Data Interface
+
+
+
