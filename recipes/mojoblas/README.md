@@ -7,7 +7,7 @@
 
 A high-performance **BLAS (Basic Linear Algebra Subprograms)** implementation written in [Mojo](https://modular.com/mojo).
 
-[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0-orange)](https://docs.modular.com/mojo/manual/)
 [![Tests](https://img.shields.io/badge/tests-level1%2F2%2F3-brightgreen)]()
 [![License](https://img.shields.io/badge/license-MIT-blue)](LICENSE)
 
@@ -27,77 +27,143 @@ The codebase is currently optimized for real scalar data types through Mojo `DTy
 ### Prerequisites
 
 - Pixi
-- Mojo `>=1.0.0b1,<2`
+- Mojo `>=1.0.0,<2`
 
-### Modular community
-`mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository. Add the following to your `channels` list in your `pixi.toml` file:
+mojoBLAS offers several installation methods to suit different development needs. Choose the method that best fits your workflow:
+
+### Method 1: Stable Release via Pixi (prefix.dev) (Recommended)
+
+For most users, we recommend installing a stable release through Pixi for guaranteed compatibility and reproducibility. `mojoBLAS` is available in the modular-community `https://repo.prefix.dev/modular-community` package repository.
+
+Add the following to your `pixi.toml` file:
 
 ```toml
+[workspace]
 channels = ["https://conda.modular.com/max", "https://repo.prefix.dev/modular-community", "conda-forge"]
+
+[dependencies]
+mojoblas = "==0.2.0"
 ```
 
-Then, you can install `mojoBLAS` using any of these methods:
+Then run:
+```bash
+pixi install
+```
 
-1. From the `pixi` CLI, run the command ```pixi add mojoblas```.
+Or, from the `pixi` CLI, run `pixi add mojoblas` in a project whose `channels` already include `https://repo.prefix.dev/modular-community`.
 
-2. In the `pixi.toml` file of your project, add the following dependency:
-    ```toml
-    mojoblas = "==0.1.0"
-    ```
-Then run `pixi install` to download and install the package.
+### Method 2: Git Installation with pixi-build-mojo
 
-### Use as a dependency
+Install mojoBLAS directly from the GitHub repository to access both stable releases and cutting-edge features. This method is perfect for developers who want the latest functionality or need to work with the most recent stable version.
 
-Add the repository to your `pixi.toml`:
+Add the following to your existing `pixi.toml`:
 
 ```toml
 [workspace]
 preview = ["pixi-build"]
 
+[package]
+name = "your_project_name"
+version = "0.1.0"
+
+[package.build]
+backend = {name = "pixi-build-mojo", version = "0.*"}
+
+[package.build.config.pkg]
+name = "your_package_name"
+
+[package.host-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+
+[package.build-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
+
+[package.run-dependencies]
+mojo = "==1.0.0"
+max-core = "==26.5.0"
+mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
+
 [dependencies]
-mojo = ">=1.0.0b1,<2"
+mojo = ">=1.0.0,<2"
+max-core = ">=26.5.0,<27"
 mojoblas = { git = "https://github.com/shivasankarka/mojoBLAS.git", branch = "main" }
 ```
 
 Then run:
-
 ```bash
 pixi install
 ```
 
-### Clone locally
+The package will be automatically available in your Pixi environment, and VSCode LSP will provide intelligent code hints.
 
-```bash
-git clone https://github.com/shivasankarka/mojoBLAS.git
-cd mojoBLAS
-pixi install
-```
+### Method 3: Build Standalone Package
+
+This method creates a portable `mojoblas.mojoc` file that you can use across multiple projects, perfect for offline development or hermetic builds.
+
+1. Clone the repository:
+   ```bash
+   git clone https://github.com/shivasankarka/mojoBLAS.git
+   cd mojoBLAS
+   ```
+
+2. Build the package:
+   ```bash
+   pixi run package
+   ```
+
+3. Copy `mojoblas.mojoc` to your project directory or add its parent directory to your include paths.
+
+### Method 4: Direct Source Integration
+
+For maximum flexibility and the ability to modify mojoBLAS source code during development:
+
+1. Clone the repository to your desired location:
+   ```bash
+   git clone https://github.com/shivasankarka/mojoBLAS.git
+   ```
+
+2. When compiling your code, include the mojoBLAS source path:
+   ```bash
+   mojo run -I "/path/to/mojoBLAS" your_program.mojo
+   ```
+
+3. **VSCode LSP Setup** (for code hints and autocompletion):
+   - Open VSCode preferences
+   - Navigate to `Mojo › Lsp: Include Dirs`
+   - Click `Add Item` and enter the full path to your mojoBLAS directory (e.g., `/Users/YourName/Projects/mojoBLAS`)
+   - Restart the Mojo LSP server
+
+After setup, VSCode will provide intelligent code completion and hints for mojoBLAS functions!
 
 ## Usage
 
 ### Basic example
 
 ```mojo
-from mojoblas.src.level1 import dot, axpy, nrm2
+from std.memory.alloc import unsafe_alloc
+from mojoblas.level1 import dot, axpy, nrm2
 
-fn main():
-    var x = alloc[Float32](3)
-    var y = alloc[Float32](3)
+def main():
+    var x = unsafe_alloc[Scalar[DType.float32]](3)
+    var y = unsafe_alloc[Scalar[DType.float32]](3)
 
-    x[0] = 1.0
-    x[1] = 2.0
-    x[2] = 3.0
-    y[0] = 4.0
-    y[1] = 5.0
-    y[2] = 6.0
+    x[unsafe_offset=0] = 1.0
+    x[unsafe_offset=1] = 2.0
+    x[unsafe_offset=2] = 3.0
+    y[unsafe_offset=0] = 4.0
+    y[unsafe_offset=1] = 5.0
+    y[unsafe_offset=2] = 6.0
 
     print(dot(3, x, 1, y, 1))
-    axpy(3, 2.0, x, 1, y, 1)
-    print(y[0], y[1], y[2])
+    axpy(3, Float32(2.0), x, 1, y, 1)
+    print(y[unsafe_offset=0], y[unsafe_offset=1], y[unsafe_offset=2])
     print(nrm2(3, x, 1))
 
-    x.free()
-    y.free()
+    x.unsafe_free()
+    y.unsafe_free()
 ```
 
 ### Available routines
@@ -132,7 +198,7 @@ pixi run -e bench bench_all
 
 ## Project structure
 
-- `src/` - Mojo source for BLAS implementations
+- `mojoblas/` - Mojo source for BLAS implementations
 - `tests/` - Mojo tests and reference data
 - `benchmarks/` - benchmark scripts and plots
 - `docs/` - Reference documentation.
@@ -152,13 +218,17 @@ pixi run -e bench bench_all
 - [ ] Complex number support
 - [ ] GPU acceleration
 
+## Changelog
+
+See [docs/CHANGELOG.md](https://github.com/shivasankarka/mojoBLAS/blob/main/docs/CHANGELOG.md) for release notes.
+
 ## Contributing
 
 Contributions are welcome. If you find a bug or performance issue, please open an issue or submit a pull request.
 
 ## License
 
-This project is licensed under the MIT License. See [LICENSE](LICENSE) for details.
+This project is licensed under the MIT License. See [LICENSE](https://github.com/shivasankarka/mojoBLAS/blob/main/LICENSE) for details.
 
 ## Acknowledgments
 
