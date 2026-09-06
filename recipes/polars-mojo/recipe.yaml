@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/polars-mojo.git
-    rev: f767f7ba56f6805365af4a4915f2d61352e8a8f8
+    rev: b15b5032714bab441e0c001a96c86073e7f73b17
 
 build:
   number: 0
@@ -72,7 +72,6 @@ tests:
 
 about:
   homepage: https://github.com/ethqnol/polars-mojo
-  author: ethqnol # Ethan Wu
   license: MIT
   license_file: LICENSE
   summary: Polars DataFrame bindings for Mojo via Arrow C Data Interface
