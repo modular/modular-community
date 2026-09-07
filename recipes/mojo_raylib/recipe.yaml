@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 context:
-  version: "0.1.0"
-  mojo_version: "=0.26.2"
-  rev: "60aca7901fe2a87dc7da94afb70ea11bb218803e"
+  version: "0.2.0"
+  mojo_version: "=1.0.0"
+  rev: "f11c881463caaccf94ec16f4d9c01f50adfcf280"
 
 package:
   name: "mojo_raylib"
@@ -21,7 +21,7 @@ build:
         set -euo pipefail
         bash shim/build.sh
         mkdir -p "${PREFIX}/lib/mojo"
-        mojo package mojo_raylib -o "${PREFIX}/lib/mojo/mojo_raylib.mojopkg"
+        mojo precompile mojo_raylib -o "${PREFIX}/lib/mojo/mojo_raylib.mojoc"
 
 requirements:
   build:
