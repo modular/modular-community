@@ -1,0 +1,113 @@
+context:
+  version: "0.2.6"
+  mojo_version: ">=1.0.0,<1.1.0"
+  family_version: ">=0.2.6,<0.3.0"
+  protomojo_version: ">=0.4.2,<0.5.0"
+  tls_version: ">=0.3.2,<0.4.0"
+
+package:
+  name: grpc-mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/nsalerni/grpc-mojo.git
+    rev: a7944f897f189a652c7d29f462dcc61cfc5843c8
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        : "${CC:?the package build must provide a C compiler}"
+        mkdir -p "${PREFIX}/lib" "${PREFIX}/lib/mojo"
+
+        case "$(uname -s)" in
+          Darwin)
+            "${CC}" -dynamiclib -fPIC -O2 -Wall -Werror \
+              -o "${PREFIX}/lib/libgrpcstop.dylib" \
+              shim/grpc_stop_signals.c
+            ;;
+          *)
+            "${CC}" -shared -fPIC -O2 -Wall -Werror \
+              -o "${PREFIX}/lib/libgrpcstop.so" \
+              shim/grpc_stop_signals.c
+            ;;
+        esac
+
+        mojo precompile -I "${PREFIX}/lib/mojo" src/grpc \
+          -o "${PREFIX}/lib/mojo/grpc.mojoc"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-http2 ${{ family_version }}
+    - mojo-net ${{ family_version }}
+    - mojo-tls ${{ tls_version }}
+    - protomojo ${{ protomojo_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - mojo-http2 ${{ family_version }}
+    - mojo-net ${{ family_version }}
+    - mojo-tls ${{ tls_version }}
+    - protomojo ${{ protomojo_version }}
+
+tests:
+  - script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/grpc.mojoc"
+          test ! -e "${PREFIX}/lib/mojo/grpc.mojopkg"
+          case "$(uname -s)" in
+            Darwin)
+              test -f "${PREFIX}/lib/libgrpcstop.dylib"
+              ;;
+            *)
+              test -f "${PREFIX}/lib/libgrpcstop.so"
+              ;;
+          esac
+          test -f "${PREFIX}/lib/mojo/h2.mojoc"
+          test -f "${PREFIX}/lib/mojo/hpack.mojoc"
+          test -f "${PREFIX}/lib/mojo/net.mojoc"
+          test -f "${PREFIX}/lib/mojo/proto.mojoc"
+          test -f "${PREFIX}/lib/mojo/tls.mojoc"
+
+          WORK="$(mktemp -d)"
+          trap 'rm -rf "${WORK}"' EXIT
+          SMOKE="${PWD}/tests/package_smoke.mojo"
+          MOJO="${PREFIX}/bin/mojo"
+          test -x "${MOJO}"
+          cd "${WORK}"
+          export CONDA_PREFIX="${PREFIX}"
+          export MODULAR_HOME="${PREFIX}/share/max"
+          export PATH="${PREFIX}/bin:${PATH}"
+          unset MOJO_PATH MOJO_TLS_SHIM
+          if [ "$(uname -s)" = Linux ]; then
+            "${MOJO}" build --emit object "${SMOKE}" -o package_smoke.o
+            test -s package_smoke.o
+            "${MOJO}" run "${SMOKE}"
+          else
+            "${MOJO}" build "${SMOKE}" -o package_smoke
+            ./package_smoke
+          fi
+    files:
+      recipe:
+        - tests/package_smoke.mojo
+
+about:
+  homepage: https://github.com/nsalerni/grpc-mojo
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: gRPC client and server runtime for Mojo
+  repository: https://github.com/nsalerni/grpc-mojo
+
+extra:
+  maintainers:
+    - nsalerni
+  project_name: grpc-mojo
