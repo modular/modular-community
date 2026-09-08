@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/polars-mojo.git
-    rev: b15b5032714bab441e0c001a96c86073e7f73b17
+    rev: 191381da3c6a0cffba532c5581d38883489d72ea
 
 build:
   number: 0
