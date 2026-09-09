@@ -17,11 +17,16 @@ build:
     - cargo build --release
     - |
       TARGET_DIR="target/${CARGO_BUILD_TARGET:-}/release"
-      if [ ! -f "$TARGET_DIR/libpolars_ffi.so" ]; then
+      if [ ! -d "$TARGET_DIR" ]; then
         TARGET_DIR="target/release"
       fi
       mkdir -p ${{ PREFIX }}/lib
-      cp "$TARGET_DIR/libpolars_ffi.so" ${{ PREFIX }}/lib/
+      if [ -f "$TARGET_DIR/libpolars_ffi.dylib" ]; then
+        cp "$TARGET_DIR/libpolars_ffi.dylib" ${{ PREFIX }}/lib/
+      fi
+      if [ -f "$TARGET_DIR/libpolars_ffi.so" ]; then
+        cp "$TARGET_DIR/libpolars_ffi.so" ${{ PREFIX }}/lib/
+      fi
       cp "$TARGET_DIR/libpolars_ffi.a" ${{ PREFIX }}/lib/
 
     - mkdir -p ${{ PREFIX }}/lib/mojo
@@ -33,8 +38,10 @@ build:
       cat << 'EOF' > ${{ PREFIX }}/etc/conda/activate.d/molars.sh
       export _MOLARS_OLD_LIBRARY_PATH="${LIBRARY_PATH:-}"
       export _MOLARS_OLD_LD_LIBRARY_PATH="${LD_LIBRARY_PATH:-}"
+      export _MOLARS_OLD_DYLD_FALLBACK_LIBRARY_PATH="${DYLD_FALLBACK_LIBRARY_PATH:-}"
       export LIBRARY_PATH="${CONDA_PREFIX}/lib${LIBRARY_PATH:+:${LIBRARY_PATH}}"
       export LD_LIBRARY_PATH="${CONDA_PREFIX}/lib${LD_LIBRARY_PATH:+:${LD_LIBRARY_PATH}}"
+      export DYLD_FALLBACK_LIBRARY_PATH="${CONDA_PREFIX}/lib${DYLD_FALLBACK_LIBRARY_PATH:+:${DYLD_FALLBACK_LIBRARY_PATH}}"
       EOF
     - |
       cat << 'EOF' > ${{ PREFIX }}/etc/conda/deactivate.d/molars.sh
@@ -45,6 +52,10 @@ build:
       if [ -n "${_MOLARS_OLD_LD_LIBRARY_PATH+x}" ]; then
           export LD_LIBRARY_PATH="${_MOLARS_OLD_LD_LIBRARY_PATH}"
           unset _MOLARS_OLD_LD_LIBRARY_PATH
+      fi
+      if [ -n "${_MOLARS_OLD_DYLD_FALLBACK_LIBRARY_PATH+x}" ]; then
+          export DYLD_FALLBACK_LIBRARY_PATH="${_MOLARS_OLD_DYLD_FALLBACK_LIBRARY_PATH}"
+          unset _MOLARS_OLD_DYLD_FALLBACK_LIBRARY_PATH
       fi
       EOF
 
@@ -60,7 +71,7 @@ requirements:
 tests:
   - package_contents:
       files:
-        - lib/libpolars_ffi.so
+        - lib/libpolars_ffi.${{ "dylib" if osx else "so" }}
         - lib/libpolars_ffi.a
         - lib/mojo/molars.mojoc
   - files:
