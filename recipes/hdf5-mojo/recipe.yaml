@@ -1,7 +1,8 @@
 context:
   version: "0.2.0"
-  mojo_version: ">=1.0.0,<2"
+  mojo_version: "==1.0.0"
   hdf5_version: "2.1.0"
+  numojo_version: "==0.10.0"
 
 package:
   name: "hdf5-mojo"
@@ -21,13 +22,13 @@ requirements:
   host:
     - mojo-compiler ${{ mojo_version }}
     - hdf5 ==${{ hdf5_version }}
-    - numojo
+    - numojo ${{ numojo_version }}
   build:
     - mojo-compiler ${{ mojo_version }}
   run:
     - mojo-compiler ${{ mojo_version }}
     - hdf5 ==${{ hdf5_version }}
-    - numojo
+    - numojo ${{ numojo_version }}
 
 about:
   homepage: https://github.com/shivasankarka/hdf5-mojo
