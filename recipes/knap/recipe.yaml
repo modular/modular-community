@@ -111,8 +111,17 @@ tests:
         test -f "${PREFIX}/share/bash-completion/completions/knap"
         test -f "${PREFIX}/share/zsh/site-functions/_knap"
         test -f "${PREFIX}/share/fish/vendor_completions.d/knap.fish"
-        "${PREFIX}/bin/knap" version
-        mojo run -I "${PREFIX}/lib/mojo" smoke.mojo
+        # The version the binary reports must be the version the package
+        # claims. Printing it proves only that the binary runs; a package
+        # built from the wrong revision would pass that and fail this.
+        test "$("${PREFIX}/bin/knap" version)" = "${{ version }}"
+
+        # No -I here, deliberately. The build installs into
+        # ${PREFIX}/lib/mojo precisely so the compiler finds the package
+        # without one, and a test that passes the flag would still pass if
+        # that promise were broken. This line is what makes the claim above
+        # the build script an assertion rather than a comment.
+        mojo run smoke.mojo
     files:
       recipe:
         - smoke.mojo
