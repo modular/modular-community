@@ -1,0 +1,47 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: flare-routegen
+  version: ${{ version }}
+
+
+source:
+  - git: https://github.com/joeressler/flare-routegen.git
+    rev: 531933edcbef7b3f465abbbbd051b69e19920062
+build:
+  number: 0
+  skip:
+    - osx
+    - win
+  script:
+    - mkdir -p ${{ PREFIX }}/bin
+    - mojo build -I src src/main.mojo -o ${{ PREFIX }}/bin/flare-routegen
+
+requirements:
+  host:
+    - mojo-compiler =1.0.0
+  build:
+    - mojo-compiler =1.0.0
+    - gxx >=13
+    - sysroot_linux-64 >=2.34
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - flare-routegen --version
+      - flare-routegen --help
+
+about:
+  homepage: https://github.com/joeressler/flare-routegen
+  repository: https://github.com/joeressler/flare-routegen
+  license: MIT
+  license_file: LICENSE
+  summary: Generate Flare route registrations from structured Mojo comment directives.
+
+extra:
+  maintainers:
+    - joeressler
+  project_name:
+    - flare-routegen
