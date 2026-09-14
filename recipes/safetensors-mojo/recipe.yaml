@@ -1,5 +1,5 @@
 context:
-  version: "0.5.0"
+  version: "0.7.0"
 
 package:
   name: safetensors-mojo
@@ -7,13 +7,10 @@ package:
 
 source:
   - git: https://github.com/egor-fedorov/safetensors.mojo.git
-    rev: 1dd3450d02a39b4b8b5cfee01e82c88743bec72b
+    rev: 560a28664baa395f4dd6e493f3370c3ce9838d3e
 
 build:
   number: 0
-  skip:
-    - osx
-    - linux and aarch64
   script:
     - mkdir -p "${PREFIX}/lib/mojo"
     - mojo precompile src/safetensors -o "${PREFIX}/lib/mojo/safetensors.mojoc"

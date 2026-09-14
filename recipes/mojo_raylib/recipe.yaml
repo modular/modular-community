@@ -1,8 +1,8 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 context:
-  version: "0.2.0"
+  version: "0.2.1"
   mojo_version: "=1.0.0"
-  rev: "f11c881463caaccf94ec16f4d9c01f50adfcf280"
+  rev: "b2fde00e920b8b61e138b7961e090c86dd2ed92f"
 
 package:
   name: "mojo_raylib"
@@ -28,6 +28,7 @@ requirements:
     - ${{ compiler('c') }}
     - cmake
     - ninja
+    - patchelf
   host:
     - mojo-compiler ${{ mojo_version }}
     - if: linux
