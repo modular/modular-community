@@ -1,0 +1,49 @@
+context:
+  version: "1.0.0"
+
+package:
+  name: heat-url
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/joeressler/heat-url.git
+    rev: fb44a8b0ccfc611a46935cc9d9e6f1cda1f4a05b
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile src/heat_url -o ${{ PREFIX }}/lib/mojo/heat_url.mojoc
+
+requirements:
+  host:
+    - mojo-compiler =1.0.0
+  build:
+    - mojo-compiler =1.0.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test_heat_url.mojo
+    files:
+      recipe:
+        - test_heat_url.mojo
+    requirements:
+      run:
+        - mojo =1.0.0
+
+about:
+  homepage: https://github.com/joeressler/heat-url
+  repository: https://github.com/joeressler/heat-url
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: URI and URL parsing for Mojo (WHATWG and RFC 3986), with native IDNA.
+
+extra:
+  maintainers:
+    - joeressler
+  project_name:
+    - heat-url
