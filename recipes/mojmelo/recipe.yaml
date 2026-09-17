@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: 2f4ec00bcbb46480776ee99d9f5405d1f2d5a6e5
+    rev: b35ad4bdcbfe3f8999729625599c14aaea1ebf01
 
 build:
   number: 0
