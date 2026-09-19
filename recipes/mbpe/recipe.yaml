@@ -8,10 +8,10 @@ package:
 
 source:
   - git: https://github.com/ratulb/mbpe.git
-    rev: 55e168bbccc11961bd54aefec4125efbf1db0244
+    rev: 3e1ed1c48c52d1df179f543dbd21528f705b37e6
 
 build:
-  number: 5
+  number: 6
   script:
     - mojo precompile bpe -o ${{ PREFIX }}/lib/mojo/bpe.mojoc
     - mkdir -p ${{ PREFIX }}/share/mbpe/data
