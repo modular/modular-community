@@ -1,6 +1,6 @@
 context:
-  version: "0.8.0"
-  mojo_version: ">=1.0.0, <1.1.0"
+  version: "0.9.0"
+  mojo_version: ">=1.1.0, <1.2.0"
 
 package:
   name: "argmojo"
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/forfudan/argmojo.git
-    rev: 2ba77c1be364e49fe7db88c724dd0f9a25ed3a44
+    rev: 1d0054987cb47136cdf16d64cfe7db3fcdfefc97
 
 build:
   number: 0
