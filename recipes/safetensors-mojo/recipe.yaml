@@ -1,5 +1,5 @@
 context:
-  version: "0.7.0"
+  version: "0.8.0"
 
 package:
   name: safetensors-mojo
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/egor-fedorov/safetensors.mojo.git
-    rev: 560a28664baa395f4dd6e493f3370c3ce9838d3e
+    rev: 0580f2a286e81a3d8302c4887473a749813ad1aa
 
 build:
   number: 0
@@ -18,11 +18,11 @@ build:
 
 requirements:
   build:
-    - mojo-compiler =1.0.0
+    - mojo-compiler ==1.1.0
   host:
-    - mojo-compiler =1.0.0
+    - mojo-compiler ==1.1.0
   run:
-    - ${{ pin_compatible('mojo-compiler') }}
+    - mojo-compiler ==1.1.0
 
 tests:
   - script:
