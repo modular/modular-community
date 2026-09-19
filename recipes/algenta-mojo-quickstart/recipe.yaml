@@ -1,0 +1,95 @@
+# =============================================================================
+# rattler-build recipe for the `modular-community` prefix.dev channel.
+#
+# Package: algenta-mojo-quickstart — the Mojo ↔ Algenta native-runtime
+# quickstart maintained in thyn-ai/algenta-sdk (examples/mojo-quickstart).
+# The package ships the quickstart sources (Mojo program, pixi workspace,
+# pinned lockfile, README) so any Mojo user can run the signed-runtime demo
+# with two commands:
+#
+#   pixi add algenta-mojo-quickstart   # in a pixi workspace, or:
+#   cp -r $CONDA_PREFIX/share/algenta-mojo-quickstart ./demo && cd demo
+#   pixi run demo
+#
+# SUBMISSION (once thyn-ai/algenta-sdk is public):
+#   1. Fork https://github.com/modular/modular-community
+#   2. Copy this recipe and its test into place:
+#        mkdir -p recipes/algenta-mojo-quickstart
+#        cp recipe/recipe.yaml recipe/test_quickstart.sh \
+#          recipes/algenta-mojo-quickstart/
+#   3. Verify the build exactly as the channel CI will run it:
+#        rattler-build build \
+#          --recipe recipes/algenta-mojo-quickstart \
+#          -c https://conda.modular.com/max \
+#          -c https://prefix.dev/conda-forge
+#   4. Open the PR against modular/modular-community.
+#
+# Source pinning: the recipe tracks `main` because the quickstart first ships
+# with the open-source launch. After the first `sdk-v*` tag that contains
+# examples/mojo-quickstart is cut, replace `branch: main` below with
+# `tag: sdk-vX.Y.Z` so the channel build is bit-reproducible.
+# =============================================================================
+
+context:
+  version: 0.1.0
+  # Mojo toolchain the quickstart is continuously verified against.
+  max_version: "26.6.*"
+
+package:
+  name: algenta-mojo-quickstart
+  version: ${{ version }}
+
+source:
+  git: https://github.com/thyn-ai/algenta-sdk.git
+  branch: main
+
+build:
+  number: 0
+  # Sources only — identical on every platform. Running the demo resolves the
+  # correct algenta-runtime-native wheel for the user's platform via pixi.
+  noarch: generic
+  script:
+    - mkdir -p "$PREFIX/share/algenta-mojo-quickstart"
+    - cd examples/mojo-quickstart
+    - cp main.mojo pixi.toml pixi.lock README.md "$PREFIX/share/algenta-mojo-quickstart/"
+
+requirements:
+  run:
+    # The quickstart is driven through its pinned pixi workspace.
+    - pixi >=0.40
+
+tests:
+  - requirements:
+      run:
+        - max ${{ max_version }}
+        - python 3.14.*
+        - pip
+        - pixi >=0.40
+    files:
+      source:
+        - test_quickstart.sh
+    script:
+      - bash test_quickstart.sh
+
+about:
+  homepage: https://algenta.ai
+  repository: https://github.com/thyn-ai/algenta-sdk
+  documentation: https://github.com/thyn-ai/algenta-sdk/tree/main/examples/mojo-quickstart
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Call the signed Algenta native runtime from Mojo — pixi-packaged quickstart
+  description: |
+    A runnable, self-contained Mojo example: it resolves the signed
+    `algenta-runtime-native` wheel from PyPI, launches the runtime worker,
+    and speaks the runtime's framed-JSON wire protocol over a Unix domain
+    socket using nothing but the Mojo standard library and direct libc FFI
+    (`external_call`). The demo performs a deterministic compute round-trip
+    (`activations.gelu(1.0)`) and exits non-zero on any failure.
+
+    The package installs the quickstart sources (main.mojo, pixi.toml,
+    pixi.lock, README.md) under `$PREFIX/share/algenta-mojo-quickstart/`.
+    Copy them anywhere and run `pixi run demo`.
+
+extra:
+  recipe-maintainers:
+    - thyn-ai
