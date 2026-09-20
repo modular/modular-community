@@ -1,6 +1,6 @@
 context:
   version: "0.2.0"
-  mojo_version: ">=1.0.0,<1.1.0"
+  mojo_version: "==1.0.0"
   numojo_version: "==0.10.0"
   msl_version: "==0.2.0"
 
