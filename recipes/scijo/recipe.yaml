@@ -1,7 +1,8 @@
 context:
   version: "0.2.0"
   mojo_version: ">=1.0.0,<1.1.0"
-  max_core_version: ">=26.5.0,<26.6"
+  numojo_version: "==0.10.0"
+  msl_version: "==0.2.0"
 
 package:
   name: "scijo"
@@ -9,7 +10,7 @@ package:
 
 source:
   - git: https://github.com/mojomath/SciJo.git
-    rev: 515fb2856f0ecf3d2740a34d958fe168183e1129
+    rev: 4e23949e34ec9fed4e1430c762b55936931dc33d
 
 build:
   number: 0
@@ -20,15 +21,17 @@ build:
 requirements:
   host:
     - mojo-compiler ${{ mojo_version }}
-    - max-core ${{ max_core_version }}
+    - numojo ${{ numojo_version }}
+    - msl ${{ msl_version }}
   build:
     - mojo-compiler ${{ mojo_version }}
   run:
     - mojo-compiler ${{ mojo_version }}
-    - max-core ${{ max_core_version }}
+    - numojo ${{ numojo_version }}
+    - msl ${{ msl_version }}
 
 about:
-  homepage: https://github.com/mojomath/SciJo.git
+  homepage: https://github.com/mojomath/SciJo
   license: Apache-2.0
   license_file: LICENSE
   summary: SciJo is a high-performance scientific computing library written in Mojo🔥, inspired by SciPy.
