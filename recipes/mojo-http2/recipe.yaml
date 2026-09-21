@@ -1,8 +1,8 @@
 context:
-  version: "0.2.8"
+  version: "0.2.9"
   mojo_version: ">=1.0.0,<1.1.0"
-  mojo_net_version: ">=0.2.4,<0.3.0"
-  mojo_tls_version: ">=0.2.0,<0.4.0"
+  mojo_net_version: ">=0.2.7,<0.3.0"
+  mojo_tls_version: ">=0.3.3,<0.4.0"
 
 package:
   name: mojo-http2
@@ -10,7 +10,7 @@ package:
 
 source:
   - git: https://github.com/nsalerni/mojo-http2.git
-    rev: c8038269dfef544a7325a971857803b3bfc5b725
+    rev: 882859180b8a09b4e423cbeab69ff6470972b3e8
 
 build:
   number: 0
