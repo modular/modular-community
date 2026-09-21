@@ -1,0 +1,56 @@
+context:
+  version: "0.2.0"
+  mojo_version: "=1.0.0"
+
+package:
+  name: strata
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/ethqnol/strata-mojo.git
+    rev: 73ee1128137f7524e13f99b0263f0c64b2a3fa28
+
+build:
+  number: 0
+  script:
+    - mkdir -p "${PREFIX}/lib/mojo"
+    - mojo precompile strata -o "${PREFIX}/lib/mojo/strata.mojoc"
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - liblapack
+    - libblas
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - liblapack
+    - libblas
+    - python >=3.10
+    - numpy
+    - scipy
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run scripts/run_tests.mojo
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+    files:
+      source:
+        - scripts/
+        - tests/
+
+about:
+  homepage: https://ethqnol.github.io/strata-mojo
+  repository: https://github.com/ethqnol/strata-mojo
+  license: MIT
+  license_file: LICENSE
+  summary: Strata is a high-performance machine learning library written in native Mojo. It provides scikit-learn compatible estimator APIs while taking advantage of Mojo's compile-time optimizations and SIMD acceleration.
+
+extra:
+  maintainers:
+    - ethqnol # Ethan Wu
