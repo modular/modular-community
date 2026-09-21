@@ -1,5 +1,5 @@
 context:
-  version: "0.4.2"
+  version: "0.4.3"
   mojo_version: ">=1.0.0,<1.1.0"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/nsalerni/protomojo.git
-    rev: 348f86c23cc6c206fd29f256fcb1eb1f5ae8e21f
+    rev: e6db83449b1b027f0750415482847c4d8a17ae24
 
 build:
   number: 0
