@@ -1,5 +1,5 @@
 context:
-  version: "0.2.6"
+  version: "0.2.7"
   mojo_version: ">=1.0.0,<1.1.0"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/nsalerni/mojo-net.git
-    rev: 7660a64b6c52b1171a0a0219700386e4a6156e7d
+    rev: 0b53bebf466961123aef17f5567c6e0dca9da423
 
 build:
   number: 0
