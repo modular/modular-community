@@ -1,5 +1,5 @@
 context:
-  version: 0.3.0
+  version: 0.3.1
 
 package:
   name: "kelvin"
@@ -7,18 +7,18 @@ package:
 
 source:
  - git: https://github.com/bgreni/Kelvin.git
-   rev: 471409b4f1ac980be4beb5ba7de9a152d2e3f702
+   tag: 0.3.1
 
 build:
   number: 0
   script:
-    - mojo package kelvin -o ${{ PREFIX }}/lib/mojo/kelvin.mojopkg
+    - mojo precompile kelvin -o ${{ PREFIX }}/lib/mojo/kelvin.mojoc
 
 requirements:
   host:
-    - mojo-compiler =1.0.0
+    - mojo-compiler =1.1.0
   build:
-    - mojo-compiler =1.0.0
+    - mojo-compiler =1.1.0
   run:
     - ${{ pin_compatible('mojo-compiler') }}
 
@@ -38,9 +38,9 @@ tests:
         - scripts/generate_tests.py
     requirements:
       build:
-        - mojo =1.0.0
+        - mojo =1.1.0
       run:
-        - mojo =1.0.0
+        - mojo =1.1.0
 
 about:
   homepage: https://github.com/bgreni/Kelvin
