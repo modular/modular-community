@@ -1,5 +1,5 @@
 context:
-  version: "0.1.6"
+  version: "0.1.7"
 
 package:
   name: "mojmelo"
@@ -7,12 +7,12 @@ package:
 
 source:
   - git: https://github.com/yetalit/mojmelo.git
-    rev: b35ad4bdcbfe3f8999729625599c14aaea1ebf01
+    rev: 641a9dd3156d48dca2d52f22d806dafcf915fb08
 
 build:
   number: 0
   script:
-    - mojo precompile pixi/mojmelo/utils/mojmelo_matmul -o ${{ PREFIX }}/lib/mojo/mojmelo_matmul.mojoc
+    - mojo precompile pixi/mojmelo/linalg/mojmelo_matmul -o ${{ PREFIX }}/lib/mojo/mojmelo_matmul.mojoc
     - mojo precompile pixi/mojmelo -o ${{ PREFIX }}/lib/mojo/mojmelo.mojoc
 requirements:
   host:
@@ -33,8 +33,8 @@ tests:
         - tests/setup.mojo
         - tests/setup.sh
         - tests/mojmelo_tmp/__init__.mojo
-        - tests/mojmelo_tmp/utils/*.mojo
-        - tests/mojmelo_tmp/utils/mojmelo_matmul/*.mojo
+        - tests/mojmelo_tmp/linalg/*.mojo
+        - tests/mojmelo_tmp/linalg/mojmelo_matmul/*.mojo
 
 about:
   homepage: https://github.com/yetalit/Mojmelo
