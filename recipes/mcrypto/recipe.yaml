@@ -1,0 +1,45 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: mcrypto
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/aelxtpt/mcrypto.git
+    rev: 7c418e5d379524f3b223c649ca771663e69dafd8
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${PREFIX}/lib/mojo
+    - mojo precompile src/mcrypto -o ${{ PREFIX }}/lib/mojo/mcrypto.mojoc
+
+requirements:
+  build:
+    - mojo-compiler =1.0.0
+  host:
+    - mojo-compiler =1.0.0
+  run:
+    - mojo-compiler =1.0.0
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/aelxtpt/mcrypto
+  repository: https://github.com/aelxtpt/mcrypto
+  license: MIT
+  license_file: LICENSE
+  summary: "Cryptographic primitives for Mojo: hashes, XOFs, stream and block ciphers, AEAD, MACs, KDFs, public-key encryption, KEM, signatures, and secure-memory helpers."
+
+extra:
+  project_name: mcrypto
+  maintainers:
+    - aelxtpt
