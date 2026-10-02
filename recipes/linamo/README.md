@@ -16,8 +16,9 @@ Each type is parameterised on an element **type** rather than a `DType`, so the
 same operators and routines run over fixed-width numbers (`Float64`, `Int32`,
 ... through SIMD kernels) and over exact ones from
 [Decimo](https://github.com/forfudan/decimo) --- arbitrary-precision `BInt`,
-and base-ten `Decimal`, where `0.1 + 0.2` is `0.3`. `la.matrix[Float64]` and
-`la.matrix[BInt]` differ only in the brackets.
+and base-ten `Decimal`, where `0.1 + 0.2` is `0.3` --- and over complex
+numbers (`CFloat64`, `CFloat32`). `la.matrix[Float64]` and `la.matrix[BInt]`
+differ only in the brackets.
 
 Compared to a general-purpose multi-dimensional array library, Linamo is more
 specialized and optimized for linear algebra of 2D matrices. This keeps the API
