@@ -1,0 +1,77 @@
+context:
+  version: "1.1.0"
+
+package:
+  name: "mojo-wayland"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Phelsong/mojo-wayland.git
+    rev: 98cb6fc1958b8d074667c0ac60856c2f1f7fe9ba
+
+build:
+  number: 0
+  skip:
+    # linux-64 + linux-aarch64 only (wayland is linux-only; the Mojo runtime
+    # is little-endian 64-bit — see [SYNC:abi] in wayland/core.mojo)
+    - not (linux and (x86_64 or aarch64))
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        # Build the C shim DSO (interface table + event capture). The
+        # xdg-shell private code is committed under wayland/c/generated,
+        # so wayland-scanner is not needed at build time. Headers live in
+        # the host env ($PREFIX), the compiler in the build env.
+        $CC $CFLAGS -I"$PREFIX/include" -shared -fPIC -O2 -Wall \
+          -o "${PREFIX}/lib/libwayland_shim.so" \
+          wayland/c/shim.c wayland/c/generated/xdg-shell-protocol.c \
+          -L"$PREFIX/lib" -lwayland-client
+        mkdir -p "${PREFIX}/lib/mojo"
+        mojo precompile wayland -o "${PREFIX}/lib/mojo/wayland.mojoc"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - mojo-compiler ==1.1.0
+    # wayland floor: every C symbol the shim/bindings use
+    # (wl_proxy_marshal_array_constructor_versioned, wl_proxy_add_dispatcher,
+    # wl_proxy_get_version) exists since 1.10; 1.23 is the oldest TESTED
+    # conda-forge wayland, not an ABI requirement. See [SYNC:minlib] in
+    # wayland/core.mojo.
+    - wayland >=1.23,<1.27
+  host:
+    - mojo-compiler ==1.1.0
+    - wayland >=1.23,<1.27
+  run:
+    - mojo-compiler ==1.1.0
+    - wayland >=1.23,<1.27
+
+tests:
+  - script:
+      - if: unix
+        then:
+          # The Mojo bindings resolve shim symbols at load time via
+          # external_call, so the shim DSO is linked into the test binary.
+          # This test is headless: no Wayland compositor required.
+          - mojo run -Xlinker $PREFIX/lib/libwayland_shim.so -I $PREFIX/lib/mojo test_pack.mojo
+    files:
+      recipe:
+        - test_pack.mojo
+    requirements:
+      run:
+        - mojo-compiler ==1.1.0
+
+about:
+  homepage: https://github.com/Phelsong/mojo-wayland
+  license: MIT
+  license_file: LICENSE
+  summary: Mojo bindings for libwayland-client, generated from protocol XML
+  repository: https://github.com/Phelsong/mojo-wayland
+
+extra:
+  maintainers:
+    - phelsong
+  project_name:
+    - mojo-wayland
