@@ -1,0 +1,59 @@
+context:
+  version: "0.1.0"
+
+package:
+  name: duckdb-mojo
+  version: ${{ version }}
+
+source:
+  # v0.1.0
+  - git: https://github.com/sbrunk/duckdb.mojo.git
+    rev: "8ab7ce85a7776318919967ca78b393742ba62949"
+
+build:
+  number: 0
+  script:
+    # Precompile the `duckdb` package into $PREFIX/lib/mojo/. Installing it at
+    # this path lets the Mojo compiler find the package automatically.
+    - mojo precompile duckdb -o ${{ PREFIX }}/lib/mojo/duckdb.mojoc
+
+requirements:
+  build:
+    # Pinned to the compiler in pixi.toml. .mojoc artifacts are compiler-version
+    # specific, so this must match the version used to build the package.
+    - mojo-compiler ==1.1.0
+  host:
+    - mojo-compiler ==1.1.0
+  run:
+    # Exact pin, not pin_compatible: a precompiled .mojoc only loads under the
+    # exact compiler it was built with. pin_compatible would let a newer
+    # release satisfy the install and fail with a version-mismatch error at
+    # import time.
+    - mojo-compiler ==1.1.0
+    # The bindings dlopen libduckdb at runtime (duckdb/_libduckdb.mojo), so the
+    # shared library must be present. Track the DuckDB minor the FFI bindings
+    # were generated against.
+    - libduckdb >=1.5.6,<1.6
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run smoke_test.mojo
+    files:
+      recipe:
+        - smoke_test.mojo
+    requirements:
+      run:
+        - libduckdb >=1.5.6,<1.6
+
+about:
+  homepage: https://github.com/sbrunk/duckdb.mojo
+  repository: https://github.com/sbrunk/duckdb.mojo
+  license: MIT
+  license_file: LICENSE
+  summary: DuckDB bindings for Mojo.
+
+extra:
+  maintainers:
+    - sbrunk
