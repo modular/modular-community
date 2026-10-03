@@ -1,0 +1,57 @@
+context:
+  version: "1.0.0"
+  mojo_version: "=1.1.0"
+
+package:
+  name: fp_mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Spellbound-Mojo/fp_mojo.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile -I src src/fp -o ${{ PREFIX }}/lib/mojo/fp.mojoc
+    # The compiler leaves a first-run marker in the prefix; it is not part of the package.
+    - rm -f ${{ PREFIX }}/share/max/firstActivation
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler', upper_bound='x.x') }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run docs/examples/quickstart.mojo
+          - mojo run docs/examples/expression.mojo
+          - mojo run docs/examples/config_parser.mojo
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+    files:
+      source:
+        - docs/examples/quickstart.mojo
+        - docs/examples/expression.mojo
+        - docs/examples/config_parser.mojo
+
+about:
+  homepage: https://spellbound-mojo.github.io/fp_mojo/
+  repository: https://github.com/Spellbound-Mojo/fp_mojo
+  documentation: https://spellbound-mojo.github.io/fp_mojo/
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Functional programming for Mojo, with ownership-aware callbacks and algebraic data types
+
+extra:
+  maintainers:
+    - anatolvitold
+  project_name:
+    - fp_mojo
