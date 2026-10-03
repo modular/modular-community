@@ -52,7 +52,19 @@ about:
   repository: https://github.com/sbrunk/duckdb.mojo
   license: MIT
   license_file: LICENSE
-  summary: DuckDB bindings for Mojo.
+  documentation: https://github.com/sbrunk/duckdb.mojo#readme
+  summary: "DuckDB for Mojo: queries, UDFs, extensions and portable GPU compute."
+  description: |
+    duckdb.mojo lets Mojo programs use DuckDB. Run SQL and decode results into
+    Mojo types, including structs, lists and maps. Build queries with a lazy
+    relation API and load data with the Appender. Register scalar, aggregate and
+    table functions written in Mojo, including SIMD-vectorized ones, and build
+    DuckDB extensions in Mojo that load with LOAD. The package also ships SIMD
+    math kernels (duckdb.kernels) that can be registered as SQL functions.
+    Mojo GPU kernels can process DuckDB data directly. The same kernel code runs
+    on NVIDIA, AMD and Apple silicon GPUs (Metal), with no CUDA toolkit or
+    vendor-specific code. GPU kernels need the max-core package, which
+    duckdb-mojo does not depend on.
 
 extra:
   maintainers:
