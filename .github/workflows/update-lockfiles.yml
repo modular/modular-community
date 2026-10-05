@@ -14,8 +14,20 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@3d3c42e5aac5ba805825da76410c181273ba90b1 # v7.0.1
+      - name: Bump pixi to the latest release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          current=$(sed -nE 's/^requires-pixi = ">=([0-9.]+)"$/\1/p' pixi.toml)
+          latest=$(gh api repos/prefix-dev/pixi/releases/latest --jq .tag_name)
+          latest=${latest#v}
+          sed -i -E "s/^requires-pixi = \">=[0-9.]+\"$/requires-pixi = \">=${latest}\"/" pixi.toml
+          if [ "$current" != "$latest" ]; then
+            printf 'Bumps pixi from %s to %s.\n\n' "$current" "$latest" >> diff.md
+          fi
       - name: Set up pixi
-        uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+        uses: ./.github/actions/setup-pixi
         with:
           run-install: false
       - name: Update lockfiles
@@ -26,11 +38,13 @@ jobs:
         uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
         with:
           token: ${{ secrets.GITHUB_TOKEN }}
-          commit-message: Update pixi lockfile
-          title: Update pixi lockfile
+          commit-message: Update pixi and lockfile
+          title: Update pixi and lockfile
           body-path: diff.md
           branch: update-pixi
           base: main
           labels: pixi
           delete-branch: true
-          add-paths: pixi.lock
+          add-paths: |
+            pixi.lock
+            pixi.toml

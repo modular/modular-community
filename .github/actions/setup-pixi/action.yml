@@ -1,0 +1,26 @@
+name: Set up pixi
+description: Install the pixi version pinned by `requires-pixi` in pixi.toml.
+
+inputs:
+  run-install:
+    description: Whether to run `pixi install` after installing pixi.
+    default: "true"
+
+runs:
+  using: composite
+  steps:
+    # pixi.toml is the single source of truth so that CI, local development and
+    # the lockfile-update bot (which cannot edit workflow files) stay in sync.
+    - id: version
+      shell: bash
+      run: |
+        version=$(sed -nE 's/^requires-pixi = ">=([0-9.]+)"$/\1/p' pixi.toml)
+        if [ -z "$version" ]; then
+          echo "::error file=pixi.toml::requires-pixi = \">=X.Y.Z\" not found"
+          exit 1
+        fi
+        echo "version=v$version" >> "$GITHUB_OUTPUT"
+    - uses: prefix-dev/setup-pixi@d3f436a425481402e6a95a1d1fc10331c708cd9e # v0.10.2
+      with:
+        pixi-version: ${{ steps.version.outputs.version }}
+        run-install: ${{ inputs.run-install }}
