@@ -1,0 +1,71 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+
+context:
+  version: "0.9.5"
+  mojo_version: "1.1.0"
+
+package:
+  name: pion
+  version: ${{ version }}
+
+source:
+  url: https://github.com/pavelhorak/pion/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 840ccf7b31e1752a393e35e971c7b1fb533ca5d76fb204502de707b080330281
+
+build:
+  number: 0
+  skip:
+    - win
+  script: build.sh
+
+requirements:
+  host:
+    - mojo-compiler ==${{ mojo_version }}
+  # pion-server loads libKGENCompilerRTShared (and the two libraries it pulls
+  # in) from the compiler package at run time.
+  run:
+    - mojo-compiler ==${{ mojo_version }}
+
+tests:
+  - script:
+      - bash test_server.sh ${{ version }}
+    requirements:
+      run:
+        - python >=3.10
+    files:
+      recipe:
+        - test_server.sh
+      source:
+        - tests/test_raw.py
+        - tests/resp_strict.py
+        - tests/test_vector_recall_smoke.py
+
+about:
+  homepage: https://pion.pavelhorak.com
+  repository: https://github.com/pavelhorak/pion
+  documentation: https://pion.pavelhorak.com
+  license: Apache-2.0 AND LicenseRef-Pion-Vector-Binary-Licence-1.0
+  license_file:
+    - LICENSE
+    - NOTICE
+    - vendor/pion-vector/LICENSE
+  summary: Redis-compatible key-value and vector database written in Mojo, with a persistent prompt cache for local models.
+  description: |
+    Pion speaks RESP2/RESP3, so existing Redis clients work against it. Its main
+    job is to be a local model's memory: it keeps a prompt's K/V cache across
+    processes and restarts, so mlx-lm skips a long prefill it has already done
+    once (the client side is the pion-vllm-mlx package on PyPI).
+
+    The engine is Apache-2.0. The tuned 1536-dim vector-search kernels are a
+    free, closed static library (vendor/pion-vector, under the Pion Vector
+    Binary Licence), and this build links it, as the release binaries do. An
+    open reference implementation of the same algorithms is in the repository,
+    and `pixi run build-open` there builds everything from source without it.
+
+    Run `pion-server`; it listens on port 1974 and keeps its state in the
+    working directory.
+
+extra:
+  maintainers:
+    - pavelhorak
+  project_name: Pion
