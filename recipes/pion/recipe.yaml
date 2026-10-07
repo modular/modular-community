@@ -1,7 +1,7 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.9.5"
+  version: "0.9.6"
   mojo_version: "1.1.0"
 
 package:
@@ -10,7 +10,7 @@ package:
 
 source:
   url: https://github.com/pavelhorak/pion/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 840ccf7b31e1752a393e35e971c7b1fb533ca5d76fb204502de707b080330281
+  sha256: 65cfe85b4a993f973bfee9f45b6b83de9d6e87269477b2639ae2f88890ebb4b3
 
 build:
   number: 0
