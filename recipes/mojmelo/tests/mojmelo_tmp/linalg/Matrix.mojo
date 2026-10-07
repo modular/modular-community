@@ -1,9 +1,8 @@
 from .mojmelo_matmul import matmul
 from std.memory import unsafe_memcpy, unsafe_memset_zero, Layout
 from std.sys import simd_width_of, CompilationTarget
-import std.math as math
-import std.random as random
-from mojmelo.utils.utils import cast
+from std import math, random
+from mojmelo.linalg.utils import cast
 
 struct Matrix(Copyable, ImplicitlyCopyable, Sized):
     var height: Int

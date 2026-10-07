@@ -6,8 +6,10 @@
 
 Mojo Scientific Library (MSL) is a comprehensive collection of scientific computation routines derived from the [GNU Scientific Library (GSL)](https://www.gnu.org/software/gsl/) written in pure Mojo, providing special functions, probability distributions, linear algebra, interpolation, numerical differentiation, integration, root-finding, minimization, and ODE solving. Install it with `pixi add msl`.
 
-[![Version](https://img.shields.io/badge/version-v0.1.0-blue)](https://github.com/mojomath/MSL)
-[![Mojo](https://img.shields.io/badge/mojo-1.0.0b1-orange)](https://docs.modular.com/mojo/manual/)
+[![Version](https://img.shields.io/badge/version-v0.2.0-blue)](https://github.com/mojomath/MSL)
+[![Mojo](https://img.shields.io/badge/mojo-1.0.0-orange)](https://docs.modular.com/mojo/manual/)
+
+**[Manual»](https://github.com/mojomath/MSL/blob/main/docs/MANUAL.md)** | **[Changelog»](https://github.com/mojomath/MSL/blob/main/docs/changelog.md)** | **[Developer Guide»](https://github.com/mojomath/MSL/blob/main/docs/developer_guide.md)**
 
 MSL is designed as the **low-level scalar backend** for [SciJo](https://github.com/mojomath/SciJo) - the same relationship GSL has with SciPy.
 
@@ -15,16 +17,6 @@ MSL is designed as the **low-level scalar backend** for [SciJo](https://github.c
 SciJo (high-level, user-friendly)
 └── MSL (low-level, GSL-like numerics)
 ```
-
----
-
-## Motivation
-
-Porting GSL is a huge task, but it's much better than writing crazy bindings lol. I also get exposed to more functions that might be helpful in my research, and it helps me learn the math and how to do numerical scientific computing in general (people have come up with crazy tricks!).
-
-I ported a lot of GSL derivative, integration routines, special functions and solvers like `hermv`, ODE solvers like `rkf45`, etc. for my own research project in Mojo. I also ported many statistics routines for SciJo and StatMojo. So I thought it's better to bundle it all together like the GSL library.
-
-I don't plan to port every single function from GSL - perhaps if I get time in the future, I'll try to port more. I'm porting just enough for our libraries: SciJo, StatMojo, and HEPJo. Check out our org [MojoMath](https://github.com/mojomath) for more details.
 
 ---
 
@@ -43,14 +35,25 @@ I don't plan to port every single function from GSL - perhaps if I get time in t
 | `msl.vector` | 1-D strided vector with BLAS-backed operations |
 | `msl.matrix` | 2-D dense matrix with BLAS-backed operations |
 | `msl.blas` | BLAS wrappers (Level 1/2/3) over [mojoBLAS](https://github.com/shivasankarka/mojoBLAS) |
+| `msl.linalg` | Dense linear algebra: LU, Cholesky, QR, symmetric eigensolver (Jacobi) |
 | `msl.permutation` | Permutation array operations |
+| `msl.poly` | Polynomial evaluation, divided-difference interpolation, quadratic/cubic root solving |
+| `msl.statistics` | Descriptive statistics: moments, order statistics, robust scale, weighted, Spearman correlation |
 | `msl.core` | Constants, error codes (`MSL_*`), math utilities |
+
+### Motivation
+
+Porting GSL is a huge task, but it's much better than writing crazy bindings lol. I also get exposed to more functions that might be helpful in my research, and it helps me learn the math and how to do numerical scientific computing in general (people have come up with crazy tricks!).
+
+I ported a lot of GSL derivative, integration routines, special functions and solvers like `hermv`, ODE solvers like `rkf45`, etc. for my own research project in Mojo. I also ported many statistics routines for SciJo and StatMojo. So I thought it's better to bundle it all together like the GSL library.
+
+I don't plan to port every single function from GSL - perhaps if I get time in the future, I'll try to port more. I'm porting just enough for our libraries: SciJo, StatMojo, and HEPJo. Check out our org [MojoMath](https://github.com/mojomath) for more details.
 
 ---
 
 ## Installation
 
-MSL requires [pixi](https://pixi.sh) and Mojo 1.0.0b1.
+MSL requires [pixi](https://pixi.sh) and Mojo 1.0.0.
 
 ### With pixi (recommended)
 
@@ -67,7 +70,7 @@ Or add it directly to your `pixi.toml`:
 channels = ["https://conda.modular.com/max/", "https://repo.prefix.dev/modular-community", "conda-forge"]
 
 [dependencies]
-msl = ">=0.1.0"
+msl = ">=0.2.0"
 ```
 
 Then run `pixi install`.
@@ -89,7 +92,7 @@ version = "x.y.z"
 backend = {name = "pixi-build-mojo", version = "0.*"}
 
 [dependencies]
-msl = { git = "https://github.com/shivasankarka/msl.git", branch = "main" }
+msl = { git = "https://github.com/mojomath/MSL.git", branch = "main" }
 ```
 
 Then run `pixi install`.
@@ -187,22 +190,21 @@ def main():
 ### Interpolation
 
 ```mojo
+from std.memory.alloc import unsafe_alloc
 from msl.interpolation import CubicSpline, AkimaSpline
 
 def main() raises:
-    var xa = alloc[Float64](5)
-    var ya = alloc[Float64](5)
-    xa[0]=0.0; xa[1]=1.0; xa[2]=2.0; xa[3]=3.0; xa[4]=4.0
-    ya[0]=0.0; ya[1]=1.0; ya[2]=4.0; ya[3]=9.0; ya[4]=16.0
+    var xa = unsafe_alloc[Float64](5)
+    var ya = unsafe_alloc[Float64](5)
+    xa[unsafe_offset=0]=0.0; xa[unsafe_offset=1]=1.0; xa[unsafe_offset=2]=2.0
+    xa[unsafe_offset=3]=3.0; xa[unsafe_offset=4]=4.0
+    ya[unsafe_offset=0]=0.0; ya[unsafe_offset=1]=1.0; ya[unsafe_offset=2]=4.0
+    ya[unsafe_offset=3]=9.0; ya[unsafe_offset=4]=16.0
 
-    var spline = CubicSpline(
-        xa.unsafe_origin_cast[MutExternalOrigin](),
-        ya.unsafe_origin_cast[MutExternalOrigin](),
-        5,
-    )
+    var spline = CubicSpline(xa, ya, 5)
     print(spline.eval(1.5).val)   # ≈ 2.25 (interpolates x^2)
     print(spline.deriv(2.0).val)  # ≈ 4.0  (derivative of x^2)
-    xa.free(); ya.free()
+    xa.unsafe_free(); ya.unsafe_free()
 ```
 
 ### Root-finding and minimization
@@ -230,39 +232,40 @@ def main():
 ### ODE solving
 
 ```mojo
+from std.memory import Pointer
+from std.memory.alloc import unsafe_alloc
 from msl.ode import ode_rk4, ode_rkf45
 from std.math import cos, sin
-
-comptime MutExt = MutExternalOrigin
 
 def main() raises:
     # Harmonic oscillator: y'' + y = 0
     # y0(t) = cos(t),  y1(t) = -sin(t)
     def rhs[o1: MutOrigin, o2: MutOrigin, //](
         t: Float64,
-        y: UnsafePointer[Float64, o1],
-        dydt: UnsafePointer[Float64, o2],
+        y: Pointer[Float64, o1],
+        dydt: Pointer[Float64, o2],
     ) capturing:
-        dydt[0] = y[1]
-        dydt[1] = -y[0]
+        dydt[unsafe_offset=0] = y[unsafe_offset=1]
+        dydt[unsafe_offset=1] = -y[unsafe_offset=0]
 
-    var y = alloc[Float64](2)
-    y[0] = 1.0; y[1] = 0.0
+    var y = unsafe_alloc[Float64](2)
+    y[unsafe_offset=0] = 1.0; y[unsafe_offset=1] = 0.0
 
     # Fixed-step RK4
-    var r = ode_rk4[rhs](0.0, 1.0, 0.01, y, 2)
-    print(y[0], cos(1.0))   # ≈ cos(1)
+    _ = ode_rk4[rhs](0.0, 1.0, 0.01, y, 2)
+    print(y[unsafe_offset=0], cos(1.0))   # ≈ cos(1)
 
     # Adaptive RKF45
-    y[0] = 1.0; y[1] = 0.0
+    y[unsafe_offset=0] = 1.0; y[unsafe_offset=1] = 0.0
     var r2 = ode_rkf45[rhs](0.0, 1.0, 0.1, y, 2, epsabs=1e-8, epsrel=1e-8)
     print(r2.nsteps, "steps")
-    y.free()
+    y.unsafe_free()
 ```
 
 ### Vectors and matrices (with BLAS backend)
 
 ```mojo
+from std.memory.alloc import unsafe_alloc
 from msl.vector import Vector
 from msl.matrix import Matrix
 from msl.blas import blas_dot, blas_gemm
@@ -277,11 +280,11 @@ def main() raises:
     print(blas_dot(x, y))   # 32.0
 
     # Non-owning view over external buffer (zero-copy, e.g. from NuMojo NDArray)
-    var buf = alloc[Float64](6)
+    var buf = unsafe_alloc[Float64](6)
     # ... fill buf from NDArray.unsafe_ptr() ...
-    var v = Vector(buf.unsafe_origin_cast[MutExternalOrigin](), 6)
-    # v.owner == 0: destructor does NOT free buf
-    buf.free()
+    _ = Vector(buf, 6)
+    # Vector's owner field is False here: destructor does NOT free buf
+    buf.unsafe_free()
 
     # Matrix-matrix multiply via mojoBLAS
     var A = Matrix(2, 3, initialize=True)
@@ -356,6 +359,37 @@ struct MyRNG(RNGAlgorithm):
     def seed(mut self, s: UInt64): ...
 ```
 
+### Linear algebra (`msl.linalg`)
+
+| Function | Description |
+|----------|-------------|
+| `lu_decomp`, `lu_svx`, `lu_solve` | LU decomposition with partial pivoting and solve |
+| `lu_det`, `lu_lndet` | Determinant and log-determinant from an LU factorization |
+| `lu_invert` | Matrix inverse from an LU factorization |
+| `cholesky_decomp`, `cholesky_svx`, `cholesky_solve` | Cholesky decomposition and solve (SPD matrices) |
+| `qr_decomp`, `qr_svx`, `qr_solve` | QR decomposition (Householder) and solve |
+| `eigen_jacobi` | Symmetric eigenvalue/eigenvector solver (cyclic Jacobi) |
+
+### Polynomials (`msl.poly`)
+
+| Function | Description |
+|----------|-------------|
+| `poly_eval`, `poly_eval_derivs` | Horner-form polynomial evaluation and derivatives |
+| `poly_dd_init`, `poly_dd_eval`, `poly_dd_taylor` | Newton divided-difference interpolation |
+| `poly_solve_quadratic`, `poly_solve_cubic` | Real/complex roots of quadratics and cubics |
+
+### Statistics (`msl.statistics`)
+
+| Function group | Description |
+|----------------|-------------|
+| `stats_mean`, `stats_variance`, `stats_sd`, `stats_skew`, `stats_kurtosis` | Central moments |
+| `stats_covariance`, `stats_correlation`, `stats_lag1_autocorrelation` | Association and autocorrelation |
+| `stats_median`, `stats_quantile_from_sorted_data`, `stats_trmean_from_sorted_data` | Order statistics (require pre-sorted data) |
+| `stats_mad`, `stats_Sn_from_sorted_data`, `stats_Qn_from_sorted_data` | Robust scale estimators (Rousseeuw & Croux) |
+| `stats_wmean`, `stats_wvariance`, `stats_wskew`, `stats_wkurtosis` | Weighted counterparts of the above |
+| `stats_ttest`, `stats_pvariance` | Two-sample t-test and pooled variance |
+| `stats_spearman` | Spearman rank correlation |
+
 ---
 
 ## Design
@@ -376,7 +410,7 @@ MSL follows the GSL design philosophy:
 pixi run tests
 ```
 
-Runs the full test suite (~280 tests covering all modules).
+Runs the full test suite (330 tests covering all modules).
 
 ---
 
@@ -395,7 +429,10 @@ Runs the full test suite (~280 tests covering all modules).
 | `msl.vector` | ✅ Strided vector, math ops, BLAS-backed |
 | `msl.matrix` | ✅ Dense matrix, math ops, BLAS-backed |
 | `msl.blas` | ✅ Level 1/2/3 wrappers over mojoBLAS |
+| `msl.linalg` | ✅ LU, Cholesky, QR, symmetric eigensolver (Jacobi) |
 | `msl.permutation` | ✅ Permutation array |
+| `msl.poly` | ✅ Evaluation, divided-difference interpolation, quadratic/cubic solving |
+| `msl.statistics` | ✅ Moments, order statistics, robust scale (MAD/Sn/Qn), weighted, Spearman |
 
 ---
 
@@ -407,7 +444,7 @@ Runs the full test suite (~280 tests covering all modules).
 - [ ] Hypergeometric functions (2F1, 1F1)
 - [ ] Implicit ODE solvers (RK4-implicit, BDF)
 - [ ] Sparse matrices
-- [ ] Wiring it to SciJo. 
+- [x] Wiring it to SciJo (`scijo.integrate` and `scijo.optimize` already call into MSL).
 
 ---
 
