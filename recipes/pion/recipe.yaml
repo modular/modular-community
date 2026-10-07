@@ -1,7 +1,10 @@
 # yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
 
 context:
-  version: "0.9.6"
+  version: "0.9.7"
+  # The commit the v${{ version }} tag points at, stamped into the binary as the
+  # release binaries stamp it (pion-server --version: 0.9.7+720a55c).
+  commit: "720a55c"
   mojo_version: "1.1.0"
 
 package:
@@ -10,13 +13,16 @@ package:
 
 source:
   url: https://github.com/pavelhorak/pion/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: 65cfe85b4a993f973bfee9f45b6b83de9d6e87269477b2639ae2f88890ebb4b3
+  sha256: 3fb7c1895070d0d57b5dc8c36e18ca0f0ac173516be82361468b94cb675ee295
 
 build:
   number: 0
   skip:
     - win
-  script: build.sh
+  script:
+    file: build.sh
+    env:
+      PION_COMMIT: ${{ commit }}
 
 requirements:
   host:

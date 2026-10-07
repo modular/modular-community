@@ -58,6 +58,13 @@ else
          -Xlinker -lm -Xlinker -lpthread)
 fi
 
+# Stamp src/common/version.mojo from VERSION, as `pixi run build` does. The
+# committed copy can lag VERSION (at v0.9.7 it still said 0.9.6), and a tag
+# archive has no .git, so the stamp reads the commit from .export_sha. GIT_DIR
+# keeps git from finding a repository the build directory happens to sit in.
+echo "${PION_COMMIT}" > .export_sha
+GIT_DIR=/nonexistent bash scripts/stamp_version.sh
+
 mkdir -p "${PREFIX}/bin"
 mojo build -I . -D PION_HELD_VECTOR -O3 --target-cpu "${cpu}" src/main.mojo \
   "${link[@]}" -o "${PREFIX}/bin/pion-server"
