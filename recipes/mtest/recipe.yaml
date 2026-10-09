@@ -1,5 +1,5 @@
 context:
-  version: "1.1.0"
+  version: "1.2.0"
 
 package:
   name: mtest
@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/mikeleppane/mtest.git
-    rev: 3b534933892f6bc20312c84fe5585a756ff99248
+    rev: 0668b528b73fc65d83265a1f481e989b6df1a69b
 
 build:
   number: 0
@@ -25,12 +25,12 @@ build:
 
 requirements:
   build:
-    - mojo ==1.0.0b2
+    - mojo ==1.1.0
     - clang ==18.1.8
   host:
-    - mojo-compiler ==1.0.0b2
+    - mojo-compiler ==1.1.0
   run:
-    - mojo-compiler ==1.0.0b2
+    - mojo-compiler ==1.1.0
 
 tests:
   - files:
