@@ -1,0 +1,89 @@
+context:
+  version: "0.1.0"
+  mojo_version: "==1.1.0"
+
+package:
+  name: req
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/mojoto/req.mojo.git
+    rev: c46152a5d77adf17b85ebb40fe90106a0522e0ee  # v0.1.0
+  - git: https://github.com/ehsanmok/json.git
+    rev: 0bae1f3815d249efa6cb0a3483eb6658700635e5  # v0.4.1
+    target_directory: vendor/json
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content: |
+      set -euo pipefail
+      mkdir -p "${PREFIX}/lib/mojo"
+      # req's precompiled module still imports json; no community recipe exists yet.
+      cp -R vendor/json/json "${PREFIX}/lib/mojo/json"
+      # Req uses the CPU API; the optional GPU module requires MAX.
+      rm -rf "${PREFIX}/lib/mojo/json/gpu"
+      if [[ "$(uname -s)" == "Darwin" ]]; then
+        native="${PREFIX}/lib/libreq_curl.dylib"
+        shared_flags=(-dynamiclib -Wl,-install_name,@rpath/libreq_curl.dylib -Wl,-rpath,@loader_path)
+      else
+        native="${PREFIX}/lib/libreq_curl.so"
+        shared_flags=(-shared -Wl,-soname,libreq_curl.so '-Wl,-rpath,$ORIGIN')
+      fi
+      "${CC}" ${CPPFLAGS:-} ${CFLAGS:-} ${LDFLAGS:-} -O2 -std=c11 -D_POSIX_C_SOURCE=200809L -Wall -Wextra -Werror \
+        -fPIC "${shared_flags[@]}" -I"${PREFIX}/include" -L"${PREFIX}/lib" \
+        req/_transports/_curl.c -lcurl -lz -o "${native}"
+      mojo precompile --Werror -I "${PREFIX}/lib/mojo" req \
+        -o "${PREFIX}/lib/mojo/req.mojoc"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - libcurl >=7.85
+    - libzlib
+    - zlib
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - ${{ pin_compatible('libcurl') }}
+    - ${{ pin_compatible('libzlib') }}
+
+tests:
+  - script:
+      interpreter: bash
+      content: |
+        set -euo pipefail
+        mojo build --Werror test.mojo -o test-req
+        python test.py
+    files:
+      recipe:
+        - test.mojo
+        - test.py
+    requirements:
+      run:
+        - python >=3.12
+
+about:
+  homepage: https://github.com/mojoto/req.mojo
+  repository: https://github.com/mojoto/req.mojo
+  documentation: https://mojoto.github.io/req.mojo/
+  license: MIT
+  license_file:
+    - LICENSE
+    - vendor/json/LICENSE
+    - vendor/json/NOTICE
+  summary: A synchronous HTTP client for Mojo.
+  description: |
+    Send HTTP/1.1 requests with JSON, forms, authentication, cookies,
+    connection reuse, streaming, timeouts, and TLS verification.
+    Includes the native shared library and the CPU source modules from
+    ehsanmok/json 0.4.1. The native transport loads automatically from
+    the active environment; consumers need no extra linker flags.
+
+extra:
+  project_name: Req
+  maintainers:
+    - Prodesire
