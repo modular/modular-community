@@ -1,7 +1,7 @@
 context:
-  version: "0.3.2"
+  version: "0.3.5"
   mojo_version: ">=1.0.0,<1.1.0"
-  mojo_net_version: ">=0.2.5,<0.3.0"
+  mojo_net_version: ">=0.2.8,<0.3.0"
   openssl_version: ">=3.0,<4.0a0"
 
 package:
@@ -10,7 +10,7 @@ package:
 
 source:
   - git: https://github.com/nsalerni/mojo-tls.git
-    rev: f79b8ae0013b9f1011694c8d93a0317fc22ebe28
+    rev: 07afb9fe80f6c3bbb6af1320bbd163c158cee721
 
 build:
   number: 0
