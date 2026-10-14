@@ -1,0 +1,120 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+# cvc5_mojo for the modular-community channel.
+#
+# Design: the matching official cvc5 shared build is repackaged into a
+# private directory, $PREFIX/lib/cvc5_mojo/lib. The archive bundles its own
+# libgmp, libmpfr and libpoly; keeping them private avoids clobbering files
+# owned by conda-forge packages. Upstream relative loader paths resolve
+# within the bundle; preserve library bytes and Mach-O signatures.
+context:
+  version: "1.4.1.0"
+  mojo_version: "=1.1.0"
+  apn_version: "=1.0.1"
+  cvc5_version: "1.4.1"
+
+package:
+  name: cvc5_mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Spellbound-Mojo/cvc5_mojo.git
+    tag: v${{ version }}
+    target_directory: cvc5_mojo
+  - if: target_platform == "linux-64"
+    then:
+      url: https://github.com/cvc5/cvc5/releases/download/cvc5-${{ cvc5_version }}/cvc5-Linux-x86_64-shared.zip
+      sha256: 6d7e7c3772824505c68c7b4747482c1c16291253b2438adcac3fc744704252f3
+      target_directory: cvc5
+  - if: target_platform == "linux-aarch64"
+    then:
+      url: https://github.com/cvc5/cvc5/releases/download/cvc5-${{ cvc5_version }}/cvc5-Linux-arm64-shared.zip
+      sha256: c45ff7dfb2346855215d2f6d68428c06ad6a33bbe95ce4f94e5b02e70e0a6312
+      target_directory: cvc5
+  - if: target_platform == "osx-arm64"
+    then:
+      url: https://github.com/cvc5/cvc5/releases/download/cvc5-${{ cvc5_version }}/cvc5-macOS-arm64-shared.zip
+      sha256: 74d766082c44d17a811779a788b997cfe15fde90f814a2ce5e69d00a42509b88
+      target_directory: cvc5
+
+build:
+  number: 0
+  skip:
+    - target_platform not in ["linux-64", "linux-aarch64", "osx-arm64"]
+  dynamic_linking:
+    binary_relocation: false
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        python cvc5_mojo/bindgen/package_native.py --release cvc5 --prefix "${PREFIX}" --platform "${{ target_platform }}"
+        mkdir -p "${PREFIX}/lib/mojo"
+        mojo precompile cvc5_mojo/src/cvc5_mojo -o "${PREFIX}/lib/mojo/cvc5_mojo.mojoc"
+        rm -f "${PREFIX}/share/max/firstActivation"
+
+requirements:
+  build:
+    - python >=3.11
+    - llvm-tools >=20,<23
+    - mojo-compiler ${{ mojo_version }}
+    - apn_mojo ${{ apn_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - apn_mojo ${{ apn_version }}
+  run:
+    # Any patch release of the same Mojo minor, e.g. >=1.1.0,<1.2.0a0.
+    - ${{ pin_compatible('mojo-compiler', upper_bound='x.x') }}
+    - apn_mojo ${{ apn_version }}
+    # The bundled Linux libraries need libstdc++ from GCC 11 (GLIBCXX_3.4.29);
+    # tests/bindgen/test_packaging.py checks this bound against the snapshot.
+    - if: linux
+      then: libstdcxx >=11
+
+tests:
+  - files:
+      source:
+        - cvc5_mojo/tests/smoke/test_smoke.mojo
+        - cvc5_mojo/tests/smoke/test_lifetimes.mojo
+        - cvc5_mojo/tests/smoke/test_api.mojo
+        - cvc5_mojo/docs/examples/plugins.mojo
+        - cvc5_mojo/docs/examples/oracles.mojo
+    script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/cvc5_mojo.mojoc"
+          case "${{ target_platform }}" in
+            osx-*) test -f "${PREFIX}/lib/cvc5_mojo/lib/libcvc5.dylib" ;;
+            *) test -f "${PREFIX}/lib/cvc5_mojo/lib/libcvc5.so" ;;
+          esac
+          # Exercise the default discovery path ($CONDA_PREFIX/lib/cvc5_mojo/lib).
+          export CONDA_PREFIX="${CONDA_PREFIX:-${PREFIX}}"
+          # No -I: cvc5_mojo and apn_mojo must resolve from the installed packages.
+          mojo run cvc5_mojo/tests/smoke/test_smoke.mojo
+          mojo run cvc5_mojo/tests/smoke/test_lifetimes.mojo
+          mojo run cvc5_mojo/tests/smoke/test_api.mojo
+          mojo run cvc5_mojo/docs/examples/plugins.mojo
+          mojo run cvc5_mojo/docs/examples/oracles.mojo
+
+about:
+  homepage: https://spellbound-mojo.github.io/cvc5_mojo/
+  repository: https://github.com/Spellbound-Mojo/cvc5_mojo
+  documentation: https://spellbound-mojo.github.io/cvc5_mojo/
+  # cvc5_mojo itself is Apache-2.0 WITH LLVM-exception. The bundled cvc5 build
+  # is BSD-3-Clause (cvc5, and symfpu under its BSD option), includes MIT code
+  # (MiniSat, CaDiCaL), and ships GMP, MPFR and LibPoly, under
+  # LGPL-3.0-or-later, as unmodified shared libraries; see cvc5/COPYING.
+  license: Apache-2.0 WITH LLVM-exception AND BSD-3-Clause AND MIT AND LGPL-3.0-or-later
+  license_file:
+    - cvc5_mojo/LICENSE
+    - cvc5_mojo/NOTICE
+    - cvc5/COPYING
+    - cvc5/licenses/*
+  summary: Mojo bindings for the cvc5 SMT solver, mirroring the cvc5 Python base API (bundles libcvc5 ${{ cvc5_version }})
+
+extra:
+  maintainers:
+    - anatolvitold
+  project_name:
+    - cvc5 Mojo
