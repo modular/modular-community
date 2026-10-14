@@ -1,0 +1,50 @@
+context:
+  version: 0.1.1
+  mojo_version: "=0.26.1"
+
+package:
+  name: mojo2wasm
+  version: ${{ version }}
+
+source:
+  git: https://github.com/ravioli67/mojo2wasm.git
+  tag: v0.1.1
+
+build:
+  number: 0
+  script:
+    - mkdir mojo2wasm
+    - cd mojo2wasm
+    - git init
+    - git clone https://github.com/ravioli67/mojo2wasm.git
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - test -f $PREFIX/lib/mojo/yaml/__init__.mojo
+      - test -f $PREFIX/lib/mojo/yaml/parser.mojo
+      - test -f $PREFIX/lib/mojo/yaml/lexer.mojo
+
+about:
+  homepage: https://github.com/ravioli67/mojo2wasm
+  license: MIT
+  license_file: LICENSE
+  summary: A library to convert Mojo to Web Assembly
+  description: |
+    An experimental, self-hosted compiler frontend written entirely
+    in Mojo to compile Mojo source code into WebAssembly (Wasm).
+
+The goal of this project is to bridge the gap between Mojo's high-performance systems programming capabilities and the web/edge ecosystem.
+  documentation: https://github.com/ravioli67/mojo2wasm/blob/main/README.md
+  repository: https://github.com/ravioli67/mojo2wasm
+
+extra:
+  recipe-maintainers:
+    - ravioli67
