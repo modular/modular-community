@@ -1,3 +1,5 @@
+schema_version: 1
+
 context:
   version: 0.1.1
   mojo_version: "=0.26.1"
@@ -8,15 +10,13 @@ package:
 
 source:
   git: https://github.com/ravioli67/mojo2wasm.git
-  tag: v0.1.1
+  tag: v${{ version }}
 
 build:
   number: 0
   script:
-    - mkdir mojo2wasm
-    - cd mojo2wasm
-    - git init
-    - git clone https://github.com/ravioli67/mojo2wasm.git
+    - mkdir -p $PREFIX/lib/mojo
+    - mojo package src -o $PREFIX/lib/mojo/mojo2wasm.mojopkg
 
 requirements:
   build:
@@ -27,21 +27,22 @@ requirements:
     - ${{ pin_compatible('mojo-compiler') }}
 
 tests:
-  - script:
-      - test -f $PREFIX/lib/mojo/yaml/__init__.mojo
-      - test -f $PREFIX/lib/mojo/yaml/parser.mojo
-      - test -f $PREFIX/lib/mojo/yaml/lexer.mojo
+  - package_contents:
+      files:
+        - lib/mojo/mojo2wasm.mojopkg
 
 about:
   homepage: https://github.com/ravioli67/mojo2wasm
   license: MIT
   license_file: LICENSE
-  summary: A library to convert Mojo to Web Assembly
+  summary: A library to convert Mojo to WebAssembly
   description: |
     An experimental, self-hosted compiler frontend written entirely
     in Mojo to compile Mojo source code into WebAssembly (Wasm).
 
-The goal of this project is to bridge the gap between Mojo's high-performance systems programming capabilities and the web/edge ecosystem.
+    The goal of this project is to bridge the gap between Mojo's
+    high-performance systems programming capabilities and the web/edge
+    ecosystem.
   documentation: https://github.com/ravioli67/mojo2wasm/blob/main/README.md
   repository: https://github.com/ravioli67/mojo2wasm
 
