@@ -1,0 +1,67 @@
+context:
+  version: "1.0.0"
+  mojo_version: "=1.1.0"
+  apn_mojo_version: "=1.0.1"
+
+package:
+  name: poly_mojo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Spellbound-Mojo/poly_mojo.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    # apn_mojo comes from the host prefix; poly builds on the precompiled polynomials.
+    - mojo precompile -I ${{ PREFIX }}/lib/mojo src/polynomials -o ${{ PREFIX }}/lib/mojo/polynomials.mojoc
+    - mojo precompile -I ${{ PREFIX }}/lib/mojo src/poly -o ${{ PREFIX }}/lib/mojo/poly.mojoc
+    # The compiler leaves a first-run marker in the prefix; it is not part of the package.
+    - rm -f ${{ PREFIX }}/share/max/firstActivation
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - apn_mojo ${{ apn_mojo_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler', upper_bound='x.x') }}
+    # The packages are precompiled against this apn_mojo build.
+    - apn_mojo ${{ apn_mojo_version }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run docs/examples/tutorial_first.mojo
+          - mojo run docs/examples/tutorial_roots.mojo
+          - mojo run docs/examples/tutorial_numerical.mojo
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+    files:
+      source:
+        - docs/examples/tutorial_first.mojo
+        - docs/examples/tutorial_roots.mojo
+        - docs/examples/tutorial_numerical.mojo
+
+about:
+  homepage: https://spellbound-mojo.github.io/poly_mojo/
+  repository: https://github.com/Spellbound-Mojo/poly_mojo
+  documentation: https://spellbound-mojo.github.io/poly_mojo/
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+    - licenses/SymPy.txt
+    - licenses/Z3.txt
+    - licenses/SMT-RAT.txt
+  summary: Exact and validated polynomial algebra for Mojo, with independently checkable certificates
+
+extra:
+  maintainers:
+    - anatolvitold
+  project_name:
+    - Poly Mojo
