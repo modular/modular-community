@@ -5,7 +5,7 @@
   },
   "source": {
     "git": "https://github.com/henlamp/filelock-mojo.git",
-    "rev": "428c17441e947ba2ddd9d220993661cbbc3879fb"
+    "rev": "67c712425287fbbf7b473257214e6c2736ff17e2"
   },
   "build": {
     "number": 0,
