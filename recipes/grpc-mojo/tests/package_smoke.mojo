@@ -6,6 +6,7 @@ from grpc import (
     Metadata,
     PollingServer,
     PollingServerConfig,
+    ReflectionRegistry,
     Server,
     ServerContext,
     Status,
@@ -13,6 +14,8 @@ from grpc import (
     decode_timeout,
     encode_timeout,
     frame_message,
+    gzip_compress,
+    gzip_decompress,
     status_code_name,
 )
 from net import resolve
@@ -155,4 +158,15 @@ def main() raises:
     var health = Health()
     health.set_status("echo.Echo", 1)
     assert_true(health.status("echo.Echo"))
+    var sample: List[Byte] = [1, 2, 3]
+    var gz = gzip_compress(Span(sample))
+    var plain = gzip_decompress(Span(gz), max_size=16)
+    assert_equal(len(plain), 3)
+    var reflection = ReflectionRegistry()
+    var descriptor: List[Byte] = [10]
+    reflection.add_file(
+        String("smoke.proto"),
+        descriptor^,
+        [String("smoke.Smoke")],
+    )
     print("grpc-mojo package smoke test passed")
