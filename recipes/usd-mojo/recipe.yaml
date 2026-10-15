@@ -5,7 +5,7 @@
   },
   "source": {
     "git": "https://github.com/henlamp/usd-mojo.git",
-    "rev": "36de37b5ff7a517a80dbd37eaba468662b48e8a5"
+    "rev": "b150c43e621c62dc04accf0d27fd66ee7ec0f2a2"
   },
   "build": {
     "number": 0,
