@@ -54,6 +54,15 @@ def commit_push_changes(message: str, branch_name: str) -> None:
 
     # Commit, pull and push the changes
     run_command(["git", "pull", "origin", branch_name])
+    # Another runner may already have pushed the same generated changes.
+    # Pulling that commit leaves nothing staged, which is a successful no-op.
+    result = run_command_unchecked(["git", "diff-index", "--cached", "--quiet", "HEAD"])
+    if result.returncode == 0:
+        eprint("No changes to commit after pulling.")
+        return
+    if result.returncode != 1:
+        sys.exit(result.returncode)
+
     run_command(["git", "commit", "--message", message, "--no-verify"])
     run_command(["git", "push", "--set-upstream", "origin", branch_name])
 

@@ -20,3 +20,6 @@ jobs:
 
       - name: Run pre-commit
         run: pixi run lint
+
+      - name: Test compatibility commits
+        run: pixi run python -m unittest discover -s tests -v
