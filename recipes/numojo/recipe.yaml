@@ -1,7 +1,7 @@
 context:
-  version: "0.10.0"
-  mojo_version: ">=1.0.0,<1.1.0"
-  max_core_version: ">=26.5.0,<26.6"
+  version: "0.11.0"
+  mojo_version: ">=1.1.0,<1.2.0"
+  max_core_version: ">=26.6.0,<26.7"
 
 package:
   name: "numojo"
@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
-    rev: 515fb2856f0ecf3d2740a34d958fe168183e1129
+    rev: 26b48742c57cba745415c8482e00176fc99aaa62
 
 build:
   number: 0
