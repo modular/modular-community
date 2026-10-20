@@ -75,6 +75,10 @@ def main() -> None:
 
         command.extend(
             [
+                # A shared output channel can hide compatible published builds
+                # behind another recipe's newer, incompatible compiler pin.
+                "--output-dir",
+                str(Path("output") / recipe_dir.name),
                 "--variant-config",
                 variant_config,
                 "--skip-existing=all",
