@@ -2,7 +2,7 @@ schema_version: 1
 
 context:
   version: 0.1.1
-  mojo_version: "=0.26.1"
+  mojo_version: "=1.1.0"
 
 package:
   name: mojo2wasm
@@ -34,7 +34,7 @@ tests:
 about:
   homepage: https://github.com/ravioli67/mojo2wasm
   license: MIT
-  license_file: LICENSE
+  license_file: LICENSE.md
   summary: A library to convert Mojo to WebAssembly
   description: |
     An experimental, self-hosted compiler frontend written entirely
