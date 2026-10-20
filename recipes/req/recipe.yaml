@@ -1,5 +1,5 @@
 context:
-  version: "0.1.0"
+  version: "0.2.0"
   mojo_version: "==1.1.0"
 
 package:
@@ -8,7 +8,7 @@ package:
 
 source:
   - git: https://github.com/mojoto/req.mojo.git
-    rev: c46152a5d77adf17b85ebb40fe90106a0522e0ee  # v0.1.0
+    rev: 7f8b006c7b39e77584cf57a24579e32cbadd6435  # 0.2.0 preparation source; no release tag
   - git: https://github.com/ehsanmok/json.git
     rev: 0bae1f3815d249efa6cb0a3483eb6658700635e5  # v0.4.1
     target_directory: vendor/json
@@ -56,15 +56,20 @@ tests:
       interpreter: bash
       content: |
         set -euo pipefail
-        mojo build --Werror test.mojo -o test-req
+        mojo build --Werror tests/package.mojo -o test-req
         python test.py
     files:
       recipe:
-        - test.mojo
         - test.py
+      source:
+        - tests/package.mojo
+        - tests/conftest.py
+        - tests/transports/http2_server.py
     requirements:
       run:
         - python >=3.12
+        - h2 >=4.3,<5
+        - openssl
 
 about:
   homepage: https://github.com/mojoto/req.mojo
@@ -77,8 +82,9 @@ about:
     - vendor/json/NOTICE
   summary: A synchronous HTTP client for Mojo.
   description: |
-    Send HTTP/1.1 requests with JSON, forms, authentication, cookies,
-    connection reuse, streaming, timeouts, and TLS verification.
+    Send HTTP/1.1 and opt-in HTTP/2 requests with JSON, multipart and file
+    uploads, HTTP/HTTPS proxies, connection pool limits, hooks, injectable
+    transports, response iterators, and verified TLS.
     Includes the native shared library and the CPU source modules from
     ehsanmok/json 0.4.1. The native transport loads automatically from
     the active environment; consumers need no extra linker flags.
