@@ -7,7 +7,7 @@
   </p>
 </div>
 
-**[Manual»](docs/MANUAL.md)** | **[Changelog»](docs/changelog.md)** | **[Examples»](examples/)**
+**[Manual»](https://github.com/mojomath/SciJo/blob/main/docs/MANUAL.md)** | **[Changelog»](https://github.com/mojomath/SciJo/blob/main/docs/changelog.md)** | **[Examples»](https://github.com/mojomath/SciJo/tree/main/examples)**
 
 ## Overview
 
@@ -343,8 +343,8 @@ def main() raises:
     print("eigenvalues:", w_v[0])
 ```
 
-See the **[Manual»](docs/MANUAL.md)** for a full prose tour of every module, and
-**[examples/»](examples/)** for runnable, longer versions of the snippets above
+See the **[Manual»](https://github.com/mojomath/SciJo/blob/main/docs/MANUAL.md)** for a full prose tour of every module, and
+**[examples/»](https://github.com/mojomath/SciJo/tree/main/examples)** for runnable, longer versions of the snippets above
 (run them all with `examples/run_all.sh`, after `pixi run package`).
 
 ## Roadmap
@@ -370,7 +370,8 @@ Priority areas:
 
 ## License
 
-Distributed under the Apache 2.0 License with LLVM Exceptions. See [LICENSE](LICENSE) for more information.
+Distributed under the Apache 2.0 License with LLVM Exceptions. See the
+[license](https://github.com/mojomath/SciJo/blob/main/LICENSE) for more information.
 
 ## Acknowledgements
 
