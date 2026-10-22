@@ -41,7 +41,7 @@ about:
   repository: https://github.com/mojomath/SciJo
   license: Apache-2.0
   license_file: LICENSE
-  summary: SciPy-inspired scientific computing for Mojo, built on NuMojo.
+  summary: A high-performance scientific computing library for Mojo, providing SciPy-like functionality.
 
 extra:
   project_name: SciJo
