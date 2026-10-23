@@ -71,7 +71,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         matmul.matmul(self.height, self.width, rhs.width, C, A, B)
         return Matrix(C.data, self.height, rhs.width)
 
-    @inline(.always)
+    @staticmethod
     def random(height: Int, width: Int, order: String = 'c') -> Matrix:
         random.seed()
         var mat = Matrix(height, width, order= order)
