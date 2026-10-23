@@ -13,7 +13,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
     comptime simd_width: Int = 4 * simd_width_of[DType.float32]() if CompilationTarget.is_apple_silicon() else 2 * simd_width_of[DType.float32]()
 
     # initialize from Pointer
-    @always_inline
+    @inline(.always)
     def __init__[src: DType = DType.float32](out self, data: Pointer[Scalar[src], MutUntrackedOrigin], height: Int, width: Int, order: String = 'c'):
         self.height = height
         self.width = width
@@ -26,7 +26,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         self.order = order.lower()
 
     # initialize by copying from Pointer
-    @always_inline
+    @inline(.always)
     def __init__(out self, height: Int, width: Int, data: OptionalPointer[Float32, MutUntrackedOrigin] = None, order: String = 'c'):
         self.height = height
         self.width = width
@@ -54,15 +54,15 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         #move.order = ''
         #move.data = Pointer[Float32, MutAnyOrigin]()
 
-    @always_inline
+    @inline(.always)
     def __deinit__(deinit self):
         self.data.unsafe_free()
 
-    @always_inline
+    @inline(.always)
     def __len__(self) -> Int:
         return self.size
 
-    @always_inline
+    @inline(.always)
     def __mul__(self, rhs: Self) -> Self:
         var A = matmul.Matrix[DType.float32](self.data, (self.height, self.width))
         var B = matmul.Matrix[DType.float32](rhs.data, (rhs.height, rhs.width))
@@ -71,7 +71,7 @@ struct Matrix(Copyable, ImplicitlyCopyable, Sized):
         matmul.matmul(self.height, self.width, rhs.width, C, A, B)
         return Matrix(C.data, self.height, rhs.width)
 
-    @staticmethod
+    @inline(.always)
     def random(height: Int, width: Int, order: String = 'c') -> Matrix:
         random.seed()
         var mat = Matrix(height, width, order= order)
