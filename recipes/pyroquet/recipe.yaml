@@ -12,7 +12,7 @@ source:
 build:
   number: 0
   skip:
-    - target_platform != "linux-64"
+    - target_platform != "#linux-64"
   files:
     - lib/mojo/pyroquet.mojoc
     - lib/mojo/compact_protocol.mojoc
