@@ -1,7 +1,8 @@
 context:
   version: "0.3.0"
   mojo_version: "==1.1.0"
-  numojo_version: "==0.11.0"
+  max_core_version: "==26.6.0"
+  numojo_version: "0.11.0"
 
 package:
   name: scijo
@@ -10,22 +11,27 @@ package:
 source:
   - git: https://github.com/mojomath/SciJo.git
     rev: 91cc86f211447ab01b4e3dac4761ad874d968ce6
+  - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
+    tag: v${{ numojo_version }}
+    target_directory: vendor/numojo
 
 build:
   number: 0
   script:
     - mkdir -p "${PREFIX}/lib/mojo"
+    - mojo precompile vendor/numojo/numojo -o "${PREFIX}/lib/mojo/numojo.mojoc"
     - mojo precompile -I "${PREFIX}/lib/mojo" scijo -o "${PREFIX}/lib/mojo/scijo.mojoc"
 
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}
+    - max-core ${{ max_core_version }}
   host:
     - mojo-compiler ${{ mojo_version }}
-    - numojo ${{ numojo_version }}
+    - max-core ${{ max_core_version }}
   run:
     - mojo-compiler ${{ mojo_version }}
-    - numojo ${{ numojo_version }}
+    - max-core ${{ max_core_version }}
 
 tests:
   - script:
@@ -40,7 +46,9 @@ about:
   homepage: https://github.com/mojomath/SciJo
   repository: https://github.com/mojomath/SciJo
   license: Apache-2.0
-  license_file: LICENSE
+  license_file:
+    - LICENSE
+    - vendor/numojo/LICENSE
   summary: A high-performance scientific computing library for Mojo, providing SciPy-like functionality.
 
 extra:
