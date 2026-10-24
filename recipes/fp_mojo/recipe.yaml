@@ -1,5 +1,5 @@
 context:
-  version: "1.0.0"
+  version: "1.0.1"
   mojo_version: "=1.1.0"
 
 package:
@@ -33,6 +33,7 @@ tests:
           - mojo run docs/examples/quickstart.mojo
           - mojo run docs/examples/expression.mojo
           - mojo run docs/examples/config_parser.mojo
+          - mojo run docs/examples/iteration_chaining.mojo
     requirements:
       run:
         - mojo ${{ mojo_version }}
@@ -41,6 +42,7 @@ tests:
         - docs/examples/quickstart.mojo
         - docs/examples/expression.mojo
         - docs/examples/config_parser.mojo
+        - docs/examples/iteration_chaining.mojo
 
 about:
   homepage: https://spellbound-mojo.github.io/fp_mojo/
