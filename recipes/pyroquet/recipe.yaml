@@ -10,9 +10,9 @@ source:
     rev: a923b5926a2867f82fee8f9e4d7c4443793165a6
 
 build:
-  number: 0
+  number: 1
   skip:
-    - target_platform != "#linux-64"
+    - target_platform != "linux-64"
   files:
     - lib/mojo/pyroquet.mojoc
     - lib/mojo/compact_protocol.mojoc
@@ -28,14 +28,15 @@ requirements:
     - mojo-compiler ==1.0.0
     - max-core ==26.5.0
     - numojo ==0.10.0
-    - mojo-snappy ==0.2.0
+    # CI's local Snappy rebuild targets a newer compiler; select the published Mojo 1.0 build.
+    - https://prefix.dev/modular-community::mojo-snappy ==0.2.0 hb0f4dca_0
     - libzlib ==1.3.2
     - zstd ==1.5.7
   run:
     - mojo-compiler ==1.0.0
     - max-core ==26.5.0
     - numojo ==0.10.0
-    - mojo-snappy ==0.2.0
+    - https://prefix.dev/modular-community::mojo-snappy ==0.2.0 hb0f4dca_0
     - libzlib ==1.3.2
     - zstd ==1.5.7
 
@@ -53,6 +54,8 @@ tests:
     requirements:
       run:
         - gcc_linux-64
+        # Runtime metadata drops channel qualifiers; repeat it for the CI test solve.
+        - https://prefix.dev/modular-community::mojo-snappy ==0.2.0 hb0f4dca_0
     files:
       source:
         - tests/release/package_smoke.mojo
