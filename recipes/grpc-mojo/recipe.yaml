@@ -1,9 +1,9 @@
 context:
-  version: "0.2.6"
+  version: "0.2.8"
   mojo_version: ">=1.0.0,<1.1.0"
-  family_version: ">=0.2.6,<0.3.0"
-  protomojo_version: ">=0.4.2,<0.5.0"
-  tls_version: ">=0.3.2,<0.4.0"
+  family_version: ">=0.2.7,<0.3.0"
+  protomojo_version: ">=0.4.3,<0.5.0"
+  tls_version: ">=0.3.3,<0.4.0"
 
 package:
   name: grpc-mojo
@@ -11,7 +11,7 @@ package:
 
 source:
   - git: https://github.com/nsalerni/grpc-mojo.git
-    rev: a7944f897f189a652c7d29f462dcc61cfc5843c8
+    rev: a71879805d0beaa2de32ededaa48717769cea69f
 
 build:
   number: 0
@@ -26,13 +26,17 @@ build:
         case "$(uname -s)" in
           Darwin)
             "${CC}" -dynamiclib -fPIC -O2 -Wall -Werror \
+              -I"${PREFIX}/include" \
+              -L"${PREFIX}/lib" \
               -o "${PREFIX}/lib/libgrpcstop.dylib" \
-              shim/grpc_stop_signals.c
+              shim/grpc_stop_signals.c shim/grpc_gzip.c -lz
             ;;
           *)
             "${CC}" -shared -fPIC -O2 -Wall -Werror \
+              -I"${PREFIX}/include" \
+              -L"${PREFIX}/lib" \
               -o "${PREFIX}/lib/libgrpcstop.so" \
-              shim/grpc_stop_signals.c
+              shim/grpc_stop_signals.c shim/grpc_gzip.c -lz
             ;;
         esac
 
@@ -49,12 +53,14 @@ requirements:
     - mojo-net ${{ family_version }}
     - mojo-tls ${{ tls_version }}
     - protomojo ${{ protomojo_version }}
+    - zlib
   run:
     - mojo-compiler ${{ mojo_version }}
     - mojo-http2 ${{ family_version }}
     - mojo-net ${{ family_version }}
     - mojo-tls ${{ tls_version }}
     - protomojo ${{ protomojo_version }}
+    - zlib
 
 tests:
   - script:
