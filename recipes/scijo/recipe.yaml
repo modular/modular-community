@@ -1,8 +1,8 @@
 context:
-  version: "0.3.0"
-  mojo_version: "==1.1.0"
-  max_core_version: "==26.6.0"
-  numojo_version: "0.11.0"
+  version: "0.4.0"
+  mojo_version: "==1.2.0"
+  max_core_version: "==26.7.0"
+  numojo_version: "0.12.0"
 
 package:
   name: scijo
@@ -10,7 +10,7 @@ package:
 
 source:
   - git: https://github.com/mojomath/SciJo.git
-    rev: 91cc86f211447ab01b4e3dac4761ad874d968ce6
+    tag: v${{ version }}
   - git: https://github.com/Mojo-Numerics-and-Algorithms-group/NuMojo.git
     tag: v${{ numojo_version }}
     target_directory: vendor/numojo

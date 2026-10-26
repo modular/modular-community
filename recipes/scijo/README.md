@@ -95,10 +95,42 @@ minimization:
   - `method="Nelder-Mead"` (default): derivative-free simplex method
   - `method="BFGS"` / `method="CG"`: gradient-based, with the gradient estimated via finite differences
 
+### Types (`scijo.types`)
+A `Numeric` trait and its conformers, for code that wants to run generically
+over plain values, complex values, or values that carry their own exact
+derivative:
+- **`Numeric`**: the trait (`+`, `-`, `*`, `/`, `exp`, `log`, `sqrt`, `sin`, `cos`, `one()`/`constant()`)
+- **`NumericComparable`**: `Numeric` plus `<`, `<=`, `>`, `==`, `floor()`, for algorithms that branch by magnitude
+- **`Primal`**: a zero-cost wrapper over `SIMD[dtype, width]`
+- **`Complex`**: `re + im*i`, with complex arithmetic and transcendentals
+- **`Dual`**: forward-mode automatic differentiation - `(value, derivative)`, with nesting for higher-order derivatives
+- **`variable`** / **`variable2`**: build a seeded `Dual` without naming the nested generic type
+
+### Special Functions (`scijo.special`)
+Gamma, error, beta, digamma, regularized incomplete gamma/beta, and the
+order-0/1 Bessel functions - each written once, generically over
+`scijo.types.NumericComparable`, so calling it on a `Dual` instead of a
+plain `Scalar` gives an exact derivative for free:
+- **`gamma`** / **`lngamma`**: the gamma function and its log, via the Lanczos approximation
+- **`erf`** / **`erfc`**: the error function and its complement
+- **`beta`** / **`lnbeta`**: the beta function, `Gamma(a)*Gamma(b)/Gamma(a+b)`
+- **`digamma`**: `d/dx[ln(Gamma(x))]`
+- **`gamma_inc`** / **`gamma_incc`**: the regularized lower/upper incomplete gamma functions, `P(a, x)` and `Q(a, x)`
+- **`beta_inc`**: the regularized incomplete beta function, `I_x(a, b)`
+- **`bessel_j0`** / **`bessel_j1`** / **`bessel_y0`** / **`bessel_y1`**: order-0/1 Bessel functions of the first and second kind
+- **`bessel_i0`** / **`bessel_i1`** / **`bessel_k0`** / **`bessel_k1`**: order-0/1 modified Bessel functions
+
 ## Installation
 
+### Version Compatibility
+
+| SciJo  | Mojo      | NuMojo  |
+|--------|-----------|---------|
+| v0.4.0 | `>=1.2.0` | v0.12.0 |
+| v0.3.0 | `>=1.1.0` | v0.11.0 |
+
 ### Method 1: Git Installation with pixi-build-mojo
-Install the SciJo v0.3.0 release directly from GitHub.
+Install the SciJo v0.4.0 release directly from GitHub.
 
 Add to your `pixi.toml`:
 ```toml
@@ -112,7 +144,7 @@ platforms = ["osx-arm64", "linux-64"]
 preview = ["pixi-build"]
 
 [dependencies]
-scijo = { git = "https://github.com/mojomath/SciJo.git", tag = "v0.3.0" }
+scijo = { git = "https://github.com/mojomath/SciJo.git", tag = "v0.4.0" }
 ```
 
 Then run:
@@ -133,7 +165,7 @@ channels = [
 ]
 
 [dependencies]
-scijo = "=0.3.0"
+scijo = "=0.4.0"
 ```
 
 Then run:
@@ -141,7 +173,7 @@ Then run:
 pixi install
 ```
 
-SciJo v0.3.0 requires Mojo 1.1 and NuMojo 0.11.
+SciJo v0.4.0 requires Mojo 1.2 and NuMojo 0.12.
 
 ### Method 3: Build from Source
 ```bash
@@ -341,6 +373,36 @@ def main() raises:
 
     var w_v = eigh(A)
     print("eigenvalues:", w_v[0])
+```
+
+### Types and Automatic Differentiation
+```mojo
+from scijo.types import Numeric, variable
+
+def f[T: Numeric](x: T) -> T:
+    return x * x + 2.0 * x
+
+def main() raises:
+    print(f(variable(3.0)).deriv.v)  # f'(3) = 2*3 + 2 = 8.0
+```
+
+### Special Functions
+```mojo
+from scijo.special import bessel_j0, bessel_j1, gamma
+from scijo.types import NumericComparable, variable
+from scijo.prelude import *
+
+def j0_kernel[T: NumericComparable](x: T) -> T:
+    return bessel_j0(x)
+
+def main() raises:
+    print("gamma(5.0):", gamma(Scalar[f64](5.0)))  # 24.0 == 4!
+
+    # Call the same function on a `Dual` for an exact derivative, no
+    # separate derivative formula needed:
+    var result = j0_kernel(variable(3.0))
+    print("J0(3.0):", result.value.v)
+    print("J0'(3.0):", result.deriv.v, " (expect -J1(3.0) =", -bessel_j1(Scalar[f64](3.0)), ")")
 ```
 
 See the **[Manual»](https://github.com/mojomath/SciJo/blob/main/docs/MANUAL.md)** for a full prose tour of every module, and
