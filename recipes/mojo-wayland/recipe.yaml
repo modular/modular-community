@@ -41,10 +41,10 @@ requirements:
     # wayland/core.mojo.
     - wayland >=1.23,<1.27
   host:
-    - mojo-compiler ==1.1.0
+    - mojo-compiler ==1.2.0
     - wayland >=1.23,<1.27
   run:
-    - mojo-compiler ==1.1.0
+    - mojo-compiler ==1.2.0
     - wayland >=1.23,<1.27
 
 tests:
@@ -60,7 +60,7 @@ tests:
         - test_pack.mojo
     requirements:
       run:
-        - mojo-compiler ==1.1.0
+        - mojo-compiler ==1.2.0
 
 about:
   homepage: https://github.com/Phelsong/mojo-wayland
