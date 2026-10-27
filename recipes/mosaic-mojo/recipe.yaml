@@ -4,19 +4,19 @@
 #
 # Created by Christian Bator on 03/11/2025
 #
-# Usage: rattler-build build --recipe rattler-build/recipe.yaml -c https://prefix.dev/max -c conda-forge
+# Usage: rattler-build build --recipe rattler-build/recipe.yaml -c https://conda.modular.com/max -c conda-forge
 #
 
 context:
-  version: "0.1.0"
+  version: "0.2.0"
 
 package:
   name: mosaic
   version: ${{ version }}
 
 source:
-  - git: https://github.com/brainwave-sh/mosaic.git
-    rev: ce7f21897b0670e1e03b75a33fe4ed8d94dc8922
+  - git: https://github.com/christianbator/mosaic.git
+    rev: 75b1d97353a95f903981a0ac4757b1e250e86d7c
 
 build:
   number: 0
@@ -28,13 +28,18 @@ build:
           - /usr/lib/swift/libswift*.dylib
 requirements:
   build:
-    - clangxx>=22.1.0,<23
+    - clangxx>=22.1.0,<23.0
+    - mojo-compiler>=1.0,<2.0
+    - max-core>=26.7.0,<27
   host:
-    - mojo-compiler==0.26.1
+    - mojo-compiler>=1.0,<2.0
+    - max-core>=26.7.0,<27
     - if: osx
       then:
         - libcxx
   run:
+    - ${{ pin_compatible('mojo-compiler') }}
+    - ${{ pin_compatible('max-core') }}
     - if: osx
       then:
         - ${{ pin_compatible('libcxx') }}
@@ -46,19 +51,20 @@ tests:
       done
     requirements:
       run:
-        - mojo==0.26.1
+        - mojo-compiler>=1.0,<2.0
+        - max-core>=26.7.0,<27
     files:
       source:
         - tests/**.mojo
         - tests/data/
 
 about:
-  homepage: https://brainwave.sh/mosaic
+  homepage: https://github.com/christianbator/mosaic
   license: Apache-2.0
   license_file: LICENSE
   summary: An image processing library in Mojo
-  repository: https://github.com/brainwave-sh/mosaic
-  documentation: https://brainwave.sh/mosaic
+  repository: https://github.com/christianbator/mosaic
+  documentation: https://github.com/christianbator/mosaic
 
 extra:
   project_name: Mosaic
