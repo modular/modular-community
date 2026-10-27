@@ -1,6 +1,6 @@
 context:
-  version: "0.2.0"
-  mojo_version: "==1.1.0"
+  version: "0.2.1"
+  mojo_version: "==1.2.0"
 
 package:
   name: mojo-snappy
@@ -8,10 +8,10 @@ package:
 
 source:
   - git: https://github.com/idlab-discover/mojo-snappy.git
-    rev: 83a08c6f746077003a833a8cb014039dd836f6bb
+    rev: a7751a507f5e54e499ed33c40926ae3a3b586021
 
 build:
-  number: 1
+  number: 0
   # Linux x86-64 is the only platform the project builds and tests.
   skip:
     - target_platform != "linux-64"
