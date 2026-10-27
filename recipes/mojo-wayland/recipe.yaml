@@ -7,7 +7,7 @@ package:
 
 source:
   - git: https://github.com/Phelsong/mojo-wayland.git
-    rev: ed4c201c56feafce9d1a3128d91ae14f9f3168f5
+    rev: 41383a9d90ca0b6f50140a3e4594bdacd4152095
 
 build:
   number: 0
@@ -26,6 +26,7 @@ build:
         $CC $CFLAGS -I"$PREFIX/include" -shared -fPIC -O2 -Wall \
           -o "${PREFIX}/lib/libwayland_shim.so" \
           wayland/c/shim.c wayland/c/generated/xdg-shell-protocol.c \
+          wayland/c/generated/xdg-decoration-protocol.c \
           -L"$PREFIX/lib" -lwayland-client
         mkdir -p "${PREFIX}/lib/mojo"
         mojo precompile wayland -o "${PREFIX}/lib/mojo/wayland.mojoc"
