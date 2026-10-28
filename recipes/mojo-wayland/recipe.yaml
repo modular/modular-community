@@ -1,5 +1,5 @@
 context:
-  version: "1.1.0"
+  version: "1.2.0"
 
 package:
   name: "mojo-wayland"
@@ -7,13 +7,12 @@ package:
 
 source:
   - git: https://github.com/Phelsong/mojo-wayland.git
-    rev: 98cb6fc1958b8d074667c0ac60856c2f1f7fe9ba
+    rev: 41383a9d90ca0b6f50140a3e4594bdacd4152095
 
 build:
   number: 0
   skip:
-    # linux-64 + linux-aarch64 only (wayland is linux-only; the Mojo runtime
-    # is little-endian 64-bit — see [SYNC:abi] in wayland/core.mojo)
+    # linux-64 + linux-aarch64 only (wayland is linux-only)
     - not (linux and (x86_64 or aarch64))
   script:
     interpreter: bash
@@ -27,6 +26,7 @@ build:
         $CC $CFLAGS -I"$PREFIX/include" -shared -fPIC -O2 -Wall \
           -o "${PREFIX}/lib/libwayland_shim.so" \
           wayland/c/shim.c wayland/c/generated/xdg-shell-protocol.c \
+          wayland/c/generated/xdg-decoration-protocol.c \
           -L"$PREFIX/lib" -lwayland-client
         mkdir -p "${PREFIX}/lib/mojo"
         mojo precompile wayland -o "${PREFIX}/lib/mojo/wayland.mojoc"
@@ -34,7 +34,7 @@ build:
 requirements:
   build:
     - ${{ compiler('c') }}
-    - mojo-compiler ==1.1.0
+    - mojo-compiler ==1.2.0
     # wayland floor: every C symbol the shim/bindings use
     # (wl_proxy_marshal_array_constructor_versioned, wl_proxy_add_dispatcher,
     # wl_proxy_get_version) exists since 1.10; 1.23 is the oldest TESTED
@@ -42,10 +42,10 @@ requirements:
     # wayland/core.mojo.
     - wayland >=1.23,<1.27
   host:
-    - mojo-compiler ==1.1.0
+    - mojo-compiler ==1.2.0
     - wayland >=1.23,<1.27
   run:
-    - mojo-compiler ==1.1.0
+    - mojo-compiler ==1.2.0
     - wayland >=1.23,<1.27
 
 tests:
@@ -61,7 +61,7 @@ tests:
         - test_pack.mojo
     requirements:
       run:
-        - mojo-compiler ==1.1.0
+        - mojo-compiler ==1.2.0
 
 about:
   homepage: https://github.com/Phelsong/mojo-wayland

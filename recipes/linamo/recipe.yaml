@@ -1,8 +1,8 @@
 context:
-  version: "0.2.0"
-  mojo_version: ">=1.1.0,<1.2.0"
-  max_core_version: ">=26.6.0,<26.7"
-  decimo_version: ">=0.15.0,<0.16"
+  version: "0.3.0"
+  mojo_version: ">=1.2.0,<1.3.0"
+  max_core_version: ">=26.7.0,<26.8"
+  decimo_version: ">=0.16.0,<0.17"
 
 package:
   name: "linamo"
@@ -10,7 +10,7 @@ package:
 
 source:
   - git: https://github.com/mojomath/linamo.git
-    rev: 559bbaa4bd04ff66d7a800a349ac0427987cdc78
+    rev: 5561f3f9864b51ed5f23839adacb2ad16b786a56
 
 build:
   number: 0

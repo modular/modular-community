@@ -1,7 +1,7 @@
 context:
-  version: "1.0.0"
-  mojo_version: "=1.1.0"
-  apn_mojo_version: "=1.0.1"
+  version: "1.0.1"
+  mojo_version: "=1.2.0"
+  apn_mojo_version: "=1.0.2"
 
 package:
   name: poly_mojo
