@@ -8,7 +8,7 @@
 # Validate it against the working tree (no pushed SHA needed) with:
 #     pixi run check-recipe
 context:
-  version: "0.2.1"
+  version: "0.4.0"
 
   # modular-community requires a full 40-character commit SHA -- never a branch
   # or a tag, both of which can be repointed after review. A commit cannot
@@ -16,18 +16,18 @@ context:
   # and before the tag; release.yml then refuses to build unless the source at
   # this revision matches the tagged source outside conda.recipe/. See
   # CONTRIBUTING.md, "Releasing".
-  rev: "2dc4f7f6dece61a2aafa60b3dd22b48b13a335d9"
+  rev: "c9eb27f86fa0e28de49f58e3f5cb6ba9a087cd83"
 
   # Exact, not a range. wgpu-native renumbered the whole 0x0003xxxx SType enum
   # in the v29.0.0.0 -> v29.0.1.1 *patch* release, so a "compatible" newer patch
   # silently misreads every extras chain. conda.recipe/build.sh additionally
   # compares the installed header against the copy vendored in this repo.
-  wgpu_native_version: "29.0.0.0"
+  wgpu_native_version: "29.0.1.1"
 
   # Pinned exactly, per the modular-community packaging guide: a package is
   # rebuilt (build.number += 1) against each new compiler release rather than
   # claiming forward compatibility it has not been tested for.
-  mojo_version: "=1.0.0"
+  mojo_version: "=1.2.0"
 
 package:
   name: wgpu-mojo
@@ -63,7 +63,9 @@ requirements:
     - wgpu-native ==${{ wgpu_native_version }}
     - glfw >=3.4,<4
   run:
-    - ${{ pin_compatible('mojo-compiler') }}
+    # Exact, not pin_compatible: the shipped .mojoc only loads in the compiler
+    # version that built it.
+    - mojo-compiler ${{ mojo_version }}
     - wgpu-native ==${{ wgpu_native_version }}
     - glfw >=3.4,<4
 
