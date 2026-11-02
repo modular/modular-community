@@ -9,7 +9,7 @@ package:
 
 source:
  - git: https://github.com/thatstoasty/mog.git
-   tag: ${{ version }}
+   tag: v${{ version }}
 
 build:
   number: 0
