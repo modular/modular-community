@@ -1,0 +1,62 @@
+context:
+  version: 0.4.0
+  mojo_version: "=1.2.0"
+  mist_version: "=26.3.0"
+
+package:
+  name: "mog"
+  version: ${{ version }}
+
+source:
+ - git: https://github.com/thatstoasty/mog.git
+   tag: ${{ version }}
+
+build:
+  number: 0
+  script:
+    - mojo precompile mog -o ${{ PREFIX }}/lib/mojo/mog.mojoc
+
+requirements:
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - mist ${{ mist_version }}
+  build:
+    - mojo-compiler ${{ mojo_version }}
+    - mist ${{ mist_version }}
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - mist ${{ mist_version }}
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - sh -c 'find ./test -name test_*.mojo | xargs -I % pixi run mojo run -I . -D ASSERT=all %'
+    requirements:
+      build:
+        - mojo-compiler ${{ mojo_version }}
+        - mist ${{ mist_version }}
+      run:
+        - mojo-compiler ${{ mojo_version }}
+        - mist ${{ mist_version }}
+    files:
+      source:
+        - mog/
+        - test/
+
+about:
+  homepage: https://github.com/thatstoasty/mog
+  # Remember to specify the license variants for BSD, Apache, GPL, and LGPL.
+  # Use the SPDX identifier, e.g: GPL-2.0-only instead of GNU General Public License version 2.0
+  # See https://spdx.org/licenses/
+  license: MIT
+  # It is strongly encouraged to include a license file in the package,
+  # (even if the license doesn't require it) using the license_file entry.
+  # See https://docs.conda.io/projects/conda-build/en/latest/resources/define-metadata.html#license-file
+  license_file: LICENSE
+  summary: Style definitions for nice terminal layouts.
+  repository: https://github.com/thatstoasty/mog
+
+extra:
+  maintainers:
+    - thatstoasty
