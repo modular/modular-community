@@ -1,21 +1,21 @@
 context:
-  version: 1.6.3
+  version: 1.8.1
 package:
   name: "mojo_csv"
   version: ${{ version }}
 
 source:
   - git: https://github.com/Phelsong/mojo_csv.git
-    rev: eb72d0b61a62b8e51754ab0b235bf12e7092cd57
+    rev: 05bc8a20db7b56fd81a966c63e4ff5085d294bcc
 
 build:
   number: 0
   script:
-    - mojo package src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojopkg
+    - mojo precompile src -o ${{ PREFIX }}/lib/mojo/mojo_csv.mojoc
 
 requirements:
   host:
-    - max >=26.0,<27.0
+    - max >=26.3.0,<27.0
   run:
     - ${{ pin_compatible('max') }}
 
@@ -23,13 +23,13 @@ tests:
   - script:
       - if: unix
         then:
-          - mojo run -I $PREFIX/lib/mojo/mojo_csv.mojopkg test_pack.mojo
+          - mojo run -I $PREFIX/lib/mojo/mojo_csv.mojoc test_pack.mojo
     files:
       recipe:
         - test_pack.mojo
     requirements:
       run:
-        - max >=26.0,<27.0
+        - max >=26.3.0,<27.0
 
 about:
   homepage: https://github.com/Phelsong/mojo_csv

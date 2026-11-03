@@ -2,7 +2,12 @@ import sys
 from pathlib import Path
 import argparse
 
-from scripts.common import commit_push_changes, eprint, run_command
+from scripts.common import (
+    commit_push_changes,
+    eprint,
+    run_command,
+    run_command_unchecked,
+)
 
 
 def main() -> None:
@@ -14,8 +19,15 @@ def main() -> None:
         eprint(f"{args.file} does not exist.")
         sys.exit(1)
 
-    # Commit and push changes
     run_command(["git", "add", str(args.file)])
+
+    # Check if there are changes to commit
+    result = run_command_unchecked(["git", "diff-index", "--cached", "--quiet", "HEAD"])
+    if result.returncode == 0:
+        print("No changes to commit")
+        sys.exit(0)
+
+    # Commit and push changes
     commit_push_changes(f"Update {args.file.name}", "main")
 
 

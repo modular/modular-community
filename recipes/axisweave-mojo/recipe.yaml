@@ -1,0 +1,64 @@
+{
+  "package": {
+    "name": "axisweave-mojo",
+    "version": "0.1.0"
+  },
+  "source": {
+    "git": "https://github.com/henlamp/axisweave-mojo.git",
+    "rev": "1f8b10071573ab55f9593a174982ed2aab1f42f1"
+  },
+  "build": {
+    "number": 0,
+    "string": "mojo110_0",
+    "skip": "not (osx and arm64)",
+    "files": [
+      "lib/mojo/axisweave.mojoc"
+    ],
+    "script": [
+      "mkdir -p \"$PREFIX/lib/mojo\"",
+      "mojo precompile --Werror src/axisweave -o \"$PREFIX/lib/mojo/axisweave.mojoc\""
+    ]
+  },
+  "requirements": {
+    "build": [
+      "mojo-compiler ==1.1.0",
+      "max-core ==26.6.0"
+    ],
+    "host": [
+      "mojo-compiler ==1.1.0",
+      "max-core ==26.6.0"
+    ],
+    "run": [
+      "mojo-compiler ==1.1.0",
+      "max-core ==26.6.0"
+    ]
+  },
+  "tests": [
+    {
+      "script": [
+        "mojo run --Werror smoke.mojo"
+      ],
+      "files": {
+        "recipe": [
+          "smoke.mojo"
+        ]
+      }
+    }
+  ],
+  "about": {
+    "homepage": "https://github.com/henlamp/axisweave-mojo",
+    "repository": "https://github.com/henlamp/axisweave-mojo.git",
+    "license": "MIT",
+    "license_file": [
+      "LICENSE",
+      "UPSTREAM_LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "summary": "Named-axis tensor operations in native Mojo"
+  },
+  "extra": {
+    "maintainers": [
+      "henlamp"
+    ]
+  }
+}

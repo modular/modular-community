@@ -1,0 +1,52 @@
+context:
+  version: 0.1.0
+
+package:
+  name: "emberserde"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/bgreni/EmberSerde.git
+    tag: 0.1.0
+
+build:
+  number: 0
+  script:
+    - mojo precompile emberserde -o ${{ PREFIX }}/lib/mojo/emberserde.mojoc
+
+requirements:
+  host:
+    - mojo-compiler =1.1.0
+  build:
+    - mojo-compiler =1.1.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+    - if: unix
+      then:
+        - python run_tests.py
+    files:
+      source:
+        - run_tests.py
+        - test/
+        - emberserde/
+    requirements:
+      build:
+        - mojo =1.1.0
+      run:
+        - mojo =1.1.0
+
+about:
+  homepage: https://github.com/bgreni/EmberSerde
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Serialization framework for Mojo
+  repository: https://github.com/bgreni/EmberSerde
+
+extra:
+  maintainters:
+    - bgreni
+  project_name:
+    - EmberSerde

@@ -1,6 +1,6 @@
 context:
-  version: "26.2.0"
-  mojo_version: "=0.26.2.0"
+  version: "26.3.0"
+  mojo_version: "=1.2.0"
 
 package:
   name: "mist"
@@ -8,12 +8,12 @@ package:
 
 source:
   - git: https://github.com/thatstoasty/mist.git
-    rev: bac6378444eebacb5c4aa7daa39dba1771ec416e
+    rev: f628079d9c747a9b00fae26769155a8f13f8f8ba
 
 build:
   number: 0
   script:
-    - mojo package mist -o ${{ PREFIX }}/lib/mojo/mist.mojopkg
+    - mojo precompile mist -o ${{ PREFIX }}/lib/mojo/mist.mojoc
 requirements:
   build:
     - mojo-compiler ${{ mojo_version }}

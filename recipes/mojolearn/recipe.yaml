@@ -1,0 +1,48 @@
+context:
+  version: "0.8.44"
+
+package:
+  name: mojolearn
+  version: ${{ version }}
+
+source:
+  git: https://github.com/mojolearn/mojolearn.git
+  rev: 620b1783f98d03c351597779668af82b3a82d98e
+
+build:
+  number: 0
+  skip: not (linux or (osx and arm64))
+  script: bash packaging/native/build.sh
+
+requirements:
+  build:
+    # Unicode 16.0.0 is pinned by the tokenizer's generated native table.
+    - python 3.14.*
+    - mojo-compiler ==1.0.0
+  host:
+    - mojo-compiler ==1.0.0
+    - max-core ==26.5.0
+  run:
+    - mojo-compiler ==1.0.0
+    - max-core ==26.5.0
+
+tests:
+  - files:
+      source:
+        - packaging/native/tests/cpu.mojo
+        - packaging/native/tests/mode.mojo
+    script:
+      - mojo run packaging/native/tests/mode.mojo
+      - mojo run packaging/native/tests/cpu.mojo
+
+about:
+  homepage: https://mojolearn.org
+  repository: https://github.com/mojolearn/mojolearn
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: Native Mojo machine learning with bitwise identical training and inference across supported GPUs.
+
+extra:
+  project_name: mojolearn
+  maintainers:
+    - ajhendel

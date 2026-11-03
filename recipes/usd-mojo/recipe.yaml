@@ -1,0 +1,87 @@
+{
+  "package": {
+    "name": "usd-mojo",
+    "version": "0.1.0"
+  },
+  "source": {
+    "git": "https://github.com/henlamp/usd-mojo.git",
+    "rev": "1ba375b5f99c49062d967036063b0f69054178a2"
+  },
+  "build": {
+    "number": 0,
+    "string": "mojo110_0",
+    "skip": "not (osx and arm64)",
+    "files": [
+      "lib/mojo/usd_mojo.mojoc",
+      "lib/libusd_mojo_bridge.*",
+      "bin/usd-mojo-build",
+      "share/usd-mojo/**"
+    ],
+    "script": [
+      "python tools/conda_install.py"
+    ],
+    "dynamic_linking": {
+      "binary_relocation": false
+    },
+    "python": {
+      "skip_pyc_compilation": [
+        "**/*.py"
+      ]
+    }
+  },
+  "requirements": {
+    "build": [
+      "python 3.12.*",
+      "mojo-compiler ==1.1.0",
+      "cmake >=3.30,<5",
+      "ninja >=1.12,<2",
+      "cxx-compiler ==2.0.0"
+    ],
+    "host": [
+      "mojo-compiler ==1.1.0",
+      "openusd ==26.08 py312h07b4ffe_0",
+      "python 3.12.*",
+      "libcxx ==23.1.3",
+      "tbb ==2023.0.0"
+    ],
+    "run": [
+      "mojo-compiler ==1.1.0",
+      "openusd ==26.08 py312h07b4ffe_0",
+      "python 3.12.*",
+      "__osx >=13.0",
+      "libcxx >=23.1.3,<24",
+      "tbb >=2023.0.0,<2024"
+    ]
+  },
+  "tests": [
+    {
+      "script": [
+        "usd-mojo-build smoke.mojo -o consumer",
+        "./consumer scene.usda"
+      ],
+      "files": {
+        "recipe": [
+          "smoke.mojo",
+          "scene.usda"
+        ]
+      }
+    }
+  ],
+  "about": {
+    "homepage": "https://github.com/henlamp/usd-mojo",
+    "repository": "https://github.com/henlamp/usd-mojo.git",
+    "license": "MIT",
+    "license_file": [
+      "LICENSE",
+      "THIRD_PARTY_NOTICES.md",
+      "licenses/OpenUSD-LICENSE.txt",
+      "licenses/OpenUSD-NOTICE.txt"
+    ],
+    "summary": "Typed Mojo access to OpenUSD scenes and geometry"
+  },
+  "extra": {
+    "maintainers": [
+      "henlamp"
+    ]
+  }
+}

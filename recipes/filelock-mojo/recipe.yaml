@@ -1,0 +1,61 @@
+{
+  "package": {
+    "name": "filelock-mojo",
+    "version": "0.1.0"
+  },
+  "source": {
+    "git": "https://github.com/henlamp/filelock-mojo.git",
+    "rev": "5bbf339e870cc60b35f22793472bc6f48057651f"
+  },
+  "build": {
+    "number": 0,
+    "string": "mojo110_0",
+    "skip": "not (osx and arm64)",
+    "files": [
+      "lib/mojo/filelock_mojo.mojoc"
+    ],
+    "script": [
+      "mkdir -p \"$PREFIX/lib/mojo\"",
+      "mojo precompile --Werror src/filelock_mojo -o \"$PREFIX/lib/mojo/filelock_mojo.mojoc\""
+    ]
+  },
+  "requirements": {
+    "build": [
+      "mojo-compiler ==1.1.0"
+    ],
+    "host": [
+      "mojo-compiler ==1.1.0"
+    ],
+    "run": [
+      "mojo-compiler ==1.1.0"
+    ]
+  },
+  "tests": [
+    {
+      "script": [
+        "mojo run --Werror smoke.mojo"
+      ],
+      "files": {
+        "recipe": [
+          "smoke.mojo"
+        ]
+      }
+    }
+  ],
+  "about": {
+    "homepage": "https://github.com/henlamp/filelock-mojo",
+    "repository": "https://github.com/henlamp/filelock-mojo.git",
+    "license": "MIT",
+    "license_file": [
+      "LICENSE",
+      "UPSTREAM_LICENSE",
+      "THIRD_PARTY_NOTICES.md"
+    ],
+    "summary": "Unix process locks and atomic text publication in Mojo"
+  },
+  "extra": {
+    "maintainers": [
+      "henlamp"
+    ]
+  }
+}

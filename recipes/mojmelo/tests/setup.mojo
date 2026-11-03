@@ -1,7 +1,7 @@
 from std.sys import CompilationTarget, argv
 from std.ffi import *
 import std.os as os
-from mojmelo_tmp.utils.Matrix import Matrix
+from mojmelo_tmp.linalg.Matrix import Matrix
 import std.time as time
 from std.benchmark import keep
 from std.collections import Counter
@@ -10,9 +10,9 @@ def cachel1() -> Int32:
     var l1_cache_size: c_int = 0
     comptime length: c_size_t = 4
     # Get L1 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".as_c_string_slice(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l1dcachesize".as_c_string_span(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
         if l1_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_slice(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_span(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
                 if l1_cache_size <= 1:
                     return 65536
                 return l1_cache_size
@@ -20,7 +20,7 @@ def cachel1() -> Int32:
                 return 65536
         return l1_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_slice(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l1dcachesize".as_c_string_span(), Pointer(to=l1_cache_size), Pointer(to=length), None, 0) == 0:
             if l1_cache_size <= 1:
                 return 65536
             return l1_cache_size
@@ -32,9 +32,9 @@ def cachel2() -> Int32:
     var l2_cache_size: c_int = 0
     comptime length: c_size_t = 4
     # Get L2 Cache Size
-    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".as_c_string_slice(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
+    if external_call["sysctlbyname", c_int]("hw.perflevel0.l2cachesize".as_c_string_span(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
         if l2_cache_size <= 1:
-            if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_slice(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
+            if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_span(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
                 if l2_cache_size <= 1:
                     return 4194304
                 return l2_cache_size
@@ -42,7 +42,7 @@ def cachel2() -> Int32:
                 return 4194304
         return l2_cache_size
     else:
-        if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_slice(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
+        if external_call["sysctlbyname", c_int]("hw.l2cachesize".as_c_string_span(), Pointer(to=l2_cache_size), Pointer(to=length), None, 0) == 0:
             if l2_cache_size <= 1:
                 return 4194304
             return l2_cache_size
@@ -66,7 +66,7 @@ def initialize(cache_l1_size: Int, cache_l1_associativity: Int, cache_l2_size: I
             possible_l2_associativities[0] = 4 if cache_l2_size <= 2097154 else 8
             possible_l2_associativities[1] = possible_l2_associativities[0] * 2
             possible_l2_associativities[2] = possible_l2_associativities[0] * 4
-        with open("./mojmelo_tmp/utils/mojmelo_matmul/params.mojo", "w") as f:
+        with open("./mojmelo_tmp/linalg/mojmelo_matmul/params.mojo", "w") as f:
             var code = 'comptime L1_CACHE_SIZE = ' + String(cache_l1_size) + '\n'
             code += 'comptime L1_ASSOCIATIVITY = ' + String(possible_l1_associativities[0]) + '\n'
             code += 'comptime L2_CACHE_SIZE = ' + String(cache_l2_size) + '\n'
@@ -81,7 +81,7 @@ def initialize(cache_l1_size: Int, cache_l1_associativity: Int, cache_l2_size: I
                     code += 'comptime L2_ASSOCIATIVITY = ' + String(possible_l2_associativities[j - 1]) + '\n'
                     f.write(code)
     else:
-        with open("./mojmelo_tmp/utils/mojmelo_matmul/params.mojo", "w") as f:
+        with open("./mojmelo_tmp/linalg/mojmelo_matmul/params.mojo", "w") as f:
             var code = 'comptime L1_CACHE_SIZE = ' + String(cache_l1_size) + '\n'
             code += 'comptime L1_ASSOCIATIVITY = ' + String(cache_l1_associativity) + '\n'
             code += 'comptime L2_CACHE_SIZE = ' + String(cache_l2_size) + '\n'
@@ -165,7 +165,7 @@ def main() raises:
             var code: String
             with open("./param" + String(Int(command) + 1), "r") as f:
                 code = f.read()
-            with open("./mojmelo_tmp/utils/mojmelo_matmul/params.mojo", "w") as f:
+            with open("./mojmelo_tmp/linalg/mojmelo_matmul/params.mojo", "w") as f:
                 f.write(code)
             print('Setup', command + '/8', 'done!')
         else:
@@ -192,7 +192,7 @@ def main() raises:
             var code: String
             with open("./param" + String(Counter[Int](votes).most_common(1)[0]._value + 1), "r") as f:
                 code = f.read()
-            with open("./mojmelo_tmp/utils/mojmelo_matmul/params.mojo", "w") as f:
+            with open("./mojmelo_tmp/linalg/mojmelo_matmul/params.mojo", "w") as f:
                 f.write(code)
 
             for i in range(1, 10):
