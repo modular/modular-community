@@ -15,6 +15,7 @@ build:
   script:
     - mkdir -p "${PREFIX}/lib/mojo"
     - mojo precompile strata -o "${PREFIX}/lib/mojo/strata.mojoc"
+    - rm -f "${PREFIX}/share/max/firstActivation"
 
 requirements:
   build:
@@ -27,7 +28,7 @@ requirements:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
     - libblas
-    - python >=3.10
+    - python >=3.10,<3.15
     - numpy
     - scipy
 
@@ -39,6 +40,7 @@ tests:
     requirements:
       run:
         - mojo ${{ mojo_version }}
+        - python >=3.10,<3.15
     files:
       source:
         - scripts/
