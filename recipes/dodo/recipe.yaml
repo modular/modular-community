@@ -1,0 +1,102 @@
+context:
+  version: "0.0.1"
+  mojo_version: "=1.2.0"
+
+package:
+  name: dodo
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/dodo-mojo/dodo.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        mkdir -p "${PREFIX}/lib/mojo"
+
+        # The wrapper build scripts install into $CONDA_PREFIX/lib, which
+        # here is the package prefix, and fail loudly on a broken build.
+        export CONDA_PREFIX="${PREFIX}"
+        export DODO_CC="${CC}"
+        export DODO_CXX="${CXX}"
+        source tools/build_native.sh
+
+        mojo precompile dodo -o "${PREFIX}/lib/mojo/dodo.mojoc"
+
+requirements:
+  build:
+    - ${{ compiler('c') }}
+    - ${{ compiler('cxx') }}
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+    - openssl >=3.6.1,<4
+    - zlib >=1.3.1,<2
+    - libdeflate >=1.22,<2
+    - libbrotlicommon >=1.2.1,<2
+    - libbrotlidec >=1.2.1,<2
+    - libbrotlienc >=1.2.1,<2
+    - simdjson >=4.6.11,<5
+    - libsqlite >=3.45,<4
+  run:
+    - mojo-compiler ${{ mojo_version }}
+    - ca-certificates >=2025.1.31
+    # dodo opens libsqlite3 by name at runtime, so nothing links it.
+    - libsqlite >=3.45,<4
+
+tests:
+  - requirements:
+      run:
+        - mojo ${{ mojo_version }}
+        - curl
+        # mojo build links through the system C compiler, which Linux lacks.
+        - if: linux
+          then: gcc
+    files:
+      recipe:
+        - tests/package_smoke.mojo
+        - tests/hello_server.mojo
+    script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/dodo.mojoc"
+          for name in tls zlib brotli fs simdjson; do
+            test -f "${PREFIX}/lib/libdodo_${name}.so"
+          done
+
+          mojo build tests/package_smoke.mojo -o package_smoke
+          ./package_smoke
+
+          mojo build tests/hello_server.mojo -o hello_server
+          ./hello_server 18471 &
+          SERVER=$!
+          trap 'kill "${SERVER}" 2>/dev/null || true' EXIT
+          BODY=""
+          for attempt in $(seq 1 50); do
+            if BODY="$(curl -fsS http://127.0.0.1:18471/)"; then
+              break
+            fi
+            sleep 0.2
+          done
+          test "${BODY}" = "hello from dodo"
+
+about:
+  homepage: https://github.com/dodo-mojo/dodo
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+    - THIRD_PARTY_NOTICES.md
+  summary: Mojo web framework with AI, GPU and computer vision natively supported, all in one language
+  repository: https://github.com/dodo-mojo/dodo
+
+extra:
+  maintainers:
+    - anubhav-qt
+  project_name: dodo
