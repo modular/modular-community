@@ -1,5 +1,5 @@
 context:
-  version: "0.2.0"
+  version: "0.2.1"
   mojo_version: "=1.0.0"
 
 package:
@@ -8,13 +8,14 @@ package:
 
 source:
   - git: https://github.com/ethqnol/strata-mojo.git
-    rev: 73ee1128137f7524e13f99b0263f0c64b2a3fa28
+    rev: 84ccfdb38ec1853f8f37d7aaab3e7a22123c1bc9
 
 build:
   number: 0
   script:
     - mkdir -p "${PREFIX}/lib/mojo"
     - mojo precompile strata -o "${PREFIX}/lib/mojo/strata.mojoc"
+    - rm -f "${PREFIX}/share/max/firstActivation"
 
 requirements:
   build:
@@ -27,7 +28,7 @@ requirements:
     - mojo-compiler ${{ mojo_version }}
     - liblapack
     - libblas
-    - python >=3.10
+    - python >=3.10,<3.15
     - numpy
     - scipy
 
@@ -39,6 +40,7 @@ tests:
     requirements:
       run:
         - mojo ${{ mojo_version }}
+        - python >=3.10,<3.15
     files:
       source:
         - scripts/
