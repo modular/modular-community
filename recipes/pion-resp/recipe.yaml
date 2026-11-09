@@ -1,0 +1,51 @@
+context:
+  version: "1.1.0"
+
+package:
+  name: "pion-resp"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/pavelhorak/pion.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  script:
+    - python3 packages/build.py pion_resp --assemble-only
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile build/mojo-packages/src/pion_resp -o ${{ PREFIX }}/lib/mojo/pion_resp.mojoc
+
+requirements:
+  build:
+    - mojo-compiler =1.2.0
+    - python >=3.11
+  host:
+    - mojo-compiler =1.2.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - mojo run -I $PREFIX/lib/mojo packages/pion_resp/tests/test_resp.mojo
+    files:
+      source:
+        - packages/pion_resp/tests/
+    requirements:
+      build:
+        - mojo =1.2.0
+      run:
+        - mojo =1.2.0
+
+about:
+  homepage: https://github.com/pavelhorak/pion
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: "A zero-copy RESP2/RESP3 request parser: pipelined commands, inline commands, partial frames and Redis's protocol errors, from Pion's server"
+  repository: https://github.com/pavelhorak/pion
+
+extra:
+  maintainers:
+    - pavelhorak
+  project_name:
+    - Pion
