@@ -42,7 +42,10 @@
       "cxx-compiler ==2.0.0",
       {
         "if": "linux",
-        "then": "sysroot_linux-64 ==2.28"
+        "then": [
+          "sysroot_linux-64 ==2.28",
+          "patchelf >=0.19,<0.20"
+        ]
       }
     ],
     "host": [
