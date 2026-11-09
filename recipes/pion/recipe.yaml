@@ -1,0 +1,77 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+# Built from source only, with Pion's open reference vector kernels: this channel
+# carries no closed binaries.
+
+context:
+  version: "1.1.0"
+  # The commit the v${{ version }} tag points at, stamped into the binary as the
+  # release binaries stamp it.
+  commit: "8221878"
+  mojo_version: "1.2.0"
+
+package:
+  name: pion
+  version: ${{ version }}
+
+source:
+  url: https://github.com/pavelhorak/pion/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: e71259ccb38f5370b6cdaae70c8cab017a4a3a6876e56fe63facb99d7bf83116
+
+build:
+  number: 0
+  skip:
+    - win
+  script:
+    file: build.sh
+    env:
+      PION_COMMIT: ${{ commit }}
+
+requirements:
+  host:
+    - mojo-compiler ==${{ mojo_version }}
+  # pion-server loads libKGENCompilerRTShared (and the two libraries it pulls
+  # in) from the compiler package at run time.
+  run:
+    - mojo-compiler ==${{ mojo_version }}
+
+tests:
+  - script:
+      - bash test_server.sh ${{ version }}
+    requirements:
+      run:
+        - python >=3.10
+    files:
+      recipe:
+        - test_server.sh
+      source:
+        - tests/test_raw.py
+        - tests/resp_strict.py
+        - tests/test_vector_recall_smoke.py
+
+about:
+  homepage: https://pion.pavelhorak.com
+  repository: https://github.com/pavelhorak/pion
+  documentation: https://pion.pavelhorak.com
+  license: Apache-2.0
+  license_file:
+    - LICENSE
+    - NOTICE
+  summary: Redis-compatible key-value and vector database written in Mojo, built entirely from source
+  description: |
+    Pion speaks RESP2/RESP3, so existing Redis clients work against it. It is a
+    durable key-value store with a write-ahead log, a cache with Redis's eviction
+    policies, vector search over the FT.* commands, and a persistent prompt cache
+    for local models.
+
+    This package is the Apache-2.0 build, compiled entirely from source with the
+    open reference vector kernels. The project's release tarballs and Homebrew
+    formula link a closed library of tuned 1536-dim kernels instead, which return
+    identical results, faster. Nothing else differs.
+
+    Run `pion-server`; it listens on port 1974 and keeps its state in the working
+    directory.
+
+extra:
+  maintainers:
+    - pavelhorak
+  project_name: Pion
