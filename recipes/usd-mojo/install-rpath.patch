@@ -1,8 +1,6 @@
 --- a/tools/conda_install.py
 +++ b/tools/conda_install.py
-@@ -21,4 +21,26 @@
- runpy.run_path(str(Path(__file__).resolve().parents[1] / "share/usd-mojo/compile.py"), run_name="__main__")
- """
+@@ -22,0 +23,22 @@
 +
 +
 +def normalize_linux_rpath(bridge, native):
@@ -25,12 +23,6 @@
 +    ).strip()
 +    if actual != "$ORIGIN":
 +        raise RuntimeError("Installed bridge runtime search path is not relative")
-
-
-@@ -107,4 +129,6 @@
-                 )
-         subprocess.run(["codesign", "--force", "--sign", "-", str(bridge)], check=True)
+@@ -108,0 +131,2 @@
 +    elif sys.platform == "linux":
 +        normalize_linux_rpath(bridge, native)
-     owned = [modules / "usd_mojo.mojoc", bridge]
-     owned.extend(p for p in share.rglob("*") if p.is_file())
