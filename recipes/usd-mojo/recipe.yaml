@@ -18,6 +18,7 @@
       "share/usd-mojo/**"
     ],
     "script": [
+      "export CXXFLAGS=\"${CXXFLAGS:-} -ffile-prefix-map=${SRC_DIR}=source -ffile-prefix-map=${BUILD_PREFIX}=build-tools\"",
       "python tools/conda_install.py"
     ],
     "dynamic_linking": {
