@@ -1,0 +1,51 @@
+context:
+  version: "1.1.0"
+
+package:
+  name: "pion-simd"
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/pavelhorak/pion.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  script:
+    - python3 packages/build.py pion_simd --assemble-only
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile build/mojo-packages/src/pion_simd -o ${{ PREFIX }}/lib/mojo/pion_simd.mojoc
+
+requirements:
+  build:
+    - mojo-compiler =1.2.0
+    - python >=3.11
+  host:
+    - mojo-compiler =1.2.0
+  run:
+    - ${{ pin_compatible('mojo-compiler') }}
+
+tests:
+  - script:
+      - mojo run -I $PREFIX/lib/mojo packages/pion_simd/tests/test_kernels.mojo
+    files:
+      source:
+        - packages/pion_simd/tests/
+    requirements:
+      build:
+        - mojo =1.2.0
+      run:
+        - mojo =1.2.0
+
+about:
+  homepage: https://github.com/pavelhorak/pion
+  license: Apache-2.0
+  license_file: LICENSE
+  summary: "SIMD vector-distance kernels: FP32 dot and L2, INT8/INT4 L2, Hamming, INT8 quantization, with NEON SDOT and x86 VNNI paths, from Pion's open vector engine"
+  repository: https://github.com/pavelhorak/pion
+
+extra:
+  maintainers:
+    - pavelhorak
+  project_name:
+    - Pion
