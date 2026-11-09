@@ -5,7 +5,10 @@
   },
   "source": {
     "git": "https://github.com/henlamp/usd-mojo.git",
-    "rev": "8908e9815627d4d478edb59fe074166fb7962268"
+    "rev": "8908e9815627d4d478edb59fe074166fb7962268",
+    "patches": [
+      "install-rpath.patch"
+    ]
   },
   "build": {
     "number": 0,
