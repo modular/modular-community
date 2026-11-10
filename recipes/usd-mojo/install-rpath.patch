@@ -1,0 +1,28 @@
+--- a/tools/conda_install.py
++++ b/tools/conda_install.py
+@@ -22,0 +23,22 @@
++
++
++def normalize_linux_rpath(bridge, native):
++    current = subprocess.check_output(
++        ["patchelf", "--print-rpath", str(bridge)], text=True
++    ).strip()
++    if not current:
++        raise RuntimeError("Installed bridge has no runtime search path")
++    script = native / "normalize_rpath.cmake"
++    script.write_text(
++        'file(RPATH_CHANGE FILE "${BRIDGE}" OLD_RPATH "${OLD_RPATH}" '
++        'NEW_RPATH "$ORIGIN")\n'
++    )
++    subprocess.run(
++        ["cmake", f"-DBRIDGE={bridge}", f"-DOLD_RPATH={current}", "-P", str(script)],
++        check=True,
++    )
++    actual = subprocess.check_output(
++        ["patchelf", "--print-rpath", str(bridge)], text=True
++    ).strip()
++    if actual != "$ORIGIN":
++        raise RuntimeError("Installed bridge runtime search path is not relative")
+@@ -108,0 +131,2 @@
++    elif sys.platform == "linux":
++        normalize_linux_rpath(bridge, native)
