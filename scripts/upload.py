@@ -26,6 +26,11 @@ def main() -> None:
             str(conda_file),
         ]
         result = run_command_unchecked(command)
+        # A later run can rebuild a package that is already published before
+        # prefix.dev's index shows it; the server rejects the duplicate with 409.
+        if result.returncode != 0 and "409 Conflict" in result.stderr:
+            eprint(f"Skipping {conda_file}: already published")
+            continue
         if result.returncode != 0:
             eprint(f"Error uploading {conda_file}: {result.stderr}")
             exit_code = 1
