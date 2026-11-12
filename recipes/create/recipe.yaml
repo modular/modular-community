@@ -1,0 +1,58 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+context:
+  version: "0.1.1"
+
+package:
+  name: create
+  version: ${{ version }}
+
+source:
+  url: https://github.com/create-framework/create/archive/refs/tags/v${{ version }}.tar.gz
+  sha256: 0af7dd3ecfbc37ec81cf14846b7172836bfe649fdaf5d7efe395d88f70a161ac
+
+build:
+  number: 0
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        mkdir -p "${PREFIX}/lib/mojo" "${PREFIX}/share/create"
+        mojo precompile src/create -o "${PREFIX}/lib/mojo/create.mojoc"
+        # Create looks for its packaged fonts in the environment's
+        # share/create/fonts when they aren't beside its source.
+        cp -R src/create/text/fonts "${PREFIX}/share/create/fonts"
+
+requirements:
+  build:
+    - mojo-compiler =1.1
+  host:
+    - mojo-compiler =1.1
+  run:
+    # A .mojoc loads only on the compiler that built it.
+    - ${{ pin_compatible('mojo-compiler', upper_bound='x.x') }}
+    - sdl3 >=3.4,<4
+    - freetype >=2.13,<3
+    - libpng >=1.6,<2
+    - libjpeg-turbo >=3,<4
+    - libsndfile >=1.2,<2
+
+tests:
+  - script:
+      - if: unix
+        then:
+          - mojo run test.mojo
+    files:
+      recipe:
+        - test.mojo
+
+about:
+  homepage: https://github.com/create-framework/create
+  repository: https://github.com/create-framework/create
+  license: MIT
+  license_file: LICENSE
+  summary: Creative coding library for interactive graphics in Mojo
+
+extra:
+  maintainers:
+    - Maelkiz
