@@ -3,10 +3,10 @@
 # carries no closed binaries.
 
 context:
-  version: "1.1.0"
+  version: "1.1.2"
   # The commit the v${{ version }} tag points at, stamped into the binary as the
   # release binaries stamp it.
-  commit: "8221878"
+  commit: "b473a39"
   mojo_version: "1.2.0"
 
 package:
@@ -15,7 +15,7 @@ package:
 
 source:
   url: https://github.com/pavelhorak/pion/archive/refs/tags/v${{ version }}.tar.gz
-  sha256: e71259ccb38f5370b6cdaae70c8cab017a4a3a6876e56fe63facb99d7bf83116
+  sha256: 528aba06f2229789c68a1e17e662f17a1ec1b7bd20e934073932911cb01947ac
 
 build:
   number: 0
