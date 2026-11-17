@@ -16,8 +16,11 @@ I'm working on porting some particle physics simulation libraries to Mojo. Since
 
 - Read/write HDF5 files with h5py-style API
 - Create groups, datasets, and attributes
-- Support for `float64`, `float32`, `int32`, `int64`, `int8`, `uint8` dtypes
-- N-D Array reading with `read[dtype]()` (uses NuMojo NDArray in the backend.)
+- Support for `float64`, `float32`, `float16`, `int64`, `int32`, `int16`, `int8`,
+  `uint64`, `uint32`, `uint16`, `uint8` dtypes
+- N-D array reading of any rank with `read[dtype]()` (uses NuMojo NDArray in the
+  backend), plus `read_direct`/`write_direct` into existing arrays
+- Scalar and array attributes
 - Chunked datasets, resizable (`maxshape`) datasets, and fill values
 - Built-in filters: gzip compression, shuffle, and fletcher32 checksums,
   plus filter metadata accessors (`compression()`, `shuffle()`, etc.)
@@ -38,14 +41,19 @@ I'm working on porting some particle physics simulation libraries to Mojo. Since
 | `DType.int64` | `H5T_NATIVE_INT64` |
 | `DType.int8` | `H5T_NATIVE_INT8` |
 | `DType.uint8` | `H5T_NATIVE_UINT8` |
+| `DType.int16` | `H5T_NATIVE_INT16` |
+| `DType.uint16` | `H5T_NATIVE_UINT16` |
+| `DType.uint32` | `H5T_NATIVE_UINT32` |
+| `DType.uint64` | `H5T_NATIVE_UINT64` |
+| `DType.float16` | `H5T_IEEE_F16LE` |
 
 ## Known limitations
 
 This library covers the dataset/group/attribute workflows needed for the
 particle-physics use case it was built for; it is not yet full h5py parity.
-Notably missing, as of v0.2:
+Notably missing, as of v0.3:
 
-- **Types**: no `int16`, `uint16`, `uint32`, `uint64`, `bool`, or string
+- **Types**: no `bool` or string
   (fixed- or variable-length) datasets/attributes. No compound, enum,
   opaque, or reference types.
 - **Indexing**: no fancy indexing or multi-block hyperslab selections;
@@ -62,7 +70,27 @@ roadmap.
 
 ## Installation
 
-Add the following to your `pixi.toml`:
+### From the Modular community channel (recommended)
+
+Add the [Modular community channel](https://prefix.dev/groups/modular-community) to
+the `channels` of your `pixi.toml`:
+
+```toml
+[workspace]
+channels = ["conda-forge", "https://conda.modular.com/max/", "https://repo.prefix.dev/modular-community"]
+```
+
+Then install the package:
+
+```bash
+pixi add hdf5-mojo
+```
+
+This also pulls in `hdf5` and `numojo`, so no further setup is needed.
+
+### From source (git)
+
+To track the latest `main` instead, add the following to your `pixi.toml`:
 
 ```toml
 [workspace]
@@ -79,18 +107,18 @@ backend = {name = "pixi-build-mojo", version = "0.*"}
 name = "your_package_name"
 
 [package.host-dependencies]
-mojo = "==1.0.0"
+mojo = ">=1.2.0,<2"
 
 [package.build-dependencies]
-mojo = "==1.0.0"
+mojo = ">=1.2.0,<2"
 hdf5-mojo = { git = "https://github.com/shivasankarka/hdf5-mojo.git", branch = "main"}
 
 [package.run-dependencies]
-mojo = "==1.0.0"
+mojo = ">=1.2.0,<2"
 hdf5-mojo = { git = "https://github.com/shivasankarka/hdf5-mojo.git", branch = "main"}
 
 [dependencies]
-mojo = ">=1.0.0,<2"
+mojo = ">=1.2.0,<2"
 hdf5-mojo = { git = "https://github.com/shivasankarka/hdf5-mojo.git", branch = "main"}
 ```
 
@@ -134,6 +162,7 @@ def main() raises:
 ### Writing a file
 
 ```mojo
+from std.memory import alloc
 from hdf5 import File, f64, i32
 
 def main() raises:
@@ -142,22 +171,36 @@ def main() raises:
     # Create groups (nested paths are automatically created)
     f.create_group("results/nested")
 
-    # Create datasets
-    var shape = List[Int](100, 50)
-    var dset = f.create_dataset[f64]("results/data", shape)
+    # Create datasets (chunks, maxshape, compression, fillvalue, ... are optional keywords)
+    var dset = f.create_dataset[f64](
+        "results/data", [100, 50], compression="gzip", shuffle=True
+    )
 
     # Write data
     var n = 100 * 50
     var buf = alloc[Scalar[f64]](n)
     # ... fill buf with data ...
     dset.write[DType.float64](buf, n)
-    buf.free()
+    buf.unsafe_free()
     # You can also pass a NDArray directly as buffer.
 
     # Write attributes
     f.attrs().set[i32]("version", Int32(1))
 
     f.close()
+```
+
+### Context manager and attribute inspection
+
+```mojo
+from hdf5 import File, f64
+
+def main() raises:
+    with File("output.h5", "a", track_order=True) as f:
+        for name in f:                      # iterate over member names
+            print(name)
+        for item in f.attrs().items():      # (name, AttrValue) pairs
+            print(item[0], item[1].dtype, item[1].shape)
 ```
 
 ## API Reference
@@ -187,7 +230,7 @@ examples/
 
 **File fails to open** — Ensure `libhdf5.dylib` is accessible. If using pixi, run `pixi install` first so `$CONDA_PREFIX` is set.
 
-**Memory leak warnings** — Call `.close()` on `File` when done.
+**Memory leak warnings** — Call `.close()` on `File` when done, or use `with File(...) as f:`. A `File` also closes itself when its last copy is destroyed; `Group`/`Dataset` handles should be closed explicitly.
 
 **"dataset already exists" on write** — The write helpers refuse to overwrite existing datasets. Choose a new path or recreate the file.
 
