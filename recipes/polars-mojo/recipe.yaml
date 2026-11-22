@@ -1,6 +1,6 @@
 context:
   name: polars-mojo
-  version: "0.1.0"
+  version: "0.2.0"
   mojo_version: "=1.0.0"
 
 package:
@@ -9,7 +9,7 @@ package:
 
 source:
   - git: https://github.com/ethqnol/polars-mojo.git
-    rev: 191381da3c6a0cffba532c5581d38883489d72ea
+    rev: 8af2a3fd823845866c5c8fac662c7ef1745342f6
 
 build:
   number: 0
