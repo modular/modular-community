@@ -1,0 +1,48 @@
+context:
+  version: "0.1.0"
+  mojo_version: "==1.2.0"
+
+package:
+  name: difpatch
+  version: ${{ version }}
+
+source:
+  # Full SHA of the release commit.
+  - git: https://github.com/saalineo/difpatch.git
+    rev: "b944966f3cf37b6d164fa9bef795fd828b4eef89"
+
+build:
+  number: 0
+  script:
+    - mkdir -p ${{ PREFIX }}/lib/mojo
+    - mojo precompile src/difpatch -o ${{ PREFIX }}/lib/mojo/difpatch.mojoc
+    # The compiler leaves a first-run marker in the prefix; it is not part of the package.
+    - rm -f ${{ PREFIX }}/share/max/firstActivation
+
+requirements:
+  build:
+    - mojo-compiler ${{ mojo_version }}
+  host:
+    - mojo-compiler ${{ mojo_version }}
+  run:
+    # Exact pin: a .mojoc only loads under the compiler that built it.
+    - mojo-compiler ${{ mojo_version }}
+
+tests:
+  - script:
+      - mojo run smoke_test.mojo
+    files:
+      recipe:
+        - smoke_test.mojo
+
+about:
+  homepage: https://github.com/saalineo/difpatch
+  repository: https://github.com/saalineo/difpatch
+  documentation: https://github.com/saalineo/difpatch#readme
+  license: MIT
+  license_file: LICENSE
+  summary: Minimal Myers diffs, unified diff formatting and strict patching for Mojo
+
+extra:
+  maintainers:
+    - saalineo
