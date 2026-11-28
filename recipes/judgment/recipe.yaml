@@ -1,0 +1,166 @@
+# yaml-language-server: $schema=https://raw.githubusercontent.com/prefix-dev/recipe-format/main/schema.json
+context:
+  version: "1.0.0"
+  mojo_version: "=1.2.0"
+  apn_version: "=1.0.2"
+  fp_version: "=1.0.2"
+
+package:
+  name: judgment
+  version: ${{ version }}
+
+source:
+  - git: https://github.com/Spellbound-Mojo/judgment.git
+    tag: v${{ version }}
+
+build:
+  number: 0
+  skip:
+    - target_platform not in ["linux-64", "linux-aarch64", "osx-arm64"]
+  script:
+    interpreter: bash
+    content:
+      - |
+        set -euo pipefail
+        export CONDA_PREFIX="${PREFIX}"
+        export MODULAR_HOME="${MODULAR_HOME:-${PREFIX}/share/max}"
+
+        if [ -n "${JUDGMENT_BUILD_JOBS:-}" ]; then
+          jobs="${JUDGMENT_BUILD_JOBS}"
+        else
+          mem_gib=$("${PREFIX}/bin/python" -c '
+        import os, sys, subprocess
+        if sys.platform == "darwin":
+            b = int(subprocess.check_output(["sysctl", "-n", "hw.memsize"]).strip())
+        else:
+            b = os.sysconf("SC_PAGE_SIZE") * os.sysconf("SC_PHYS_PAGES")
+        print(b // (1024 ** 3))
+        ')
+          if [ "${mem_gib}" -ge 30 ]; then
+            jobs=2
+          else
+            jobs=1
+          fi
+        fi
+
+        "${PREFIX}/bin/python" scripts/build.py --with-store
+        "${PREFIX}/bin/python" bindings/build_core.py --variant store --jobs "${jobs}"
+
+        case "${{ target_platform }}" in
+          osx-*) ext=".dylib" ;;
+          *) ext=".so" ;;
+        esac
+
+        sp_dir="$("${PREFIX}/bin/python" -c 'import sysconfig; print(sysconfig.get_path("purelib"))')"
+        mkdir -p "${PREFIX}/lib" "${PREFIX}/lib/mojo" "${PREFIX}/bin" "${sp_dir}/judgment"
+        cp ".cache/prebuilt-core/lib/libjudgment_store${ext}" "${PREFIX}/lib/"
+        mojo precompile -I bindings/mojo_client bindings/mojo_client/judgment -o "${PREFIX}/lib/mojo/judgment.mojoc"
+        cp bindings/python/judgment/__init__.py \
+           bindings/python/judgment/_abi.py \
+           bindings/python/judgment/_api.py \
+           bindings/python/judgment/_core.py \
+           bindings/python/judgment/_mathlib.py \
+           "${sp_dir}/judgment/"
+
+        cat <<'EOF' > "${PREFIX}/bin/judgment-fetch-mathlib"
+        #!/usr/bin/env python3
+        from judgment._mathlib import main
+        raise SystemExit(main())
+        EOF
+        chmod 0755 "${PREFIX}/bin/judgment-fetch-mathlib"
+
+        # The compiler leaves a first-run marker in the prefix; it is not part of the package.
+        rm -f "${PREFIX}/share/max/firstActivation"
+
+requirements:
+  build:
+    - python >=3.11
+    - mojo-compiler ${{ mojo_version }}
+    - apn_mojo ${{ apn_version }}
+    - fp_mojo ${{ fp_version }}
+  host:
+    - python >=3.11
+    - mojo-compiler ${{ mojo_version }}
+    - apn_mojo ${{ apn_version }}
+    - fp_mojo ${{ fp_version }}
+  run:
+    - ${{ pin_compatible('mojo-compiler', upper_bound='x.x') }}
+    - apn_mojo ${{ apn_version }}
+    - fp_mojo ${{ fp_version }}
+    - ${{ pin_compatible('python', lower_bound='x.x', upper_bound='x.x') }}
+
+tests:
+  - files:
+      source:
+        - docs/examples/library/quick_start_goal.mojo
+        - docs/examples/library/quick_start_calculation.mojo
+        - docs/examples/python/library/quick_start_goal.py
+        - docs/examples/python/store/binary_roundtrip.py
+    requirements:
+      run:
+        - mojo ${{ mojo_version }}
+    script:
+      interpreter: bash
+      content:
+        - |
+          set -euo pipefail
+          test -f "${PREFIX}/lib/mojo/judgment.mojoc"
+          test -x "${PREFIX}/bin/judgment-fetch-mathlib"
+          case "${{ target_platform }}" in
+            osx-*) test -f "${PREFIX}/lib/libjudgment_store.dylib" ;;
+            *) test -f "${PREFIX}/lib/libjudgment_store.so" ;;
+          esac
+          export CONDA_PREFIX="${CONDA_PREFIX:-${PREFIX}}"
+
+          # Mojo: zero -I and zero -Xlinker flags for both mojo run and mojo build.
+          mojo run docs/examples/library/quick_start_goal.mojo
+          mojo run docs/examples/library/quick_start_calculation.mojo
+          mojo build docs/examples/library/quick_start_goal.mojo -o quick_start_bin
+          ./quick_start_bin
+
+          cat <<'EOF' > smoke_all.mojo
+          from std.tempfile import mkdtemp
+          from judgment import Budget, Library, ProfileLevel, Session, build_scalar, default_context, fetch_mathlib, session
+          from judgment.exact import ExactValue
+          from apn_mojo import Rational
+
+          def main() raises:
+              var budget = Budget(10_000_000)
+              var profile = build_scalar(budget, ProfileLevel.FOUNDATION)
+              var s = session(profile, ["x"], work=1_000_000)
+              _ = default_context(s)
+              var v = ExactValue(Rational(3, 2))
+              var dir = mkdtemp()
+              var lib = Library.create(String(dir, "/lib"), "none")
+              var bad = False
+              try:
+                  _ = fetch_mathlib(String(dir))
+              except:
+                  bad = True
+              if not bad:
+                  raise Error("expected non-library dir refusal")
+              print("MOJO SMOKE OK:", len(profile.theorems()), len(lib.theorems()), v.re)
+          EOF
+          mojo run smoke_all.mojo
+
+          # Python: zero PYTHONPATH and zero JUDGMENT_CORE.
+          python docs/examples/python/library/quick_start_goal.py
+          python docs/examples/python/store/binary_roundtrip.py
+          python -c "import judgment; assert callable(judgment.fetch_mathlib); s = judgment.Session(); print('PY SMOKE OK:', s.prop('P').format())"
+
+          # CLI
+          judgment-fetch-mathlib --help >/dev/null
+
+about:
+  homepage: https://spellbound-mojo.github.io/judgment/
+  repository: https://github.com/Spellbound-Mojo/judgment
+  documentation: https://spellbound-mojo.github.io/judgment/
+  license: Apache-2.0 WITH LLVM-exception
+  license_file: LICENSE
+  summary: Checked symbolic proofs, mathematical profiles, and optional persistence for Mojo and Python
+
+extra:
+  maintainers:
+    - anatolvitold
+  project_name:
+    - judgment
